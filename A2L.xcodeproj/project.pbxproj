@@ -8,12 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		D8E7DAA421E54DD200A3E420 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7DAA321E54DD200A3E420 /* AppDelegate.swift */; };
-		D8E7DAA621E54DD200A3E420 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7DAA521E54DD200A3E420 /* ViewController.swift */; };
+		D8E7DAA621E54DD200A3E420 /* MaFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7DAA521E54DD200A3E420 /* MaFiche.swift */; };
 		D8E7DAA921E54DD300A3E420 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8E7DAA721E54DD300A3E420 /* Main.storyboard */; };
 		D8E7DAAB21E54DDD00A3E420 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8E7DAAA21E54DDD00A3E420 /* Assets.xcassets */; };
 		D8E7DAAE21E54DDD00A3E420 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8E7DAAC21E54DDD00A3E420 /* LaunchScreen.storyboard */; };
 		D8E7DAB921E54DDD00A3E420 /* A2LTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7DAB821E54DDD00A3E420 /* A2LTests.swift */; };
 		D8E7DAC421E54DDD00A3E420 /* A2LUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7DAC321E54DDD00A3E420 /* A2LUITests.swift */; };
+		D8E7DAD521E557E100A3E420 /* QRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7DAD421E557E100A3E420 /* QRCode.swift */; };
+		D8E7DAD921E6340700A3E420 /* Réglages.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7DAD821E6340700A3E420 /* Réglages.swift */; };
+		D8E7DADB21E6409A00A3E420 /* ListeAdherents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7DADA21E6409A00A3E420 /* ListeAdherents.swift */; };
+		D8E7DADE21E64C5400A3E420 /* CustomCellTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7DADD21E64C5400A3E420 /* CustomCellTableView.swift */; };
+		D8E7DAE021E65EAB00A3E420 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7DADF21E65EAB00A3E420 /* TabBarController.swift */; };
+		D8E7DAE221E6726300A3E420 /* ScannerDeQRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7DAE121E6726300A3E420 /* ScannerDeQRCode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +42,7 @@
 /* Begin PBXFileReference section */
 		D8E7DAA021E54DD200A3E420 /* A2L.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = A2L.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8E7DAA321E54DD200A3E420 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		D8E7DAA521E54DD200A3E420 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		D8E7DAA521E54DD200A3E420 /* MaFiche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaFiche.swift; sourceTree = "<group>"; };
 		D8E7DAA821E54DD300A3E420 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D8E7DAAA21E54DDD00A3E420 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D8E7DAAD21E54DDD00A3E420 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -47,6 +53,12 @@
 		D8E7DABF21E54DDD00A3E420 /* A2LUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = A2LUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8E7DAC321E54DDD00A3E420 /* A2LUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A2LUITests.swift; sourceTree = "<group>"; };
 		D8E7DAC521E54DDD00A3E420 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D8E7DAD421E557E100A3E420 /* QRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCode.swift; sourceTree = "<group>"; };
+		D8E7DAD821E6340700A3E420 /* Réglages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Réglages.swift"; sourceTree = "<group>"; };
+		D8E7DADA21E6409A00A3E420 /* ListeAdherents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListeAdherents.swift; sourceTree = "<group>"; };
+		D8E7DADD21E64C5400A3E420 /* CustomCellTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellTableView.swift; sourceTree = "<group>"; };
+		D8E7DADF21E65EAB00A3E420 /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		D8E7DAE121E6726300A3E420 /* ScannerDeQRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerDeQRCode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,8 +109,9 @@
 		D8E7DAA221E54DD200A3E420 /* A2L */ = {
 			isa = PBXGroup;
 			children = (
+				D8E7DADC21E64C4100A3E420 /* Style */,
+				D8E7DAD121E54E8E00A3E420 /* ViewController */,
 				D8E7DAA321E54DD200A3E420 /* AppDelegate.swift */,
-				D8E7DAA521E54DD200A3E420 /* ViewController.swift */,
 				D8E7DAA721E54DD300A3E420 /* Main.storyboard */,
 				D8E7DAAA21E54DDD00A3E420 /* Assets.xcassets */,
 				D8E7DAAC21E54DDD00A3E420 /* LaunchScreen.storyboard */,
@@ -123,6 +136,27 @@
 				D8E7DAC521E54DDD00A3E420 /* Info.plist */,
 			);
 			path = A2LUITests;
+			sourceTree = "<group>";
+		};
+		D8E7DAD121E54E8E00A3E420 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D8E7DAA521E54DD200A3E420 /* MaFiche.swift */,
+				D8E7DAD421E557E100A3E420 /* QRCode.swift */,
+				D8E7DAD821E6340700A3E420 /* Réglages.swift */,
+				D8E7DADA21E6409A00A3E420 /* ListeAdherents.swift */,
+				D8E7DADF21E65EAB00A3E420 /* TabBarController.swift */,
+				D8E7DAE121E6726300A3E420 /* ScannerDeQRCode.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		D8E7DADC21E64C4100A3E420 /* Style */ = {
+			isa = PBXGroup;
+			children = (
+				D8E7DADD21E64C5400A3E420 /* CustomCellTableView.swift */,
+			);
+			path = Style;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -256,8 +290,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8E7DAA621E54DD200A3E420 /* ViewController.swift in Sources */,
+				D8E7DAA621E54DD200A3E420 /* MaFiche.swift in Sources */,
+				D8E7DAE021E65EAB00A3E420 /* TabBarController.swift in Sources */,
+				D8E7DAD521E557E100A3E420 /* QRCode.swift in Sources */,
+				D8E7DADB21E6409A00A3E420 /* ListeAdherents.swift in Sources */,
 				D8E7DAA421E54DD200A3E420 /* AppDelegate.swift in Sources */,
+				D8E7DAD921E6340700A3E420 /* Réglages.swift in Sources */,
+				D8E7DADE21E64C5400A3E420 /* CustomCellTableView.swift in Sources */,
+				D8E7DAE221E6726300A3E420 /* ScannerDeQRCode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
