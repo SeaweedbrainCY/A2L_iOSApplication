@@ -8,11 +8,13 @@
 
 import UIKit
 
+//Connecté à la première page
+
 class MaFiche: UIViewController, UITabBarControllerDelegate {
 
     @IBOutlet weak var afficheListeAdherent: UIBarButtonItem!
     
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) { // lancée quand la vue load
         super.viewDidAppear(animated)
         var statut = "Adhérent"
         do {
@@ -20,10 +22,10 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         } catch {
             print("Fichier introuvable. ERREUR GRAVE")
         }
-        if statut == "Membre du bureau" || statut == "Super-admin" {
+        if statut == "Membre du bureau" || statut == "Super-admin" { // on affiche le bouton
             afficheListeAdherent.image = UIImage(named: "liste")
             afficheListeAdherent.isEnabled = true
-        } else {
+        } else { // on désactive le bouton
             afficheListeAdherent.image = nil
             afficheListeAdherent.isEnabled = false
         }

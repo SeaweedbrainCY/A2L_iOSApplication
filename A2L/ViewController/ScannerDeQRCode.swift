@@ -9,6 +9,9 @@
 import AVFoundation
 import UIKit
 
+// Cette classe gère à elle toute seule la caméra et la reconnaissance du QR code (code source trouvé sur : https://www.hackingwithswift.com/example-code/media/how-to-scan-a-qr-code)
+// ATTENTION : ne pas oublier de demander la permission à l'utilisateur via Info.plist
+
 class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     var captureSession: AVCaptureSession!
     var previewLayer: AVCaptureVideoPreviewLayer!
@@ -56,7 +59,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     }
     
     func failed() {
-        let ac = UIAlertController(title: "Scanning not supported", message: "Your device does not support scanning a code from an item. Please use a device with a camera.", preferredStyle: .alert)
+        let ac = UIAlertController(title: "Scann impossible", message: "Your device does not support scanning a code from an item. Please use a device with a camera.", preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "OK", style: .default))
         present(ac, animated: true)
         captureSession = nil
@@ -91,11 +94,11 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         dismiss(animated: true)
     }
     
-    func found(code: String) {
-        print("code = '\(code)'")
-        if code == "Je m’appelle Nathan " {
+    func found(code: String) { // code est le String contenu dans le QR code
+        let mdp = "Je m’appelle Nathan"
+        if code == mdp { // si jamais cela correspond alors on affiche la fiche de l'adhérent
             performSegue(withIdentifier: "afficheFiche", sender: nil)
-        } else {
+        } else { // sinon on ne bouge pas 
             print("code non correpondant")
         }
     }

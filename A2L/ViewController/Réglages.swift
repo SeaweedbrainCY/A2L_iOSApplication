@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 import MessageUI
 
+//Associé à la page des réglage (page 3/3)
+
 let testeur = "testeurProfil.txt" // "Super-admin"/"Membre du bureau"/"Adhérent"
 
 class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MFMailComposeViewControllerDelegate {
@@ -22,7 +24,7 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
         self.tableView.dataSource = self
     }
     
-    func alert(_ title: String, message: String) {
+    func alert(_ title: String, message: String) { // pop up simple, avec un seul bouton de sortie
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let ok = UIAlertAction(title: "Ok", style: UIAlertAction.Style.cancel, handler: nil)
         alert.addAction(ok)
@@ -36,7 +38,7 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { // Cellules par section
         switch section {
-        case 0 : return 2
+        case 0 : return 3
         case 1 : return 2
         case 2 : return 1
         default : return 0
@@ -44,6 +46,7 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
         }
     }
     
+    //Nom des cellules
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "basic")
         
@@ -51,13 +54,14 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
             switch indexPath.row {
             case 0 :
                 var statut = ""
-                do {
+                do { // on va chercher le statut, et on le met dans le titre
                     statut = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(testeur), encoding: .utf8)
                 } catch {
                     print("Fichier introuvable. ERREUR GRAVE")
                 }
                 cell.textLabel?.text = "📲 Testeur : \(statut)"
             case 1 : cell.textLabel?.text = "🚨 Aide"
+            case 2 : cell.textLabel?.text = "📝 Contribuer au projet"
             default : cell.textLabel?.text = "ERROR"
             }
         } else if indexPath.section == 1{
@@ -73,6 +77,7 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
         return cell
     }
     
+    //Nom des sections
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 0 : return "En savoir plus ..."
@@ -81,10 +86,11 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
         }
     }
     
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) { // cellule selctionnée
         if indexPath.section == 0 {
             switch indexPath.row {
-            case 0 :
+            case 0 : // on affiche un menu avec 3 options pour choisir notre statut de bêta testeur
                 let alert = UIAlertController(title: "Changer de profil testeur", message: "Cette fonctionnalité ne sera disponible que durant les phases de tests de l'applications (toutes les droits sont présumés acquis)", preferredStyle: .actionSheet)
                 alert.addAction(UIAlertAction(title: "Adhérent", style: .default) { _ in
                     self.nouveauStatut("Adhérent")
@@ -98,6 +104,23 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
                 alert.addAction(UIAlertAction(title: "Annuler", style: UIAlertAction.Style.cancel, handler: nil)) // Retour
                 present(alert, animated: true)
             case 1 : break
+            case 2:
+                let alert = UIAlertController(title: "Contribuer au projet 'A2Lé", message: "Ces liens donnent un accès aux codes sources du projet (GitHub)", preferredStyle: .actionSheet)
+                alert.addAction(UIAlertAction(title: "[GitHub] Code source application iOS", style: .default) { _ in
+                    UIApplication.shared.open(URL(string: "https://github.com/DevNathan/A2L_Application")!, options: [:], completionHandler: nil)// on charge le lien dans le moteur de recherche par defaut de l'utilisateur
+                })
+                
+                alert.addAction(UIAlertAction(title: "[GitHub] Code source application Android", style: .default) { _ in
+                    self.alert("Ce repository n'a pas encore été créé", message: "Vous pourrez consulter le code source quand il sera publié")
+                })
+                
+                alert.addAction(UIAlertAction(title: "[GitHub] Code source backend (serveur)", style: .default) { _ in
+                    self.alert("Ce repository n'a pas encore été créé", message: "Vous pourrez consulter le code source quand il sera publié")
+                })
+                
+                alert.addAction(UIAlertAction(title: "Annuler", style: UIAlertAction.Style.cancel, handler: nil)) // Retour
+                present(alert, animated: true)
+                
             default : break
             }
         } else if indexPath.section == 1 {
@@ -114,8 +137,7 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
                 present(alert, animated: true)
                 
             case 1: // site du developpeur
-                UIApplication.shared.open(URL(string: "https://nathanstchepinsky--nathans1.repl.co")!, options: [:], completionHandler: nil)
-                
+                UIApplication.shared.open(URL(string: "https://nathanstchepinsky--nathans1.repl.co")!, options: [:], completionHandler: nil) // on charge le lien dans le moteur de recherche par defaut de l'utilisateur
             default : break
             }
         } else {
@@ -124,13 +146,16 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
+    //est appelé lorsqu'on change notre statut et donc modifie les privilège
     func nouveauStatut(_ statut : String){
+        //on stock le nouveau statut
         let file = FileManager.default
         file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(testeur).path, contents: statut.data(using: String.Encoding.utf8), attributes: nil)
         self.tableView.reloadData()
 
     }
     
+    //Méthode servant à envoyer un mail avec les protocoles d'Apple ou avec du HTML
     func mailReport(objet: String, body: String){
         // ATTENTION ON A BESOIN DE 'import MessageUI' et du protocole: MFMailComposeViewControllerDelegate
         let email = "nathanstchepinsky@gmail.com"

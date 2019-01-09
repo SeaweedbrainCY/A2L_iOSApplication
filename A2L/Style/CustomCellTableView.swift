@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 
+//Custom qui permet d'ajouter un label au cellule des tableView
+
 class CustomTableViewCell: UITableViewCell {
     
     let statut = UILabel()

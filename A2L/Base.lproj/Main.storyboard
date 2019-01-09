@@ -25,21 +25,32 @@
                                     <constraint firstAttribute="height" constant="300" id="OeZ-xc-sDV"/>
                                 </constraints>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nathan Stchepinsky" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tem-wr-iEE">
+                                <rect key="frame" x="84.5" y="119" width="206" height="32"/>
+                                <fontDescription key="fontDescription" name="ChalkboardSE-Bold" family="Chalkboard SE" pointSize="22"/>
+                                <color key="textColor" red="0.20049370659999999" green="0.5" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="tem-wr-iEE" firstAttribute="top" secondItem="W7m-V4-43O" secondAttribute="top" constant="55" id="KXx-yu-sO4"/>
                             <constraint firstItem="kzn-AU-9cb" firstAttribute="centerY" secondItem="0jc-aA-thB" secondAttribute="centerY" id="Xcv-BW-uq0"/>
+                            <constraint firstItem="tem-wr-iEE" firstAttribute="centerX" secondItem="0jc-aA-thB" secondAttribute="centerX" id="e6p-l6-3K6"/>
                             <constraint firstItem="kzn-AU-9cb" firstAttribute="centerX" secondItem="0jc-aA-thB" secondAttribute="centerX" id="f2i-Fp-uao"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="W7m-V4-43O"/>
                     </view>
                     <navigationItem key="navigationItem" title="Mon QR code" id="Hf8-a7-X6S">
-                        <barButtonItem key="rightBarButtonItem" title="Scanner" id="sg4-41-2Fw">
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" title=" " id="sg4-41-2Fw">
                             <connections>
                                 <segue destination="owO-fU-2a0" kind="show" id="d4R-AE-Snz"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="scanner" destination="sg4-41-2Fw" id="hrM-vG-tIc"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZCT-x1-ygQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -261,7 +272,7 @@
         <!--QR code-->
         <scene sceneID="mYt-8K-Kp1">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="RiM-FJ-aPk" sceneMemberID="viewController">
+                <navigationController title="QR code" automaticallyAdjustsScrollViewInsets="NO" id="RiM-FJ-aPk" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="QR code" image="qrCode" id="aX1-op-viI"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="bXu-xp-hyG">
