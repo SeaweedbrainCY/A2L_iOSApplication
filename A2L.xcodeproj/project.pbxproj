@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D89124E221E7A97500B77D0C /* GenerateQRcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89124E121E7A97500B77D0C /* GenerateQRcode.swift */; };
+		D89124E421E7AEA100B77D0C /* FicheAdhérent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89124E321E7AEA100B77D0C /* FicheAdhérent.swift */; };
 		D8E7DAA421E54DD200A3E420 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7DAA321E54DD200A3E420 /* AppDelegate.swift */; };
 		D8E7DAA621E54DD200A3E420 /* MaFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7DAA521E54DD200A3E420 /* MaFiche.swift */; };
 		D8E7DAA921E54DD300A3E420 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8E7DAA721E54DD300A3E420 /* Main.storyboard */; };
@@ -40,6 +42,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D89124E121E7A97500B77D0C /* GenerateQRcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateQRcode.swift; sourceTree = "<group>"; };
+		D89124E321E7AEA100B77D0C /* FicheAdhérent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FicheAdhérent.swift"; sourceTree = "<group>"; };
 		D8E7DAA021E54DD200A3E420 /* A2L.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = A2L.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8E7DAA321E54DD200A3E420 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8E7DAA521E54DD200A3E420 /* MaFiche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaFiche.swift; sourceTree = "<group>"; };
@@ -147,6 +151,7 @@
 				D8E7DADA21E6409A00A3E420 /* ListeAdherents.swift */,
 				D8E7DADF21E65EAB00A3E420 /* TabBarController.swift */,
 				D8E7DAE121E6726300A3E420 /* ScannerDeQRCode.swift */,
+				D89124E321E7AEA100B77D0C /* FicheAdhérent.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -155,6 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				D8E7DADD21E64C5400A3E420 /* CustomCellTableView.swift */,
+				D89124E121E7A97500B77D0C /* GenerateQRcode.swift */,
 			);
 			path = Style;
 			sourceTree = "<group>";
@@ -293,6 +299,8 @@
 				D8E7DAA621E54DD200A3E420 /* MaFiche.swift in Sources */,
 				D8E7DAE021E65EAB00A3E420 /* TabBarController.swift in Sources */,
 				D8E7DAD521E557E100A3E420 /* QRCode.swift in Sources */,
+				D89124E221E7A97500B77D0C /* GenerateQRcode.swift in Sources */,
+				D89124E421E7AEA100B77D0C /* FicheAdhérent.swift in Sources */,
 				D8E7DADB21E6409A00A3E420 /* ListeAdherents.swift in Sources */,
 				D8E7DAA421E54DD200A3E420 /* AppDelegate.swift in Sources */,
 				D8E7DAD921E6340700A3E420 /* Réglages.swift in Sources */,

@@ -310,7 +310,7 @@
         <!--Fiche adhérent-->
         <scene sceneID="xLA-bd-p2R">
             <objects>
-                <viewController title="Fiche adhérent" id="F8y-QO-ioX" sceneMemberID="viewController">
+                <viewController title="Fiche adhérent" id="F8y-QO-ioX" customClass="FicheAdherent" customModule="A2L" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Q7m-WY-nEd">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -364,18 +364,33 @@
                                 <color key="textColor" red="0.20049370659999999" green="0.5" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nac-Of-IbA">
+                                <rect key="frame" x="220" y="463" width="155" height="155"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="155" id="Szg-Ld-h5v"/>
+                                    <constraint firstAttribute="width" constant="155" id="quK-h9-bif"/>
+                                </constraints>
+                            </imageView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="uQj-C6-MMW">
+                                <rect key="frame" x="279" y="522" width="37" height="37"/>
+                                <color key="color" red="0.20049370659999999" green="0.5" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="REd-p3-HBc" firstAttribute="centerX" secondItem="Q7m-WY-nEd" secondAttribute="centerX" id="6Sb-JR-01R"/>
+                            <constraint firstItem="nac-Of-IbA" firstAttribute="trailing" secondItem="fRA-sg-M5i" secondAttribute="trailing" id="6Ze-hJ-xSE"/>
                             <constraint firstItem="go5-7T-Uwr" firstAttribute="top" secondItem="6KI-dK-C6K" secondAttribute="bottom" constant="20" id="7nV-4Q-Prg"/>
                             <constraint firstItem="F04-8M-W7y" firstAttribute="leading" secondItem="go5-7T-Uwr" secondAttribute="trailing" constant="10" id="97t-ZQ-cbD"/>
                             <constraint firstItem="NPK-NN-rFG" firstAttribute="top" secondItem="6KI-dK-C6K" secondAttribute="bottom" constant="112" id="Fkz-g9-rtN"/>
                             <constraint firstItem="F04-8M-W7y" firstAttribute="top" secondItem="6KI-dK-C6K" secondAttribute="bottom" constant="20" id="Mdn-50-YQf"/>
+                            <constraint firstItem="nac-Of-IbA" firstAttribute="bottom" secondItem="fRA-sg-M5i" secondAttribute="bottom" id="Rf9-Up-UU8"/>
                             <constraint firstItem="mKv-O7-BQd" firstAttribute="leading" secondItem="fRA-sg-M5i" secondAttribute="leading" constant="16" id="TpZ-8b-ff4"/>
+                            <constraint firstItem="fRA-sg-M5i" firstAttribute="trailing" secondItem="uQj-C6-MMW" secondAttribute="trailing" constant="59" id="Tze-hP-gkU"/>
                             <constraint firstItem="go5-7T-Uwr" firstAttribute="leading" secondItem="fRA-sg-M5i" secondAttribute="leading" constant="16" id="e07-GR-fym"/>
                             <constraint firstItem="REd-p3-HBc" firstAttribute="top" secondItem="fRA-sg-M5i" secondAttribute="top" constant="12" id="e8s-l5-sD9"/>
                             <constraint firstItem="DLc-Tg-F6E" firstAttribute="top" secondItem="go5-7T-Uwr" secondAttribute="bottom" constant="20" id="jAQ-XJ-S8G"/>
+                            <constraint firstItem="fRA-sg-M5i" firstAttribute="bottom" secondItem="uQj-C6-MMW" secondAttribute="bottom" constant="59" id="nv4-Cy-wbL"/>
                             <constraint firstItem="6KI-dK-C6K" firstAttribute="top" secondItem="fRA-sg-M5i" secondAttribute="top" constant="52" id="ojs-aR-38I"/>
                             <constraint firstItem="NPK-NN-rFG" firstAttribute="leading" secondItem="mKv-O7-BQd" secondAttribute="trailing" constant="10" id="qrO-p8-g0E"/>
                             <constraint firstItem="6KI-dK-C6K" firstAttribute="leading" secondItem="fRA-sg-M5i" secondAttribute="leading" constant="72" id="t6M-U9-UTa"/>
@@ -386,10 +401,15 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="fRA-sg-M5i"/>
                     </view>
+                    <connections>
+                        <outlet property="QRCodeImage" destination="nac-Of-IbA" id="i0J-bo-2Tz"/>
+                        <outlet property="chargement" destination="uQj-C6-MMW" id="YwF-qE-tE7"/>
+                        <outlet property="nomLabel" destination="REd-p3-HBc" id="fwL-Vg-FWo"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Yc-fR-fen" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1410" y="-627"/>
+            <point key="canvasLocation" x="1408.8" y="-627.4362818590705"/>
         </scene>
     </scenes>
     <resources>
@@ -400,6 +420,6 @@
         <image name="settings" width="36" height="36"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="NHB-Rg-HHG"/>
+        <segue reference="eSj-Lz-PBB"/>
     </inferredMetricsTieBreakers>
 </document>
