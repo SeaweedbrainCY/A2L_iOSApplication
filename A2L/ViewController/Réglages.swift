@@ -22,6 +22,7 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
         super.viewDidLoad()
         self.tableView.delegate = self
         self.tableView.dataSource = self
+        tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: "cell") //on associe la tableView au custom de Style/customeCelleTableView.swift
     }
     
     func alert(_ title: String, message: String) { // pop up simple, avec un seul bouton de sortie
@@ -40,7 +41,7 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
         switch section {
         case 0 : return 3
         case 1 : return 2
-        case 2 : return 1
+        case 2 : return 2
         default : return 0
             
         }
@@ -48,7 +49,7 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
     
     //Nom des cellules
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: "basic")
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
         
         if indexPath.section == 0 {
             switch indexPath.row {
@@ -71,8 +72,17 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
             default : cell.textLabel?.text = "ERROR"
             }
         } else {
-            cell.textLabel?.text = "❌ Se déconnecter"
-            cell.textLabel?.textColor = .red
+            switch indexPath.row {
+            case 0 :
+                cell.textLabel?.text = "🔄 Actualiser mes privilèges"
+                cell.info.setImage(UIImage(named: "help"), for: .normal)
+                cell.info.addTarget(self, action: #selector(helpSelected), for: .touchUpInside)
+            case 1 :
+                cell.textLabel?.text = "❌ Se déconnecter"
+                cell.textLabel?.textColor = .red
+            default : cell.textLabel?.text = "ERROR"
+            }
+            
         }
         return cell
     }
@@ -80,8 +90,9 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
     //Nom des sections
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
-        case 0 : return "En savoir plus ..."
+        case 0 : return "L'application A2L"
         case 1 : return "Developpeur"
+        case 2: return "Mon compte"
         default : return "ERROR"
         }
     }
@@ -141,7 +152,17 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
             default : break
             }
         } else {
-            
+            switch indexPath.row {
+            case 0 : //Actualiser les privilèges
+                let chargement = UIActivityIndicatorView()
+                self.tableView.addSubview(chargement)
+                chargement.style = .white
+                chargement.color = .red
+                chargement.frame.origin = CGPoint(x: self.tableView.frame.size.width / 2, y: self.tableView.frame.size.height / 2) // on le place en plein milieu
+                chargement.startAnimating()
+            case 1 : break
+            default : break
+            }
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -153,6 +174,10 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
         file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(testeur).path, contents: statut.data(using: String.Encoding.utf8), attributes: nil)
         self.tableView.reloadData()
 
+    }
+    
+    @objc func helpSelected(sender: UIButton){ // help button
+        alert("Actualiser mes privilèges", message: "Certaines fonctionnalités de l'application A2L, nécessitent des privilèges. Si un administrateur a modifié vos privilèges et qu'ils ne s'affichent pas, veuillez 'actualiser les privilèges'")
     }
     
     //Méthode servant à envoyer un mail avec les protocoles d'Apple ou avec du HTML

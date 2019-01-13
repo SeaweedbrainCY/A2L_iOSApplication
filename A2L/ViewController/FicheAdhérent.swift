@@ -17,7 +17,7 @@ class FicheAdherent: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        let returnQRcode = generateQRcode()
+        let returnQRcode = generateQRcode() 
         self.QRCodeImage.image = returnQRcode.generateQRCode(from: self.nomLabel.text!)// on génère le QR code associé à l'élève
         chargement.stopAnimating()
     }

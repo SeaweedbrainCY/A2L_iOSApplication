@@ -22,6 +22,7 @@
 		D8E7DADE21E64C5400A3E420 /* CustomCellTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7DADD21E64C5400A3E420 /* CustomCellTableView.swift */; };
 		D8E7DAE021E65EAB00A3E420 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7DADF21E65EAB00A3E420 /* TabBarController.swift */; };
 		D8E7DAE221E6726300A3E420 /* ScannerDeQRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7DAE121E6726300A3E420 /* ScannerDeQRCode.swift */; };
+		D8FCBA5621EBA35B0027949C /* QRCodeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FCBA5521EBA35B0027949C /* QRCodeData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		D8E7DADD21E64C5400A3E420 /* CustomCellTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellTableView.swift; sourceTree = "<group>"; };
 		D8E7DADF21E65EAB00A3E420 /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		D8E7DAE121E6726300A3E420 /* ScannerDeQRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerDeQRCode.swift; sourceTree = "<group>"; };
+		D8FCBA5521EBA35B0027949C /* QRCodeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 		D8E7DAA221E54DD200A3E420 /* A2L */ = {
 			isa = PBXGroup;
 			children = (
+				D8FCBA5421EBA3180027949C /* GestionDeDonnée */,
 				D8E7DADC21E64C4100A3E420 /* Style */,
 				D8E7DAD121E54E8E00A3E420 /* ViewController */,
 				D8E7DAA321E54DD200A3E420 /* AppDelegate.swift */,
@@ -163,6 +166,15 @@
 				D89124E121E7A97500B77D0C /* GenerateQRcode.swift */,
 			);
 			path = Style;
+			sourceTree = "<group>";
+		};
+		D8FCBA5421EBA3180027949C /* GestionDeDonnée */ = {
+			isa = PBXGroup;
+			children = (
+				D8FCBA5521EBA35B0027949C /* QRCodeData.swift */,
+			);
+			name = "GestionDeDonnée";
+			path = "GestionDeDonnée";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -303,6 +315,7 @@
 				D89124E421E7AEA100B77D0C /* FicheAdhérent.swift in Sources */,
 				D8E7DADB21E6409A00A3E420 /* ListeAdherents.swift in Sources */,
 				D8E7DAA421E54DD200A3E420 /* AppDelegate.swift in Sources */,
+				D8FCBA5621EBA35B0027949C /* QRCodeData.swift in Sources */,
 				D8E7DAD921E6340700A3E420 /* Réglages.swift in Sources */,
 				D8E7DADE21E64C5400A3E420 /* CustomCellTableView.swift in Sources */,
 				D8E7DAE221E6726300A3E420 /* ScannerDeQRCode.swift in Sources */,
