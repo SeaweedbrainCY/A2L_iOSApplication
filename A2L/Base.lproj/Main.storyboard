@@ -329,6 +329,9 @@
                                 <state key="normal" title="Je suis (presque) sûr que c'est moi">
                                     <color key="titleColor" red="0.2278912837" green="0.97680455450000003" blue="0.31047557310000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="connexionSelectedWithSender:" destination="zOs-mA-RAe" eventType="touchUpInside" id="0HG-M2-Ulj"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="39E-Un-TCI">
                                 <rect key="frame" x="54" y="617" width="267" height="30"/>
@@ -390,7 +393,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OTC-7o-O6B" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4599" y="-206"/>
+            <point key="canvasLocation" x="-4599.1999999999998" y="-206.44677661169416"/>
         </scene>
         <!--Connexion Admin-->
         <scene sceneID="jxn-be-61x">
@@ -428,7 +431,7 @@
                                 </constraints>
                                 <color key="textColor" red="0.0" green="0.68388931480000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" name="ChalkboardSE-Regular" family="Chalkboard SE" pointSize="18"/>
-                                <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="continue" secureTextEntry="YES"/>
+                                <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="continue" secureTextEntry="YES" textContentType="password"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Nom" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1pL-aG-ogK">
                                 <rect key="frame" x="196" y="173.5" width="144" height="30"/>
@@ -447,7 +450,7 @@
                                     <color key="titleColor" red="0.2278912837" green="0.97680455450000003" blue="0.31047557310000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="YvL-fE-kpP" kind="presentation" modalTransitionStyle="crossDissolve" id="wNa-gl-mMa"/>
+                                    <action selector="connexionSelectedWithSender:" destination="oN1-d6-pUQ" eventType="touchUpInside" id="OGO-KT-djS"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fol-S4-pt7">

@@ -61,29 +61,47 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
                     print("Fichier introuvable. ERREUR GRAVE")
                 }
                 cell.textLabel?.text = "📲 Testeur : \(statut)"
-            case 1 : cell.textLabel?.text = "🚨 Aide"
-            case 2 : cell.textLabel?.text = "📝 Contribuer au projet"
+            case 1 :
+                cell.textLabel?.text = "     Aide"
+                cell.iconCell.image = UIImage(named: "helpLocation")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
+                cell.iconCell.tintColor = .gray
+            case 2 :
+                cell.textLabel?.text = "     Contribuer au projet"
+                cell.iconCell.image = UIImage(named: "codeBalise")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
+                cell.iconCell.tintColor = .gray
             default : cell.textLabel?.text = "ERROR"
             }
         } else if indexPath.section == 1{
             switch indexPath.row {
-            case 0: cell.textLabel?.text = "✉️ Signaler"
-            case 1 : cell.textLabel?.text = "💻 Visiter le site du developpeur"
+            case 0:
+                cell.textLabel?.text = "     Signaler"
+                cell.iconCell.image = UIImage(named: "security")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
+                cell.iconCell.tintColor = .gray
+            case 1 :
+                cell.textLabel?.text = "     Visiter le site du developpeur"
+                cell.iconCell.image = UIImage(named: "codePhone")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
+                cell.iconCell.tintColor = .gray
             default : cell.textLabel?.text = "ERROR"
             }
         } else {
             switch indexPath.row {
             case 0 :
-                cell.textLabel?.text = "🔄 Actualiser mes privilèges"
+                cell.textLabel?.text = "     Actualiser mes privilèges"
+                cell.iconCell.image = UIImage(named: "refresh")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
+                cell.iconCell.tintColor = .gray
                 cell.info.setImage(UIImage(named: "help"), for: .normal)
                 cell.info.addTarget(self, action: #selector(helpSelected), for: .touchUpInside)
             case 1 :
-                cell.textLabel?.text = "❌ Se déconnecter"
+                cell.textLabel?.text = "    Se déconnecter"
+                cell.iconCell.image = UIImage(named: "croix")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
+                cell.iconCell.tintColor = .red
                 cell.textLabel?.textColor = .red
             default : cell.textLabel?.text = "ERROR"
             }
             
         }
+        //On colore l'image en rouge
+        
         return cell
     }
     
