@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D83D1C8A21F0A6D0001F88CD /* ConnexionAdherent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83D1C8921F0A6D0001F88CD /* ConnexionAdherent.swift */; };
-		D83D1C8E21F3CD24001F88CD /* ConnexionAdmin.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83D1C8D21F3CD24001F88CD /* ConnexionAdmin.swift */; };
 		D83D1C9221F67476001F88CD /* HashProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83D1C9121F67476001F88CD /* HashProtocol.swift */; };
 		D83D1C9421F7B471001F88CD /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83D1C9321F7B471001F88CD /* CustomTextField.swift */; };
 		D89124E221E7A97500B77D0C /* GenerateQRcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89124E121E7A97500B77D0C /* GenerateQRcode.swift */; };
@@ -48,8 +46,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D83D1C8921F0A6D0001F88CD /* ConnexionAdherent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnexionAdherent.swift; sourceTree = "<group>"; };
-		D83D1C8D21F3CD24001F88CD /* ConnexionAdmin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnexionAdmin.swift; sourceTree = "<group>"; };
 		D83D1C9121F67476001F88CD /* HashProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashProtocol.swift; sourceTree = "<group>"; };
 		D83D1C9321F7B471001F88CD /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		D89124E121E7A97500B77D0C /* GenerateQRcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateQRcode.swift; sourceTree = "<group>"; };
@@ -158,8 +154,6 @@
 		D8E7DAD121E54E8E00A3E420 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				D83D1C8921F0A6D0001F88CD /* ConnexionAdherent.swift */,
-				D83D1C8D21F3CD24001F88CD /* ConnexionAdmin.swift */,
 				D8E7DAA521E54DD200A3E420 /* MaFiche.swift */,
 				D8E7DAD421E557E100A3E420 /* QRCode.swift */,
 				D8E7DAD821E6340700A3E420 /* Réglages.swift */,
@@ -335,10 +329,8 @@
 				D8FCBA5621EBA35B0027949C /* QRCodeData.swift in Sources */,
 				D8E7DAD921E6340700A3E420 /* Réglages.swift in Sources */,
 				D8E7DADE21E64C5400A3E420 /* CustomCellTableView.swift in Sources */,
-				D83D1C8E21F3CD24001F88CD /* ConnexionAdmin.swift in Sources */,
 				D83D1C9221F67476001F88CD /* HashProtocol.swift in Sources */,
 				D8E7DAE221E6726300A3E420 /* ScannerDeQRCode.swift in Sources */,
-				D83D1C8A21F0A6D0001F88CD /* ConnexionAdherent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
