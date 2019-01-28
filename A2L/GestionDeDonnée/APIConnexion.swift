@@ -23,10 +23,7 @@ class APIConnexion {
         //ATTENTION : Les données transmises par l'URL doivent être sûr. Il doit bien s'agir d'un nom suivit d'un prénom, et d'un mot de passe hashé
         //Les caractères spéciaux devront être remplacés
         //L'API se charge juste de verifier et transmettre les données. Tout bug est donc de la responsbilité de l'application
-        let maFiche = MaFiche()
         var reponse = "error"
-        
-        
         let urlString = "http://192.168.1.64:8888/returnSpecificData.php?Nom=\(nom)&Mdp=\(mdpHashed)"
         let url = URL(string: urlString)
         
@@ -35,6 +32,10 @@ class APIConnexion {
             URLSession.shared.dataTask(with: url!, completionHandler: {(data, response, error) in // On load le PHP
                 if error != nil {
                     print("******ERROR FATAL. URL NON FONCTIONNEL. ECHEC : \(String(describing: error))")
+                    
+                    let file = FileManager.default
+                    file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(erreurPath).path, contents: error?.localizedDescription.data(using: String.Encoding.utf8), attributes: nil)
+                    
                     
                 } else { // Si aucune erreur n'est survenu
                     if let JSONObject = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSArray{ // On enregsitre le tableau total en JSON
@@ -58,54 +59,96 @@ class APIConnexion {
                             //let pageConnexion = ConnexionAdmin()
                             
                             if result! as String == "Autorisation refusée" { //Si la connexion est refusée
-                                print("resulat = \(String(describing: result))")
                                 reponse = "permission refusée"
                                 //print("permission refusée")
                                 //pageConnexion.errorWhileConnectingToDatabase(erreur: "Autorisation refusée")
                             } else if result! as String == "Mdp incorrect" {
-                                print("resulat = \(String(describing: result))")
                                 reponse = "Mdp incorrect"
                                 //print("mdp incorrect")
                                 //pageConnexion.errorWhileConnectingToDatabase(erreur: "Mdp incorrect")
                             }
                         }
                     }
-                    OperationQueue.main.addOperation({
-                        let pageConnexion = ConnexionAdmin()
-                        pageConnexion.viewAlreadyLoaded = true
-                        //Appelle la fonction une fois que l'opération est finie
-                        if reponse == "success" {
-                            maFiche.listeInfoAdherent = self.allInfo //On stock la valeur
-                            maFiche.loadInfo()//On lance la fonction associée
-                        } else if reponse == "Autorisation refusée" { //Si la connexion est refusée
-                            print("permission refusée")
-                            //let erreur: String! = "Autorisation refusée"
-                            //pageConnexion.errorWhileConnectingToDatabase(erreur: erreur!)
-                        } else if reponse  == "Mdp incorrect" {
-                            reponse = "Mdp incorrect"
-                            pageConnexion.alert("essaie", message: "")
-                            pageConnexion.erreur = "Mdp incorrect"
-                            pageConnexion.viewDidAppear(true)
-                            
-                            
-                            //print("mdp incorrect")
-                            //pageConnexion.errorWhileConnectingToDatabase(erreur: erreur!)
-                        } else {
-                            print("erreur inconnue")
-                        }
-                        
-                        
+                    OperationQueue.main.addOperation({ // Une fois l'action effectuée on envoie le resultat
+                        let file = FileManager.default
+                        file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(erreurPath).path, contents: reponse.data(using: String.Encoding.utf8), attributes: nil)
                     })
 
                 }
             }).resume()
         } else { //bug dans l'URL
-            print("url = nil")
             reponse =  "url nil"
-            let pageConnexion = ConnexionAdmin()
-            pageConnexion.errorWhileConnectingToDatabase(erreur : "url nil")
+           // let pageConnexion = ConnexionAdmin()
+            //pageConnexion.errorWhileConnectingToDatabase(erreur : "url nil")
         }
         
+    }
+    
+    //Gère la connexion d'un adhérent simple :
+    public func adherentConnexion(nom: String, dateNaissance: String){
+        //ATTENTION : Les données transmises par l'URL doivent être sûr. Il doit bien s'agir d'un nom suivit d'un prénom, et d'une date de la forme YYYY-MM-DD
+        //Les caractères spéciaux devront être remplacés
+        //L'API se charge juste de verifier et transmettre les données. Tout bug est donc de la responsbilité de l'application
+        
+        var reponse = "error"
+        let urlString = "http://192.168.1.64:8888/infoAdherent.php?Nom=\(nom)&DateNaissance=\(dateNaissance)"
+        let url = URL(string: urlString)
+        print("url = \(url)")
+        if url != nil {
+            URLSession.shared.dataTask(with: url!, completionHandler: {(data, response, error) in // On load le PHP
+                if error != nil {
+                    print("******ERROR FATAL. URL NON FONCTIONNEL. ECHEC : \(String(describing: error))")
+                    
+                    let file = FileManager.default
+                    file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(erreurPath).path, contents: error?.localizedDescription.data(using: String.Encoding.utf8), attributes: nil)
+                    
+                    
+                } else { // Si aucune erreur n'est survenu
+                    
+                    if let allDataUser = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSArray{ // On enregsitre le tableau total en JSON
+                        print("dataUser = \(String(describing: allDataUser))")
+                        if allDataUser != nil {
+                            let dataUser: NSDictionary = allDataUser![0] as! NSDictionary // On a qu'une seule valeur -> voir API
+                            //Pour une raison qui m'est obscure, les informations ne seront pas classés dans cet ordre ...
+                            var temporaryDictionnary: [String:String] = [:] // tableau temporaire qui sert à convertir les données avant de les enregsitrer
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "id") as! String, forKey: "id")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "Nom") as! String, forKey: "Nom")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "Statut") as! String, forKey: "Statut")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "DateNaissance") as! String, forKey: "dateNaissance")
+                            self.allInfo.append(temporaryDictionnary) // et on ajoute notre nouveau dico au tableau général
+                            print("all info = \(self.allInfo)")
+                            reponse = "success"
+                        } else if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
+                            //let pageConnexion = ConnexionAdmin()
+                            print("resulat = \(result)")
+                            
+                            if result! as String == "Élève introuvable" { //Si la connexion est refusée
+                                reponse = "Élève introuvable"
+                                //print("permission refusée")
+                                //pageConnexion.errorWhileConnectingToDatabase(erreur: "Autorisation refusée")
+                            } else if result! as String == "Date de naissance incorrect" {
+                                reponse = "Date de naissance incorrect"
+                                //print("mdp incorrect")
+                                //pageConnexion.errorWhileConnectingToDatabase(erreur: "Mdp incorrect")
+                            }
+                        }
+                    } else {
+                        print("bug")
+                    }
+                    OperationQueue.main.addOperation({ // Une fois l'action effectuée on envoie le resultat
+                        print("result message = \(reponse)")
+                        let file = FileManager.default
+                        file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(erreurPath).path, contents: reponse.data(using: String.Encoding.utf8), attributes: nil)
+                    })
+                    
+                }
+            }).resume()
+        } else { //bug dans l'URL
+            print("url = nil")
+            reponse =  "url nil"
+            // let pageConnexion = ConnexionAdmin()
+            //pageConnexion.errorWhileConnectingToDatabase(erreur : "url nil")
+        }
     }
     
     //Sert à convertir un text UTF8 en admissible par une URL
@@ -118,7 +161,6 @@ class APIConnexion {
                 text = text.replacingOccurrences(of: String(charactere), with: code) // On le remplace par son code hexa
             }
         }
-        
        return text
     }
 }

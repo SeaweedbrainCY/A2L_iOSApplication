@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="YvL-fE-kpP">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="iWj-Wn-pdI">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -9,6 +9,11 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="Richardine.ttf">
+            <string>Richardine</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Mon QR code-->
         <scene sceneID="CKi-ph-DEx">
@@ -253,6 +258,112 @@
             </objects>
             <point key="canvasLocation" x="485.60000000000002" y="-1039.4302848575712"/>
         </scene>
+        <!--Connexion Admin-->
+        <scene sceneID="3iM-XI-8GQ">
+            <objects>
+                <viewController id="iWj-Wn-pdI" customClass="ConnexionAdmin" customModule="A2L" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="fFr-Ks-DeY">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Membre du bureau ? Je vous souhaite la bienvenue !" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jX2-rh-QmR">
+                                <rect key="frame" x="31.5" y="64" width="312" height="83.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="312" id="WZD-TG-k5V"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Richardine" family="Richardine" pointSize="31"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Nom" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="AYY-3C-uxc">
+                                <rect key="frame" x="195" y="261.5" width="130" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="130" id="Wtl-95-7eQ"/>
+                                </constraints>
+                                <color key="textColor" red="0.0" green="0.68388931480000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="18"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words" keyboardAppearance="alert" returnKeyType="done" textContentType="family-name"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Mot de passe" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Kyc-uu-kpR">
+                                <rect key="frame" x="75.5" y="318.5" width="224" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="224" id="pIq-Oc-5sG"/>
+                                </constraints>
+                                <color key="textColor" red="0.0" green="0.68388931480000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="18"/>
+                                <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="continue" secureTextEntry="YES" textContentType="password"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Prénom" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="GEb-xc-pr8">
+                                <rect key="frame" x="50" y="261.5" width="130" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="130" id="mGE-Px-nkM"/>
+                                </constraints>
+                                <color key="textColor" red="0.0" green="0.68388931480000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="18"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words" keyboardAppearance="alert" returnKeyType="done" textContentType="given-name"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hnu-2C-b00">
+                                <rect key="frame" x="112" y="401" width="151" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="151" id="NV3-rk-7Ll"/>
+                                    <constraint firstAttribute="height" constant="40" id="YMC-TN-6Iy"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Richardine" family="Richardine" pointSize="32"/>
+                                <size key="titleShadowOffset" width="2" height="2"/>
+                                <state key="normal" title="Me connecter">
+                                    <color key="titleColor" red="0.061467683469999999" green="0.74885081119999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="connexionSelectedWithSender:" destination="iWj-Wn-pdI" eventType="touchUpInside" id="1Ts-dz-IoJ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uSu-2X-AbW">
+                                <rect key="frame" x="68.5" y="616" width="238" height="42"/>
+                                <fontDescription key="fontDescription" name="Richardine" family="Richardine" pointSize="22"/>
+                                <state key="normal" title="Me connecter en tant qu'adhérent">
+                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <segue destination="SCS-jz-BOi" kind="presentation" modalTransitionStyle="flipHorizontal" id="v1Y-Q5-4sE"/>
+                                </connections>
+                            </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="RMy-N7-5XA">
+                                <rect key="frame" x="169" y="403" width="37" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="color" red="0.061467683469999999" green="0.74885081119999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Kyc-uu-kpR" firstAttribute="centerX" secondItem="fFr-Ks-DeY" secondAttribute="centerX" id="0x3-VP-1XC"/>
+                            <constraint firstItem="hnu-2C-b00" firstAttribute="top" secondItem="Kyc-uu-kpR" secondAttribute="bottom" constant="52.5" id="3iP-wk-n0N"/>
+                            <constraint firstItem="jX2-rh-QmR" firstAttribute="top" secondItem="UUE-Sm-WO5" secondAttribute="top" constant="44" id="IAd-zt-Z6l"/>
+                            <constraint firstItem="UUE-Sm-WO5" firstAttribute="trailing" secondItem="AYY-3C-uxc" secondAttribute="trailing" constant="50" id="IyT-hY-PNV"/>
+                            <constraint firstItem="GEb-xc-pr8" firstAttribute="leading" secondItem="UUE-Sm-WO5" secondAttribute="leading" constant="50" id="KZS-aC-TP7"/>
+                            <constraint firstItem="UUE-Sm-WO5" firstAttribute="bottom" secondItem="uSu-2X-AbW" secondAttribute="bottom" constant="9" id="ZKC-82-Wa9"/>
+                            <constraint firstItem="Kyc-uu-kpR" firstAttribute="top" secondItem="GEb-xc-pr8" secondAttribute="bottom" constant="27" id="oMo-pX-Uf7"/>
+                            <constraint firstItem="Kyc-uu-kpR" firstAttribute="centerY" secondItem="fFr-Ks-DeY" secondAttribute="centerY" id="szl-cQ-I0w"/>
+                            <constraint firstItem="hnu-2C-b00" firstAttribute="centerX" secondItem="fFr-Ks-DeY" secondAttribute="centerX" id="tFg-vu-Fe1"/>
+                            <constraint firstItem="Kyc-uu-kpR" firstAttribute="top" secondItem="AYY-3C-uxc" secondAttribute="bottom" constant="27" id="tgB-B0-XX1"/>
+                            <constraint firstItem="uSu-2X-AbW" firstAttribute="centerX" secondItem="fFr-Ks-DeY" secondAttribute="centerX" id="v07-Vg-FPm"/>
+                            <constraint firstItem="jX2-rh-QmR" firstAttribute="centerX" secondItem="fFr-Ks-DeY" secondAttribute="centerX" id="z2X-fT-8vh"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="UUE-Sm-WO5"/>
+                    </view>
+                    <connections>
+                        <outlet property="chargement" destination="RMy-N7-5XA" id="VeD-AU-GYm"/>
+                        <outlet property="connexionButton" destination="hnu-2C-b00" id="PUG-ia-WC5"/>
+                        <outlet property="mdpField" destination="Kyc-uu-kpR" id="5Tq-Da-U7W"/>
+                        <outlet property="nomField" destination="AYY-3C-uxc" id="wFu-0Z-kAJ"/>
+                        <outlet property="prenomField" destination="GEb-xc-pr8" id="9uT-qG-Awl"/>
+                        <outlet property="switchToAdherentPage" destination="uSu-2X-AbW" id="Rjt-m5-1EH"/>
+                        <outlet property="titreLabel" destination="jX2-rh-QmR" id="CHd-Kc-g6S"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1cJ-Xm-GZR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4839.1999999999998" y="-206.44677661169416"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="lPR-yt-rZ8">
             <objects>
@@ -413,6 +524,151 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Yc-fR-fen" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1408.8" y="-627.4362818590705"/>
+        </scene>
+        <!--Connexion Adherent-->
+        <scene sceneID="DNt-7P-glg">
+            <objects>
+                <viewController id="SCS-jz-BOi" customClass="ConnexionAdherent" customModule="A2L" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="L2g-fQ-Mqw">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Adhérent de l'A2L connectez vous ;)" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iDJ-u4-HEy">
+                                <rect key="frame" x="31.5" y="64" width="312" height="94"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="312" id="Y3V-XV-feH"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Richardine" family="Richardine" pointSize="35"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Nom" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="UxX-i5-hAH">
+                                <rect key="frame" x="195" y="261" width="130" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="130" id="ljE-tx-KjU"/>
+                                </constraints>
+                                <color key="textColor" red="0.0" green="0.68388931480000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="18"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words" keyboardAppearance="alert" returnKeyType="done" textContentType="family-name"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Jour" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IsI-xh-l0e">
+                                <rect key="frame" x="65" y="318" width="75" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="75" id="2pe-v0-DaQ"/>
+                                </constraints>
+                                <color key="textColor" red="0.0" green="0.68388931480000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="18"/>
+                                <textInputTraits key="textInputTraits" keyboardType="numberPad" keyboardAppearance="alert" returnKeyType="continue"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Mois" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eSA-Am-gpT">
+                                <rect key="frame" x="153.5" y="318.5" width="68" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="68" id="vvY-8R-5eU"/>
+                                </constraints>
+                                <color key="textColor" red="0.0" green="0.68388931480000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="18"/>
+                                <textInputTraits key="textInputTraits" keyboardType="numberPad" keyboardAppearance="alert" returnKeyType="continue"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Année" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L1d-aC-KGc">
+                                <rect key="frame" x="235" y="318.5" width="75" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="75" id="dCy-fO-8qR"/>
+                                </constraints>
+                                <color key="textColor" red="0.0" green="0.68388931480000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="18"/>
+                                <textInputTraits key="textInputTraits" keyboardType="numberPad" keyboardAppearance="alert" returnKeyType="continue"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Prénom" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Jgt-0d-NwN">
+                                <rect key="frame" x="50" y="261" width="130" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="130" id="Rc6-Pi-N5X"/>
+                                </constraints>
+                                <color key="textColor" red="0.0" green="0.68388931480000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="18"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words" keyboardAppearance="alert" returnKeyType="done" textContentType="given-name"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LW6-pL-npT">
+                                <rect key="frame" x="112" y="401.5" width="151" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="V7g-wF-VrP"/>
+                                    <constraint firstAttribute="width" constant="151" id="X9q-jT-aks"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Richardine" family="Richardine" pointSize="32"/>
+                                <size key="titleShadowOffset" width="2" height="2"/>
+                                <state key="normal" title="Me connecter">
+                                    <color key="titleColor" red="0.2278912837" green="0.97680455450000003" blue="0.31047557310000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="connexionSelectedWithSender:" destination="SCS-jz-BOi" eventType="touchUpInside" id="suO-RX-way"/>
+                                </connections>
+                            </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="zOW-xa-i34">
+                                <rect key="frame" x="169" y="403" width="37" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="color" red="0.2278912837" green="0.97680455450000003" blue="0.31047557310000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </activityIndicatorView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="/" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vbY-pV-JZG">
+                                <rect key="frame" x="144" y="321" width="7" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="/" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tkk-S3-XuO">
+                                <rect key="frame" x="225" y="321" width="7" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KCi-QG-jPS">
+                                <rect key="frame" x="25" y="615" width="324" height="42"/>
+                                <fontDescription key="fontDescription" name="Richardine" family="Richardine" pointSize="22"/>
+                                <state key="normal" title="Me connecter en tant que membre du bureau">
+                                    <color key="titleColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <segue destination="iWj-Wn-pdI" kind="presentation" modalTransitionStyle="flipHorizontal" id="ccz-ZF-5Yl"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="L1d-aC-KGc" firstAttribute="centerY" secondItem="L2g-fQ-Mqw" secondAttribute="centerY" id="7y0-IV-1hu"/>
+                            <constraint firstItem="LW6-pL-npT" firstAttribute="top" secondItem="IsI-xh-l0e" secondAttribute="bottom" constant="52.5" id="8DM-aw-PcZ"/>
+                            <constraint firstItem="IsI-xh-l0e" firstAttribute="top" secondItem="Jgt-0d-NwN" secondAttribute="bottom" constant="27" id="Aza-yW-epz"/>
+                            <constraint firstItem="fCZ-iY-Tbm" firstAttribute="trailing" secondItem="UxX-i5-hAH" secondAttribute="trailing" constant="50" id="Ce8-bE-bos"/>
+                            <constraint firstItem="eSA-Am-gpT" firstAttribute="centerY" secondItem="L2g-fQ-Mqw" secondAttribute="centerY" id="JQ6-5C-IiV"/>
+                            <constraint firstItem="fCZ-iY-Tbm" firstAttribute="bottom" secondItem="KCi-QG-jPS" secondAttribute="bottom" constant="9" id="KHh-tR-xqw"/>
+                            <constraint firstItem="IsI-xh-l0e" firstAttribute="centerY" secondItem="L2g-fQ-Mqw" secondAttribute="centerY" id="Lgj-wa-5Ya"/>
+                            <constraint firstItem="IsI-xh-l0e" firstAttribute="leading" secondItem="fCZ-iY-Tbm" secondAttribute="leading" constant="65" id="QAS-DX-x5j"/>
+                            <constraint firstItem="eSA-Am-gpT" firstAttribute="top" secondItem="UxX-i5-hAH" secondAttribute="bottom" constant="27.5" id="SBw-f5-8F6"/>
+                            <constraint firstItem="IsI-xh-l0e" firstAttribute="top" secondItem="UxX-i5-hAH" secondAttribute="bottom" constant="27" id="UE1-kO-wbQ"/>
+                            <constraint firstItem="iDJ-u4-HEy" firstAttribute="centerX" secondItem="L2g-fQ-Mqw" secondAttribute="centerX" id="WGJ-0k-bYy"/>
+                            <constraint firstItem="Jgt-0d-NwN" firstAttribute="leading" secondItem="fCZ-iY-Tbm" secondAttribute="leading" constant="50" id="aQx-8T-yJ9"/>
+                            <constraint firstItem="iDJ-u4-HEy" firstAttribute="top" secondItem="fCZ-iY-Tbm" secondAttribute="top" constant="44" id="hRg-BE-qWw"/>
+                            <constraint firstItem="KCi-QG-jPS" firstAttribute="centerX" secondItem="L2g-fQ-Mqw" secondAttribute="centerX" id="kOG-wn-D1r"/>
+                            <constraint firstItem="fCZ-iY-Tbm" firstAttribute="trailing" secondItem="L1d-aC-KGc" secondAttribute="trailing" constant="65" id="nZ8-U6-gn1"/>
+                            <constraint firstItem="eSA-Am-gpT" firstAttribute="centerX" secondItem="L2g-fQ-Mqw" secondAttribute="centerX" id="oXb-Ko-gB1"/>
+                            <constraint firstItem="LW6-pL-npT" firstAttribute="centerX" secondItem="L2g-fQ-Mqw" secondAttribute="centerX" id="ybX-Gk-4ZW"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="fCZ-iY-Tbm"/>
+                    </view>
+                    <connections>
+                        <outlet property="anneeField" destination="L1d-aC-KGc" id="nQS-T9-83k"/>
+                        <outlet property="chargement" destination="zOW-xa-i34" id="HWc-Z9-NNu"/>
+                        <outlet property="connexionButton" destination="LW6-pL-npT" id="J0D-D0-SUP"/>
+                        <outlet property="jourField" destination="IsI-xh-l0e" id="adu-dr-MGe"/>
+                        <outlet property="moisField" destination="eSA-Am-gpT" id="6nU-tH-HS5"/>
+                        <outlet property="nomField" destination="UxX-i5-hAH" id="LdQ-CM-ZHr"/>
+                        <outlet property="prenomField" destination="Jgt-0d-NwN" id="3Af-lm-ajH"/>
+                        <outlet property="switchToAdminPage" destination="KCi-QG-jPS" id="Apo-zq-nmD"/>
+                        <outlet property="titreLabel" destination="iDJ-u4-HEy" id="jXA-Yv-Ln8"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NZ1-Ox-7YU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4007.1999999999998" y="-206.44677661169416"/>
         </scene>
     </scenes>
     <resources>

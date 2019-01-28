@@ -26,6 +26,10 @@
 		D8E7DAE221E6726300A3E420 /* ScannerDeQRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7DAE121E6726300A3E420 /* ScannerDeQRCode.swift */; };
 		D8FCBA5621EBA35B0027949C /* QRCodeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FCBA5521EBA35B0027949C /* QRCodeData.swift */; };
 		D8FCBA5821EFAC810027949C /* APIConnexion.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FCBA5721EFAC810027949C /* APIConnexion.swift */; };
+		D8FD1BEA21FA79D20064790E /* ConnexionAdmin.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD1BE921FA79D20064790E /* ConnexionAdmin.swift */; };
+		D8FD1BEE21FD383B0064790E /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD1BED21FD383B0064790E /* Button.swift */; };
+		D8FD1BF121FE4A490064790E /* Richardine.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D8FD1BF021FE4A490064790E /* Richardine.ttf */; };
+		D8FD1BF321FE582E0064790E /* ConnexionAdherent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD1BF221FE582E0064790E /* ConnexionAdherent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +75,10 @@
 		D8E7DAE121E6726300A3E420 /* ScannerDeQRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerDeQRCode.swift; sourceTree = "<group>"; };
 		D8FCBA5521EBA35B0027949C /* QRCodeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeData.swift; sourceTree = "<group>"; };
 		D8FCBA5721EFAC810027949C /* APIConnexion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConnexion.swift; sourceTree = "<group>"; };
+		D8FD1BE921FA79D20064790E /* ConnexionAdmin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnexionAdmin.swift; sourceTree = "<group>"; };
+		D8FD1BED21FD383B0064790E /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		D8FD1BF021FE4A490064790E /* Richardine.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Richardine.ttf; sourceTree = "<group>"; };
+		D8FD1BF221FE582E0064790E /* ConnexionAdherent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnexionAdherent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +169,8 @@
 				D8E7DADF21E65EAB00A3E420 /* TabBarController.swift */,
 				D8E7DAE121E6726300A3E420 /* ScannerDeQRCode.swift */,
 				D89124E321E7AEA100B77D0C /* FicheAdhérent.swift */,
+				D8FD1BE921FA79D20064790E /* ConnexionAdmin.swift */,
+				D8FD1BF221FE582E0064790E /* ConnexionAdherent.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -168,8 +178,10 @@
 		D8E7DADC21E64C4100A3E420 /* Style */ = {
 			isa = PBXGroup;
 			children = (
+				D8FD1BEF21FE4A310064790E /* Police */,
 				D8E7DADD21E64C5400A3E420 /* CustomCellTableView.swift */,
 				D83D1C9321F7B471001F88CD /* CustomTextField.swift */,
+				D8FD1BED21FD383B0064790E /* Button.swift */,
 			);
 			path = Style;
 			sourceTree = "<group>";
@@ -184,6 +196,14 @@
 			);
 			name = "GestionDeDonnée";
 			path = "GestionDeDonnée";
+			sourceTree = "<group>";
+		};
+		D8FD1BEF21FE4A310064790E /* Police */ = {
+			isa = PBXGroup;
+			children = (
+				D8FD1BF021FE4A490064790E /* Richardine.ttf */,
+			);
+			path = Police;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -293,6 +313,7 @@
 				D8E7DAAE21E54DDD00A3E420 /* LaunchScreen.storyboard in Resources */,
 				D8E7DAAB21E54DDD00A3E420 /* Assets.xcassets in Resources */,
 				D8E7DAA921E54DD300A3E420 /* Main.storyboard in Resources */,
+				D8FD1BF121FE4A490064790E /* Richardine.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,9 +338,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8FD1BEA21FA79D20064790E /* ConnexionAdmin.swift in Sources */,
 				D8E7DAA621E54DD200A3E420 /* MaFiche.swift in Sources */,
 				D8E7DAE021E65EAB00A3E420 /* TabBarController.swift in Sources */,
+				D8FD1BEE21FD383B0064790E /* Button.swift in Sources */,
 				D8E7DAD521E557E100A3E420 /* QRCode.swift in Sources */,
+				D8FD1BF321FE582E0064790E /* ConnexionAdherent.swift in Sources */,
 				D89124E221E7A97500B77D0C /* GenerateQRcode.swift in Sources */,
 				D83D1C9421F7B471001F88CD /* CustomTextField.swift in Sources */,
 				D8FCBA5821EFAC810027949C /* APIConnexion.swift in Sources */,
