@@ -9,6 +9,9 @@
 import Foundation
 import UIKit
 
+let informationConnexionAdhrent = "infoConnexion.txt" // de la forme 'Stchepinsky Nathan#14/11/2002'
+var infosAdherent = ["nil": "nil"]
+
 class ConnexionAdherent: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var titreLabel: UILabel!
@@ -23,6 +26,7 @@ class ConnexionAdherent: UIViewController, UITextFieldDelegate {
     
     var timer = Timer() //Compteur pour le chrono
     var reponse = "nil" // réponse du serveur
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,7 +74,8 @@ class ConnexionAdherent: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func connexionSelected(sender: UIButton){ // Lorsque l'on se connecte
-        var isValid = true
+        
+       var isValid = true
         let listeField = [self.prenomField, self.nomField, self.jourField, self.moisField, self.anneeField]
         
         for field in listeField { // On vérifie que les champs sont remplis
@@ -164,8 +169,8 @@ class ConnexionAdherent: UIViewController, UITextFieldDelegate {
                     
                 }
             } else if reponse == "success" {
-                print("connexion réussi")
                 //La connexion est réussi et acceptée par le serveur
+                performSegue(withIdentifier: "connexionReussie", sender: self)
             } else { // erreur inconnue
                 self.alert("Impossible de se connecter au serveur", message: reponse)
             }
@@ -184,5 +189,6 @@ class ConnexionAdherent: UIViewController, UITextFieldDelegate {
             self.switchToAdminPage.isHidden = false
         }
     }
+    
 }
 

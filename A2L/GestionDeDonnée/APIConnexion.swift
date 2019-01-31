@@ -49,6 +49,7 @@ class APIConnexion {
                                     temporaryDictionnary.updateValue(information.value(forKey: "Nom") as! String, forKey: "Nom")
                                     temporaryDictionnary.updateValue(information.value(forKey: "Statut") as! String, forKey: "Statut")
                                     temporaryDictionnary.updateValue(information.value(forKey: "DateNaissance") as! String, forKey: "dateNaissance")
+                                    temporaryDictionnary.updateValue(information.value(forKey: "URLimg") as! String, forKey: "URLimg")
                                     self.allInfo.append(temporaryDictionnary) // et on ajoute notre nouveau dico au tableau général
                                     reponse = "success"
                                 }
@@ -114,7 +115,8 @@ class APIConnexion {
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "id") as! String, forKey: "id")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Nom") as! String, forKey: "Nom")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Statut") as! String, forKey: "Statut")
-                            temporaryDictionnary.updateValue(dataUser.value(forKey: "DateNaissance") as! String, forKey: "dateNaissance")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "DateNaissance") as! String, forKey: "DateNaissance")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "URLimg") as! String, forKey: "URLimg")
                             self.allInfo.append(temporaryDictionnary) // et on ajoute notre nouveau dico au tableau général
                             print("all info = \(self.allInfo)")
                             reponse = "success"
@@ -137,15 +139,24 @@ class APIConnexion {
                     }
                     OperationQueue.main.addOperation({ // Une fois l'action effectuée on envoie le resultat
                         print("result message = \(reponse)")
+                        //let adherentPage = ConnexionAdherent()
+                        //adherentPage.saveData(self.allInfo[1])
+                        infosAdherent = self.allInfo[1]
                         let file = FileManager.default
                         file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(erreurPath).path, contents: reponse.data(using: String.Encoding.utf8), attributes: nil)
+                        
+                        if reponse == "success" { // Si on a réussi on stock les infos de l'adhérent pour 'garder la session ouverte'
+                            let file = FileManager.default
+                            file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(informationConnexionAdhrent).path, contents: "\(nom)#\(dateNaissance)".data(using: String.Encoding.utf8), attributes: nil)
+                        }
                     })
                     
                 }
             }).resume()
         } else { //bug dans l'URL
             print("url = nil")
-            reponse =  "url nil"
+            let file = FileManager.default
+            file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(erreurPath).path, contents: "Les informations saisies semblent comporter des caractères inconnus".data(using: String.Encoding.utf8), attributes: nil)
             // let pageConnexion = ConnexionAdmin()
             //pageConnexion.errorWhileConnectingToDatabase(erreur : "url nil")
         }
@@ -155,7 +166,7 @@ class APIConnexion {
     //Charactères spéciaux autorisés : *$€£%ù+=?!@#&àç-
     public func convertionToHexaCode(_ letText: String) -> String{
         var text = letText
-        let listeCharactereSpeciaux: [Character: String] = ["$": "%24", "€": "%80", "£": "%a3", "ù":"%fa", "+":"%2b", "=":"%3d", "?":"%3f", "!":"%21", "@":"%40", "#":"%23", "&":"%26", "à":"%e0", "ç":"%e7", "-":"%2d", " ":"%20"]
+        let listeCharactereSpeciaux: [Character: String] = ["$": "%24", "€": "%80", "£": "%a3", "ù":"%C3%B9", "+":"%2b", "=":"%3d", "?":"%3f", "!":"%21", "@":"%40", "#":"%23", "&":"%26", "à":"%C3%A0", "ç":"%e7", "-":"%2d", " ":"%20", "*": "%2A", "é":"%C3%A9","è":"%C3%A8", "ê":"%C3%AA", "ë":"%CA%AB", "ü":"%C3%BC", "û":"%C3%BB", "É":"%C3%89",  "È":"%C3%88", "Ê":"%C3%8A", "Ë":"%C3%8B", "Û":"%C3%9B", "Ü":"%C39C"]
         for (charactere, code) in listeCharactereSpeciaux {
             if text.contains(charactere) { // Si on a un charactère spécial
                 text = text.replacingOccurrences(of: String(charactere), with: code) // On le remplace par son code hexa

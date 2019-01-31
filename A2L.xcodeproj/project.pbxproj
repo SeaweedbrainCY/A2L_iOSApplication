@@ -28,8 +28,14 @@
 		D8FCBA5821EFAC810027949C /* APIConnexion.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FCBA5721EFAC810027949C /* APIConnexion.swift */; };
 		D8FD1BEA21FA79D20064790E /* ConnexionAdmin.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD1BE921FA79D20064790E /* ConnexionAdmin.swift */; };
 		D8FD1BEE21FD383B0064790E /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD1BED21FD383B0064790E /* Button.swift */; };
-		D8FD1BF121FE4A490064790E /* Richardine.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D8FD1BF021FE4A490064790E /* Richardine.ttf */; };
 		D8FD1BF321FE582E0064790E /* ConnexionAdherent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD1BF221FE582E0064790E /* ConnexionAdherent.swift */; };
+		D8FD1BF52200DD080064790E /* NSAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD1BF42200DD080064790E /* NSAttributedString.swift */; };
+		D8FD1BF92200F8700064790E /* Comfortaa-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D8FD1BF62200F8700064790E /* Comfortaa-Regular.ttf */; };
+		D8FD1BFA2200F8700064790E /* Comfortaa-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D8FD1BF72200F8700064790E /* Comfortaa-Light.ttf */; };
+		D8FD1BFB2200F8700064790E /* Comfortaa-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D8FD1BF82200F8700064790E /* Comfortaa-Bold.ttf */; };
+		D8FD1BFD220102240064790E /* CustomeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD1BFC220102240064790E /* CustomeImage.swift */; };
+		D8FD1BFF2203A6C50064790E /* gifGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD1BFE2203A6C50064790E /* gifGenerator.swift */; };
+		D8FD1C022203A70C0064790E /* chargementGif.gif in Resources */ = {isa = PBXBuildFile; fileRef = D8FD1C012203A70C0064790E /* chargementGif.gif */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,8 +83,14 @@
 		D8FCBA5721EFAC810027949C /* APIConnexion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConnexion.swift; sourceTree = "<group>"; };
 		D8FD1BE921FA79D20064790E /* ConnexionAdmin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnexionAdmin.swift; sourceTree = "<group>"; };
 		D8FD1BED21FD383B0064790E /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
-		D8FD1BF021FE4A490064790E /* Richardine.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Richardine.ttf; sourceTree = "<group>"; };
 		D8FD1BF221FE582E0064790E /* ConnexionAdherent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnexionAdherent.swift; sourceTree = "<group>"; };
+		D8FD1BF42200DD080064790E /* NSAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAttributedString.swift; sourceTree = "<group>"; };
+		D8FD1BF62200F8700064790E /* Comfortaa-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Comfortaa-Regular.ttf"; sourceTree = "<group>"; };
+		D8FD1BF72200F8700064790E /* Comfortaa-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Comfortaa-Light.ttf"; sourceTree = "<group>"; };
+		D8FD1BF82200F8700064790E /* Comfortaa-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Comfortaa-Bold.ttf"; sourceTree = "<group>"; };
+		D8FD1BFC220102240064790E /* CustomeImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomeImage.swift; sourceTree = "<group>"; };
+		D8FD1BFE2203A6C50064790E /* gifGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gifGenerator.swift; sourceTree = "<group>"; };
+		D8FD1C012203A70C0064790E /* chargementGif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = chargementGif.gif; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,10 +190,13 @@
 		D8E7DADC21E64C4100A3E420 /* Style */ = {
 			isa = PBXGroup;
 			children = (
+				D8FD1C002203A6F50064790E /* Gifs */,
 				D8FD1BEF21FE4A310064790E /* Police */,
 				D8E7DADD21E64C5400A3E420 /* CustomCellTableView.swift */,
 				D83D1C9321F7B471001F88CD /* CustomTextField.swift */,
 				D8FD1BED21FD383B0064790E /* Button.swift */,
+				D8FD1BF42200DD080064790E /* NSAttributedString.swift */,
+				D8FD1BFC220102240064790E /* CustomeImage.swift */,
 			);
 			path = Style;
 			sourceTree = "<group>";
@@ -193,6 +208,7 @@
 				D8FCBA5721EFAC810027949C /* APIConnexion.swift */,
 				D89124E121E7A97500B77D0C /* GenerateQRcode.swift */,
 				D83D1C9121F67476001F88CD /* HashProtocol.swift */,
+				D8FD1BFE2203A6C50064790E /* gifGenerator.swift */,
 			);
 			name = "GestionDeDonnée";
 			path = "GestionDeDonnée";
@@ -201,9 +217,19 @@
 		D8FD1BEF21FE4A310064790E /* Police */ = {
 			isa = PBXGroup;
 			children = (
-				D8FD1BF021FE4A490064790E /* Richardine.ttf */,
+				D8FD1BF82200F8700064790E /* Comfortaa-Bold.ttf */,
+				D8FD1BF72200F8700064790E /* Comfortaa-Light.ttf */,
+				D8FD1BF62200F8700064790E /* Comfortaa-Regular.ttf */,
 			);
 			path = Police;
+			sourceTree = "<group>";
+		};
+		D8FD1C002203A6F50064790E /* Gifs */ = {
+			isa = PBXGroup;
+			children = (
+				D8FD1C012203A70C0064790E /* chargementGif.gif */,
+			);
+			path = Gifs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -310,10 +336,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8FD1BF92200F8700064790E /* Comfortaa-Regular.ttf in Resources */,
 				D8E7DAAE21E54DDD00A3E420 /* LaunchScreen.storyboard in Resources */,
+				D8FD1C022203A70C0064790E /* chargementGif.gif in Resources */,
+				D8FD1BFB2200F8700064790E /* Comfortaa-Bold.ttf in Resources */,
 				D8E7DAAB21E54DDD00A3E420 /* Assets.xcassets in Resources */,
 				D8E7DAA921E54DD300A3E420 /* Main.storyboard in Resources */,
-				D8FD1BF121FE4A490064790E /* Richardine.ttf in Resources */,
+				D8FD1BFA2200F8700064790E /* Comfortaa-Light.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,13 +373,16 @@
 				D8FD1BEE21FD383B0064790E /* Button.swift in Sources */,
 				D8E7DAD521E557E100A3E420 /* QRCode.swift in Sources */,
 				D8FD1BF321FE582E0064790E /* ConnexionAdherent.swift in Sources */,
+				D8FD1BFF2203A6C50064790E /* gifGenerator.swift in Sources */,
 				D89124E221E7A97500B77D0C /* GenerateQRcode.swift in Sources */,
+				D8FD1BFD220102240064790E /* CustomeImage.swift in Sources */,
 				D83D1C9421F7B471001F88CD /* CustomTextField.swift in Sources */,
 				D8FCBA5821EFAC810027949C /* APIConnexion.swift in Sources */,
 				D89124E421E7AEA100B77D0C /* FicheAdhérent.swift in Sources */,
 				D8E7DADB21E6409A00A3E420 /* ListeAdherents.swift in Sources */,
 				D8E7DAA421E54DD200A3E420 /* AppDelegate.swift in Sources */,
 				D8FCBA5621EBA35B0027949C /* QRCodeData.swift in Sources */,
+				D8FD1BF52200DD080064790E /* NSAttributedString.swift in Sources */,
 				D8E7DAD921E6340700A3E420 /* Réglages.swift in Sources */,
 				D8E7DADE21E64C5400A3E420 /* CustomCellTableView.swift in Sources */,
 				D83D1C9221F67476001F88CD /* HashProtocol.swift in Sources */,

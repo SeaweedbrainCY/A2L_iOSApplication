@@ -159,7 +159,6 @@ class ConnexionAdmin: UIViewController, UITextFieldDelegate {
                     
                 }
             } else if reponse == "success" {
-                print("connexion réussi")
                 //On a réussi, on transmet les données et on change de view
             } else { // pour les erreurs inconnues
                 self.alert("Impossible de se connecter au serveur", message: reponse)
