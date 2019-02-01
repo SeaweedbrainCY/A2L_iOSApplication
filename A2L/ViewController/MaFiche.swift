@@ -21,42 +21,20 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
     var chargementView: UIActivityIndicatorView?
     var imageView:UIImageView?
     
-    var nom = "Error"
-    var statut = "Error"
-    var dateNaissanceString = "Error"
-    
-    var timer = Timer() //Se charge de verifier l'arrivée de l'image
+    var timer = Timer()
     
     override func viewDidLoad() { // lancée quand la vue load
         super.viewDidLoad()
-        print("listeInfoAdherent = \(listeInfoAdherent)")
-        var statut = "Adhérent"
-        do {
-            statut = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(testeur), encoding: .utf8)
-        } catch {
-            print("^^^^^^^^^Fichier introuvable.^^^^^^^^")
+        let localData = LocalData()
+        localData.returnDataFrom(stockInfosAdherent) // On enregistre la data de l'user dans la base local
+        listeInfoAdherent = infosAdherent
+        if listeInfoAdherent != ["nil":"nil"]{ // Si on a les infos
+            loadAllView()
+        } else { // On ne detecte aucune informations en local, on ne sait pas qui est l'adhérent donc on load la page de connexion
+            performSegue(withIdentifier: "connexionAdherent", sender: self)
         }
-        
-        var infosConnexion = "nil"
-        do {
-            infosConnexion = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(informationConnexionAdhrent), encoding: .utf8)
-        } catch {
-            nom = "Error"
-            dateNaissanceString = "Error"
-        }
-        
-        if infosConnexion.contains("#") { // Si on trouve qqchose
-            let infos = infosConnexion.split(separator: "#")
-            nom = String(infos[0]) // Et enregistré de cette manière
-            dateNaissanceString = String(infos[1])
-        } else {
-            nom = "Error"
-            dateNaissanceString = "Error"
-        }
-        // On lance un compteur qui permet de verfier toutes les secondes si on a une réponse du serveur
+        //On lance un timer pour verifier toutes les secondes si on a une réponse
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
-        loadAllView()
-        
     }
     
     private func loadAllView(){ // est appelé pour agencé les différents élements de la page
@@ -123,22 +101,21 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         self.chargementView = chargement*/
     }
     
-    
-    @objc func verificationReponse(){ // Est appelé pour verifier les réponses du serveur
-        if imageView?.image != UIImage(named: "Logo_A2L"){
-            timer.invalidate() // On arrète le timer
-            print("image non validée")
-            if reponseURLRequestImage == "success" {
-                print("success")
-                if self.chargementView != nil {
-                    self.chargementView?.stopAnimating() // On arrète le chargement en cours
-                }
-            }
-            print("Error loading image: \(reponseURLRequestImage)")
-            reponseURLRequestImage = "nil" // On réinitialise
+    @objc func verificationReponse() { // Est appelé pour verifier si on a une réponse ou non du serveur
+        if reponseURLRequestImage != "nil" && reponseURLRequestImage != "success" && imageView != nil{
+            self.imageView?.image = UIImage(named: "binaireWorld") //image de bug
+            let errorLabel = UILabel()
+            self.backgroundView.addSubview(errorLabel)
+            errorLabel.translatesAutoresizingMaskIntoConstraints = false
+            errorLabel.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
+            errorLabel.topAnchor.constraint(equalToSystemSpacingBelow: (self.imageView?.bottomAnchor)!, multiplier: 2).isActive = true
+            errorLabel.textColor = .red
+            errorLabel.font = UIFont(name: "Comfortaa-Regular", size: 18)
+            
+            errorLabel.text = "Erreur serveur: \(reponseURLRequestImage)"
+            
+            timer.invalidate()
         }
     }
-    
-    
 }
 

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-let nbrInvalidateMdpPath = "nbrInvalidateMdp.text" // Nombre de fois qu'un mot de passe a été refusé = lutte contre la brut force
+
 
 class ConnexionAdmin: UIViewController, UITextFieldDelegate {
     
@@ -131,7 +131,7 @@ class ConnexionAdmin: UIViewController, UITextFieldDelegate {
     
     @objc private func verificationReponse(){ // est appelé par le compteur pour verifier si on a une réponse
         do {// On regarde l'erreur qui est actuellement enregistrée dans les fichiers
-            reponse = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(erreurPath), encoding: .utf8)
+            reponse = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur), encoding: .utf8)
         } catch {
             print("Fichier introuvable. ERREUR GRAVE")
         }
@@ -171,7 +171,7 @@ class ConnexionAdmin: UIViewController, UITextFieldDelegate {
                 self.mdpField.text = ""
             }
             let file = FileManager.default
-            file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(erreurPath).path, contents: "nil".data(using: String.Encoding.utf8), attributes: nil)
+            file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: "nil".data(using: String.Encoding.utf8), attributes: nil)
             self.chargement.stopAnimating()
             self.connexionButton.isHidden = false // On réactive tout
             self.switchToAdherentPage.isHidden = false

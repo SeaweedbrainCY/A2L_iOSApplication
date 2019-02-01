@@ -36,6 +36,8 @@
 		D8FD1BFD220102240064790E /* CustomeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD1BFC220102240064790E /* CustomeImage.swift */; };
 		D8FD1BFF2203A6C50064790E /* gifGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD1BFE2203A6C50064790E /* gifGenerator.swift */; };
 		D8FD1C022203A70C0064790E /* chargementGif.gif in Resources */ = {isa = PBXBuildFile; fileRef = D8FD1C012203A70C0064790E /* chargementGif.gif */; };
+		D8FD1C042204C18A0064790E /* LocalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD1C032204C18A0064790E /* LocalData.swift */; };
+		D8FD1C062204E70C0064790E /* NoClassVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD1C052204E70C0064790E /* NoClassVariable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +93,8 @@
 		D8FD1BFC220102240064790E /* CustomeImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomeImage.swift; sourceTree = "<group>"; };
 		D8FD1BFE2203A6C50064790E /* gifGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gifGenerator.swift; sourceTree = "<group>"; };
 		D8FD1C012203A70C0064790E /* chargementGif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = chargementGif.gif; sourceTree = "<group>"; };
+		D8FD1C032204C18A0064790E /* LocalData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalData.swift; sourceTree = "<group>"; };
+		D8FD1C052204E70C0064790E /* NoClassVariable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoClassVariable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -209,6 +213,8 @@
 				D89124E121E7A97500B77D0C /* GenerateQRcode.swift */,
 				D83D1C9121F67476001F88CD /* HashProtocol.swift */,
 				D8FD1BFE2203A6C50064790E /* gifGenerator.swift */,
+				D8FD1C032204C18A0064790E /* LocalData.swift */,
+				D8FD1C052204E70C0064790E /* NoClassVariable.swift */,
 			);
 			name = "GestionDeDonnée";
 			path = "GestionDeDonnée";
@@ -373,6 +379,7 @@
 				D8FD1BEE21FD383B0064790E /* Button.swift in Sources */,
 				D8E7DAD521E557E100A3E420 /* QRCode.swift in Sources */,
 				D8FD1BF321FE582E0064790E /* ConnexionAdherent.swift in Sources */,
+				D8FD1C042204C18A0064790E /* LocalData.swift in Sources */,
 				D8FD1BFF2203A6C50064790E /* gifGenerator.swift in Sources */,
 				D89124E221E7A97500B77D0C /* GenerateQRcode.swift in Sources */,
 				D8FD1BFD220102240064790E /* CustomeImage.swift in Sources */,
@@ -385,6 +392,7 @@
 				D8FD1BF52200DD080064790E /* NSAttributedString.swift in Sources */,
 				D8E7DAD921E6340700A3E420 /* Réglages.swift in Sources */,
 				D8E7DADE21E64C5400A3E420 /* CustomCellTableView.swift in Sources */,
+				D8FD1C062204E70C0064790E /* NoClassVariable.swift in Sources */,
 				D83D1C9221F67476001F88CD /* HashProtocol.swift in Sources */,
 				D8E7DAE221E6726300A3E420 /* ScannerDeQRCode.swift in Sources */,
 			);

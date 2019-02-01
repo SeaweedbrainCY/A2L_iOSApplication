@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-var reponseURLRequestImage = "nil" // Reponse su serveur
+
 
 extension UIImageView {
     public func imageFromUrl(urlString: String) { // Pour download une image à partir d'une url

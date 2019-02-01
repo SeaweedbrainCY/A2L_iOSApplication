@@ -9,8 +9,7 @@
 import Foundation
 import UIKit
 
-let informationConnexionAdhrent = "infoConnexion.txt" // de la forme 'Stchepinsky Nathan#14/11/2002'
-var infosAdherent = ["nil": "nil"]
+
 
 class ConnexionAdherent: UIViewController, UITextFieldDelegate {
     
@@ -141,7 +140,7 @@ class ConnexionAdherent: UIViewController, UITextFieldDelegate {
     
     @objc private func verificationReponse(){ // est appelé par le compteur pour verifier si on a une réponse
         do { // Va chercher dans les mémoires si on a une réponse d'enregistrée
-            reponse = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(erreurPath), encoding: .utf8)
+            reponse = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur), encoding: .utf8)
         } catch {
             print("Fichier introuvable. ERREUR GRAVE")
         }
@@ -183,7 +182,7 @@ class ConnexionAdherent: UIViewController, UITextFieldDelegate {
             }
             //On réinitialise l'erreur :
             let file = FileManager.default
-            file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(erreurPath).path, contents: "nil".data(using: String.Encoding.utf8), attributes: nil)
+            file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: "nil".data(using: String.Encoding.utf8), attributes: nil)
             self.chargement.stopAnimating()
             self.connexionButton.isHidden = false
             self.switchToAdminPage.isHidden = false

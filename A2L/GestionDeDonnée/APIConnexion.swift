@@ -9,8 +9,6 @@
 import Foundation
 import UIKit
 
-let erreurPath = "erreurPath.text"
-
 class APIConnexion {
     
     var allInfo: [[String:String]] = [[:]]// Voila le tableau qui résumera toutes les données de tous les adhérents
@@ -34,7 +32,7 @@ class APIConnexion {
                     print("******ERROR FATAL. URL NON FONCTIONNEL. ECHEC : \(String(describing: error))")
                     
                     let file = FileManager.default
-                    file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(erreurPath).path, contents: error?.localizedDescription.data(using: String.Encoding.utf8), attributes: nil)
+                    file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: error?.localizedDescription.data(using: String.Encoding.utf8), attributes: nil)
                     
                     
                 } else { // Si aucune erreur n'est survenu
@@ -72,7 +70,7 @@ class APIConnexion {
                     }
                     OperationQueue.main.addOperation({ // Une fois l'action effectuée on envoie le resultat
                         let file = FileManager.default
-                        file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(erreurPath).path, contents: reponse.data(using: String.Encoding.utf8), attributes: nil)
+                        file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: reponse.data(using: String.Encoding.utf8), attributes: nil)
                     })
 
                 }
@@ -101,7 +99,7 @@ class APIConnexion {
                     print("******ERROR FATAL. URL NON FONCTIONNEL. ECHEC : \(String(describing: error))")
                     
                     let file = FileManager.default
-                    file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(erreurPath).path, contents: error?.localizedDescription.data(using: String.Encoding.utf8), attributes: nil)
+                    file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: error?.localizedDescription.data(using: String.Encoding.utf8), attributes: nil)
                     
                     
                 } else { // Si aucune erreur n'est survenu
@@ -117,7 +115,7 @@ class APIConnexion {
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Statut") as! String, forKey: "Statut")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "DateNaissance") as! String, forKey: "DateNaissance")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "URLimg") as! String, forKey: "URLimg")
-                            self.allInfo.append(temporaryDictionnary) // et on ajoute notre nouveau dico au tableau général
+                            self.allInfo = [temporaryDictionnary] // et on ajoute notre nouveau dico au tableau général
                             print("all info = \(self.allInfo)")
                             reponse = "success"
                         } else if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
@@ -141,9 +139,14 @@ class APIConnexion {
                         print("result message = \(reponse)")
                         //let adherentPage = ConnexionAdherent()
                         //adherentPage.saveData(self.allInfo[1])
-                        infosAdherent = self.allInfo[1]
+                        infosAdherent = self.allInfo[0] //On stock dans le tableau temporaire
+                        
+                        //On enregistre les données dans le local :
+                        let localData = LocalData()
+                        localData.stockDataTo(stockInfosAdherent)
+                        
                         let file = FileManager.default
-                        file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(erreurPath).path, contents: reponse.data(using: String.Encoding.utf8), attributes: nil)
+                        file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: reponse.data(using: String.Encoding.utf8), attributes: nil)
                         
                         if reponse == "success" { // Si on a réussi on stock les infos de l'adhérent pour 'garder la session ouverte'
                             let file = FileManager.default
@@ -156,7 +159,7 @@ class APIConnexion {
         } else { //bug dans l'URL
             print("url = nil")
             let file = FileManager.default
-            file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(erreurPath).path, contents: "Les informations saisies semblent comporter des caractères inconnus".data(using: String.Encoding.utf8), attributes: nil)
+            file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: "Les informations saisies semblent comporter des caractères inconnus".data(using: String.Encoding.utf8), attributes: nil)
             // let pageConnexion = ConnexionAdmin()
             //pageConnexion.errorWhileConnectingToDatabase(erreur : "url nil")
         }

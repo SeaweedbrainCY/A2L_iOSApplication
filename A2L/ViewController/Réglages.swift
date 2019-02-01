@@ -178,7 +178,8 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
                 chargement.color = .red
                 chargement.frame.origin = CGPoint(x: self.tableView.frame.size.width / 2, y: self.tableView.frame.size.height / 2) // on le place en plein milieu
                 chargement.startAnimating()
-            case 1 : break
+            case 1 : // Se deconnecter
+                performSegue(withIdentifier: "pageConnexion", sender: self)
             default : break
             }
         }

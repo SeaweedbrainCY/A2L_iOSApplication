@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="SCS-jz-BOi">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="YvL-fE-kpP">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -105,6 +105,7 @@
                     <navigationItem key="navigationItem" title="Réglages" id="83R-sF-ggy"/>
                     <connections>
                         <outlet property="tableView" destination="8PT-oC-63Q" id="AZD-JY-v4C"/>
+                        <segue destination="SCS-jz-BOi" kind="showDetail" identifier="pageConnexion" id="Gxn-2m-N7j"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EUH-7M-HEj" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -176,6 +177,7 @@
                     <connections>
                         <outlet property="backgroundView" destination="Co2-VY-wlO" id="5JR-8Y-uGG"/>
                         <outlet property="scrollView" destination="jw8-x3-NG4" id="o6c-YD-U8B"/>
+                        <segue destination="SCS-jz-BOi" kind="showDetail" identifier="connexionAdherent" id="A1V-CK-4wQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mvn-1z-31t" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -498,7 +500,7 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Müller" borderStyle="roundedRect" placeholder="Nom" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="UxX-i5-hAH">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Nom" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="UxX-i5-hAH">
                                 <rect key="frame" x="195" y="261" width="130" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="130" id="ljE-tx-KjU"/>
@@ -507,7 +509,7 @@
                                 <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="words" keyboardAppearance="alert" returnKeyType="done" textContentType="family-name"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="17" borderStyle="roundedRect" placeholder="Jour" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IsI-xh-l0e">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Jour" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IsI-xh-l0e">
                                 <rect key="frame" x="65" y="318" width="75" height="31"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="75" id="2pe-v0-DaQ"/>
@@ -516,7 +518,7 @@
                                 <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" keyboardType="numberPad" keyboardAppearance="alert" returnKeyType="continue"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="03" borderStyle="roundedRect" placeholder="Mois" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eSA-Am-gpT">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Mois" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eSA-Am-gpT">
                                 <rect key="frame" x="153.5" y="318.5" width="68" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="68" id="vvY-8R-5eU"/>
@@ -525,7 +527,7 @@
                                 <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" keyboardType="numberPad" keyboardAppearance="alert" returnKeyType="continue"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="2001" borderStyle="roundedRect" placeholder="Année" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L1d-aC-KGc">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Année" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L1d-aC-KGc">
                                 <rect key="frame" x="235" y="318.5" width="75" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="75" id="dCy-fO-8qR"/>
@@ -534,7 +536,7 @@
                                 <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" keyboardType="numberPad" keyboardAppearance="alert" returnKeyType="continue"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Clémentine" borderStyle="roundedRect" placeholder="Prénom" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Jgt-0d-NwN">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Prénom" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Jgt-0d-NwN">
                                 <rect key="frame" x="50" y="261" width="130" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="130" id="Rc6-Pi-N5X"/>
@@ -558,9 +560,8 @@
                                     <action selector="connexionSelectedWithSender:" destination="SCS-jz-BOi" eventType="touchUpInside" id="suO-RX-way"/>
                                 </connections>
                             </button>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="zOW-xa-i34">
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="zOW-xa-i34">
                                 <rect key="frame" x="169" y="403" width="37" height="37"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="color" red="0.2278912837" green="0.97680455450000003" blue="0.31047557310000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </activityIndicatorView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="/" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vbY-pV-JZG">
@@ -588,6 +589,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="zOW-xa-i34" firstAttribute="centerX" secondItem="L2g-fQ-Mqw" secondAttribute="centerX" id="3hR-IG-RRR"/>
                             <constraint firstItem="L1d-aC-KGc" firstAttribute="centerY" secondItem="L2g-fQ-Mqw" secondAttribute="centerY" id="7y0-IV-1hu"/>
                             <constraint firstItem="LW6-pL-npT" firstAttribute="top" secondItem="IsI-xh-l0e" secondAttribute="bottom" constant="52.5" id="8DM-aw-PcZ"/>
                             <constraint firstItem="IsI-xh-l0e" firstAttribute="top" secondItem="Jgt-0d-NwN" secondAttribute="bottom" constant="27" id="Aza-yW-epz"/>
@@ -605,6 +607,7 @@
                             <constraint firstItem="iDJ-u4-HEy" firstAttribute="centerX" secondItem="L2g-fQ-Mqw" secondAttribute="centerX" id="WGJ-0k-bYy"/>
                             <constraint firstItem="Jgt-0d-NwN" firstAttribute="leading" secondItem="fCZ-iY-Tbm" secondAttribute="leading" constant="50" id="aQx-8T-yJ9"/>
                             <constraint firstItem="tkk-S3-XuO" firstAttribute="leading" secondItem="eSA-Am-gpT" secondAttribute="trailing" constant="3.5" id="eQs-5q-0c2"/>
+                            <constraint firstItem="zOW-xa-i34" firstAttribute="top" secondItem="eSA-Am-gpT" secondAttribute="bottom" constant="54.5" id="fGp-iK-9yK"/>
                             <constraint firstItem="iDJ-u4-HEy" firstAttribute="top" secondItem="fCZ-iY-Tbm" secondAttribute="top" constant="44" id="hRg-BE-qWw"/>
                             <constraint firstItem="KCi-QG-jPS" firstAttribute="centerX" secondItem="L2g-fQ-Mqw" secondAttribute="centerX" id="kOG-wn-D1r"/>
                             <constraint firstItem="fCZ-iY-Tbm" firstAttribute="trailing" secondItem="L1d-aC-KGc" secondAttribute="trailing" constant="65" id="nZ8-U6-gn1"/>
@@ -640,6 +643,7 @@
         <image name="settings" width="36" height="36"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="A1V-CK-4wQ"/>
         <segue reference="eSj-Lz-PBB"/>
     </inferredMetricsTieBreakers>
 </document>
