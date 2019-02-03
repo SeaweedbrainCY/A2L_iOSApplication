@@ -19,7 +19,7 @@ extension UIImageView {
             DispatchQueue.main.async {
                 URLSession.shared.dataTask(with: url, completionHandler: {(data, response, error) in
                     if error != nil {
-                        reponseURLRequestImage = error.debugDescription
+                        reponseURLRequestImage = (error?.localizedDescription)!
                     } else { // Aucune erreur
                         if let imageData = data as Data? {
                             self.image = UIImage(data: imageData as Data)

@@ -20,6 +20,8 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
     var listeInfoAdherent = infosAdherent //listeDeToutes les infos
     var chargementView: UIActivityIndicatorView?
     var imageView:UIImageView?
+    var dateNaissanceLabelAnchor:NSLayoutConstraint? // doit pouvoir être désactivée si besoin
+    var dateNaissanceLabel: UILabel?
     
     var timer = Timer()
     
@@ -63,7 +65,8 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         self.backgroundView.addSubview(dateNaissance)
         dateNaissance.translatesAutoresizingMaskIntoConstraints = false
         dateNaissance.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 5).isActive = true
-        dateNaissance.topAnchor.constraint(equalToSystemSpacingBelow: photoId.bottomAnchor, multiplier: 4).isActive = true
+        dateNaissanceLabelAnchor = dateNaissance.topAnchor.constraint(equalToSystemSpacingBelow: photoId.bottomAnchor, multiplier: 4)
+        dateNaissanceLabelAnchor?.isActive = true
         dateNaissance.textColor = .blue
         dateNaissance.font = UIFont(name: "Comfortaa-Regular", size: 18)
         dateNaissance.text = "Date de naissance : \(listeInfoAdherent["DateNaissance"] ?? "Error")"
@@ -72,6 +75,8 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         coloration.setColorForText(textForAttribute: "Date de naissance :", withColor: .black)
         coloration.setFontForText(textForAttribute: "Date de naissance :", withFont: UIFont(name: "Comfortaa-Bold", size: 18)!)
         dateNaissance.attributedText = coloration
+        self.dateNaissanceLabel = dateNaissance
+        
         
         
         let statut = UILabel()
@@ -104,15 +109,25 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
     @objc func verificationReponse() { // Est appelé pour verifier si on a une réponse ou non du serveur
         if reponseURLRequestImage != "nil" && reponseURLRequestImage != "success" && imageView != nil{
             self.imageView?.image = UIImage(named: "binaireWorld") //image de bug
+            self.imageView?.widthAnchor.constraint(equalToConstant: 150).isActive = true
+            self.imageView?.heightAnchor.constraint(equalToConstant: 150).isActive = true
+            
             let errorLabel = UILabel()
             self.backgroundView.addSubview(errorLabel)
             errorLabel.translatesAutoresizingMaskIntoConstraints = false
+            errorLabel.widthAnchor.constraint(equalToConstant: 390).isActive = true
+            errorLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
             errorLabel.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
-            errorLabel.topAnchor.constraint(equalToSystemSpacingBelow: (self.imageView?.bottomAnchor)!, multiplier: 2).isActive = true
+            errorLabel.topAnchor.constraint(equalToSystemSpacingBelow: (self.imageView?.bottomAnchor)!, multiplier: -0.5).isActive = true
+            errorLabel.numberOfLines = 3
             errorLabel.textColor = .red
-            errorLabel.font = UIFont(name: "Comfortaa-Regular", size: 18)
+            errorLabel.font = UIFont(name: "Comfortaa-Light", size: 12)
+            errorLabel.text = "\(reponseURLRequestImage)"
+            errorLabel.textAlignment = .center
             
-            errorLabel.text = "Erreur serveur: \(reponseURLRequestImage)"
+            
+            dateNaissanceLabelAnchor?.isActive = false // On la désactive pour en instancier une nouvelle
+            dateNaissanceLabel?.topAnchor.constraint(equalToSystemSpacingBelow: errorLabel.bottomAnchor, multiplier: 2).isActive = true
             
             timer.invalidate()
         }
