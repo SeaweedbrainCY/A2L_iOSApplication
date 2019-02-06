@@ -14,25 +14,40 @@ import UIKit
 class QRCode: UIViewController {
     
     @IBOutlet weak var scanner: UIBarButtonItem! // lié au ItemButton du controller
+    @IBOutlet weak var QRCodeImage: UIImageView!
+    @IBOutlet weak var nomLabel: UILabel!
+    
+    var listeInfoAdherent = infosAdherent // liste de toutes les infos sur l'adherent
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let localData = LocalData()
+        localData.returnDataFrom(stockInfosAdherent)
+        listeInfoAdherent = infosAdherent // on récupère les données stocké
+        
+        nomLabel.text = listeInfoAdherent["Nom"] ?? "Error"
+        
+        //QRCodeImage.loadGif(name: "chargementGif") // Chargement en cours
+        
+        
+    }
     
     override func viewDidAppear(_ animated: Bool) { // lancée quand la vue load
         super.viewDidAppear(animated)
-        
-        var statut = "Adhérent"
-        do { // on récupère les contenu de la mémoire 'testeur'
-            statut = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(testeur), encoding: .utf8)
-        } catch {
-            print("Fichier introuvable. ERREUR GRAVE")
-        }
-        
-        if statut == "Membre du bureau" || statut == "Super-admin" { // Si le statut du testeur possède des privilèges alors on lui donne accès au scanner
-            print("activation button")
+        if let _ = listeInfoAdherent["Mdp"]{ // connecté en tant qu'admin
             scanner.title = "Scanner"
+            scanner.tintColor = self.nomLabel.textColor
             scanner.isEnabled = true
-        } else { // sinon on désactive le bouton
-            print("desactiver button")
-            scanner.title = " "
-            scanner.isEnabled = false
         }
+        
+        let api = APIConnexion()
+        let nom = api.convertionToHexaCode(listeInfoAdherent["Nom"] ?? "Error") // On converti en hexa decimal
+        
+        let qrCodeGenerator = generateQRcode()
+        let stringForQRCode = qrCodeGenerator.generateStringQRCode(nom: nom, dateNaissance: listeInfoAdherent["DateNaissance"] ?? "Error")
+        print("string generated = \(stringForQRCode)")
+        QRCodeImage.image = qrCodeGenerator.generateQRCode(from: stringForQRCode)
+        
     }
+    
 }

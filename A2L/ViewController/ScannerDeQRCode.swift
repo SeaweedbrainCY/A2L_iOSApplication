@@ -16,6 +16,18 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     var captureSession: AVCaptureSession!
     var previewLayer: AVCaptureVideoPreviewLayer!
     
+    
+    func alert(_ title: String, message: String) {
+        dismiss(animated: true)
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "Ok", style: UIAlertAction.Style.cancel, handler: { (_) in
+            self.captureSession.startRunning()
+        })
+        alert.addAction(ok)
+        self.present(alert, animated: true, completion: nil)
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -89,17 +101,43 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
             guard let stringValue = readableObject.stringValue else { return }
             AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
             found(code: stringValue)
+        } else {
+            dismiss(animated: true)
         }
         
-        dismiss(animated: true)
+        
+        
     }
     
-    func found(code: String) { // code est le String contenu dans le QR code
-        let mdp = "Je m’appelle Nathan"
-        if code == mdp { // si jamais cela correspond alors on affiche la fiche de l'adhérent
-            performSegue(withIdentifier: "afficheFiche", sender: nil)
-        } else { // sinon on ne bouge pas 
-            print("code non correpondant")
+    var timer = Timer() // COmme partout on lance le compteur pour verifier les réponses
+    func found(code: String) { // code est la String contenu dans le QR code
+        print("code QR = \(code)")
+        
+        if code.contains("#") { // sert a délimité les parties du QRCode
+            let codePortion = code.split(separator: "#")
+            if codePortion.count == 3  {
+                let nom = String(codePortion[0])
+                let dateNaissance = String(codePortion[1])
+                let key = String(codePortion[2])
+                
+                //On verifie d'abord si la clé est correcte :
+                let qrCode = generateQRcode()
+                let keyCalculated = qrCode.securityKey(withDate: dateNaissance)
+                if keyCalculated == Int(key) { // La clé est correcte
+                    let api = APIConnexion()
+                    api.otherAdherentData(nom: nom, dateNaissance: dateNaissance) // Tous est déjà en hexa pour le QR code donc pas besoin de reconvertir
+                    
+                    timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
+                } else { // elle ne l'est pas
+                    alert("QR Code falsifié", message: "Si c'est volontaire il faut savoir qu'on ne me trompe pas comme ça .... ;)")
+                }
+            } else {
+                alert("QR Code falsifié", message: "Bien tenté mais ça manque d'observation tout ça .. ")
+            }
+            
+        } else {
+            alert("Impossible de lire le QR code", message:"Je peux pas tout faire hein ... ")
+            
         }
     }
     
@@ -109,5 +147,26 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
+    }
+    
+    @objc private func verificationReponse() { // check les réponses du serveur
+        var reponse = "nil"
+        do {// On regarde l'erreur qui est actuellement enregistrée dans les fichiers
+            reponse = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur), encoding: .utf8)
+        } catch {
+            print("Fichier introuvable. ERREUR GRAVE")
+        }
+        if reponse != "nil" { // on detecte une réponse
+            timer.invalidate() // on desactive le compteur il ne sert plus à rien
+            
+             if reponse == "success" {
+                //On a réussi, on transmet les données et on change de view
+                performSegue(withIdentifier: "afficheAdherentFiche", sender: self)
+            } else { // Une erreur est survenue
+                self.alert("Erreur lors de la connexion au serveur", message: reponse)
+            }
+            let file = FileManager.default
+            file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: "nil".data(using: String.Encoding.utf8), attributes: nil)
+        }
     }
 }

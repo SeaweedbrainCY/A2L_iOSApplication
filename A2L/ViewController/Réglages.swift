@@ -89,8 +89,6 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
                 cell.textLabel?.text = "     Actualiser mes privilèges"
                 cell.iconCell.image = UIImage(named: "refresh")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
                 cell.iconCell.tintColor = .gray
-                cell.info.setImage(UIImage(named: "help"), for: .normal)
-                cell.info.addTarget(self, action: #selector(helpSelected), for: .touchUpInside)
             case 1 :
                 cell.textLabel?.text = "    Se déconnecter"
                 cell.iconCell.image = UIImage(named: "croix")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
@@ -178,8 +176,11 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
                 chargement.color = .red
                 chargement.frame.origin = CGPoint(x: self.tableView.frame.size.width / 2, y: self.tableView.frame.size.height / 2) // on le place en plein milieu
                 chargement.startAnimating()
+                self.actualisationInformations() // on actualise les informations
             case 1 : // Se deconnecter
                 performSegue(withIdentifier: "pageConnexion", sender: self)
+                let file = FileManager.default
+                file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(stockInfosAdherent).path, contents: "".data(using: String.Encoding.utf8), attributes: nil)
             default : break
             }
         }
@@ -195,9 +196,7 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
 
     }
     
-    @objc func helpSelected(sender: UIButton){ // help button
-        alert("Actualiser mes privilèges", message: "Certaines fonctionnalités de l'application A2L, nécessitent des privilèges. Si un administrateur a modifié vos privilèges et qu'ils ne s'affichent pas, veuillez 'actualiser les privilèges'")
-    }
+    
     
     //Méthode servant à envoyer un mail avec les protocoles d'Apple ou avec du HTML
     func mailReport(objet: String, body: String){
@@ -244,4 +243,47 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
             alert("Une erreur est survenue", message: "Une erreur est survenu de cause inconnu. Veuillez signaler cette erreur : \(String(describing: error)) au developpeur. Merci.")
         }
     }
+    
+    var timer = Timer()
+    func actualisationInformations(){
+        let api = APIConnexion()
+        let nom = api.convertionToHexaCode("\(infosAdherent["Nom"]!)")
+        if let mdp = infosAdherent["Mdp"] { // Si on detecte un mdp c'est qu'on est admin
+            api.adminConnexion(nom: nom, mdpHashed: mdp)
+        } else { // sinon non
+            api.adherentConnexion(nom: nom, dateNaissance: infosAdherent["DateNaissance"]!)
+        }
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
+    }
+    
+    
+
+
+@objc private func verificationReponse(){ // est appelé par le compteur pour verifier si on a une réponse
+    var reponse = "nil"
+    do { // Va chercher dans les mémoires si on a une réponse d'enregistrée
+        reponse = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur), encoding: .utf8)
+    } catch {
+        print("Fichier introuvable. ERREUR GRAVE")
+    }
+    if reponse != "nil" { // Si on a une réponse
+        timer.invalidate() // On désactive le timer il ne sert plus a rien
+         if reponse == "success" { // Si on y arrive on réinstalle les données
+            //La connexion est réussi et acceptée par le serveur
+            performSegue(withIdentifier: "backToHomePage", sender: self)
+         } else { // sinon on se reconnecte : ex si le prénom à changé, on est obligé de déconnecter
+            performSegue(withIdentifier: "pageConnexion", sender: self)
+        }
+    } else {
+        
+        }
+        //On réinitialise l'erreur :
+        let file = FileManager.default
+        file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: "nil".data(using: String.Encoding.utf8), attributes: nil)
+        
+    }
 }
+
+
+
+

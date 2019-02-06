@@ -116,7 +116,7 @@ class ConnexionAdmin: UIViewController, UITextFieldDelegate {
             nom = database.convertionToHexaCode(nom)
             prenom = database.convertionToHexaCode(prenom) // Convertion pour convenir à l'URL
             let nomEtPrenom = "\(nom)%20\(prenom)"
-            database.exctractData(nom: nomEtPrenom, mdpHashed: mdp) // On lance la requète au serveur via le PHP
+            database.adminConnexion(nom: nomEtPrenom, mdpHashed: mdp) // On lance la requète au serveur via le PHP
         }
     }
 
@@ -160,6 +160,7 @@ class ConnexionAdmin: UIViewController, UITextFieldDelegate {
                 }
             } else if reponse == "success" {
                 //On a réussi, on transmet les données et on change de view
+                performSegue(withIdentifier: "connexionReussie", sender: self)
             } else { // pour les erreurs inconnues
                 self.alert("Impossible de se connecter au serveur", message: reponse)
             }

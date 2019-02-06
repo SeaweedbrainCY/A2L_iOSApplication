@@ -26,7 +26,6 @@ class ConnexionAdherent: UIViewController, UITextFieldDelegate {
     var timer = Timer() //Compteur pour le chrono
     var reponse = "nil" // réponse du serveur
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setViewBackground() // On met le background en 2 couleurs différentes -> On doit dire à tous les éléments d'aller au dessus :

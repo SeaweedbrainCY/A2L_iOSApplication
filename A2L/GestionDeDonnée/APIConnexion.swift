@@ -15,14 +15,14 @@ class APIConnexion {
     
 
     //Va chercher et convertie les données codées en JSON.
-    public func exctractData(nom: String, mdpHashed: String) {
+    public func exctractAllData(nom: String, mdpHashed: String) {
         //l'URL de l'API avec les données voulues.
         
         //ATTENTION : Les données transmises par l'URL doivent être sûr. Il doit bien s'agir d'un nom suivit d'un prénom, et d'un mot de passe hashé
         //Les caractères spéciaux devront être remplacés
         //L'API se charge juste de verifier et transmettre les données. Tout bug est donc de la responsbilité de l'application
         var reponse = "error"
-        let urlString = "http://192.168.1.64:8888/returnSpecificData.php?Nom=\(nom)&Mdp=\(mdpHashed)"
+        let urlString = "http://192.168.1.64:8888/returnAllData.php?Nom=\(nom)&Mdp=\(mdpHashed)"
         let url = URL(string: urlString)
         
         print("url \(String(describing: url))")
@@ -48,6 +48,8 @@ class APIConnexion {
                                     temporaryDictionnary.updateValue(information.value(forKey: "Statut") as! String, forKey: "Statut")
                                     temporaryDictionnary.updateValue(information.value(forKey: "DateNaissance") as! String, forKey: "dateNaissance")
                                     temporaryDictionnary.updateValue(information.value(forKey: "URLimg") as! String, forKey: "URLimg")
+                                    temporaryDictionnary.updateValue(information.value(forKey: "Classe") as! String, forKey: "Classe")
+                                    temporaryDictionnary.updateValue(information.value(forKey: "PointFidelite") as! String, forKey: "URLimg")
                                     self.allInfo.append(temporaryDictionnary) // et on ajoute notre nouveau dico au tableau général
                                     reponse = "success"
                                 }
@@ -69,6 +71,9 @@ class APIConnexion {
                         }
                     }
                     OperationQueue.main.addOperation({ // Une fois l'action effectuée on envoie le resultat
+                        if reponse == "success" {// On stock les infos
+                            infosAllAdherent = self.allInfo
+                        }
                         let file = FileManager.default
                         file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: reponse.data(using: String.Encoding.utf8), attributes: nil)
                     })
@@ -115,6 +120,8 @@ class APIConnexion {
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Statut") as! String, forKey: "Statut")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "DateNaissance") as! String, forKey: "DateNaissance")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "URLimg") as! String, forKey: "URLimg")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "Classe") as! String, forKey: "Classe")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "PointFidelite") as! String, forKey: "URLimg")
                             self.allInfo = [temporaryDictionnary] // et on ajoute notre nouveau dico au tableau général
                             print("all info = \(self.allInfo)")
                             reponse = "success"
@@ -147,11 +154,85 @@ class APIConnexion {
                         
                         let file = FileManager.default
                         file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: reponse.data(using: String.Encoding.utf8), attributes: nil)
-                        
-                        if reponse == "success" { // Si on a réussi on stock les infos de l'adhérent pour 'garder la session ouverte'
-                            let file = FileManager.default
-                            file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(informationConnexionAdhrent).path, contents: "\(nom)#\(dateNaissance)".data(using: String.Encoding.utf8), attributes: nil)
+                    })
+                    
+                }
+            }).resume()
+        } else { //bug dans l'URL
+            print("url = nil")
+            let file = FileManager.default
+            file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: "Les informations saisies semblent comporter des caractères inconnus".data(using: String.Encoding.utf8), attributes: nil)
+            // let pageConnexion = ConnexionAdmin()
+            //pageConnexion.errorWhileConnectingToDatabase(erreur : "url nil")
+        }
+    }
+    
+    
+    //Gère la connexion d'un admin avec ses infos de bases simples :
+    public func adminConnexion(nom: String, mdpHashed: String){
+        //ATTENTION : Les données transmises par l'URL doivent être sûr. Il doit bien s'agir d'un nom suivit d'un prénom, et d'un mot de passe hashé
+        //Les caractères spéciaux devront être remplacés
+        //L'API se charge juste de verifier et transmettre les données. Tout bug est donc de la responsbilité de l'application
+        
+        var reponse = "error"
+        let urlString = "http://192.168.1.64:8888/infoAdmin.php?Nom=\(nom)&Mdp=\(mdpHashed)"
+        let url = URL(string: urlString)
+        print("url = \(url)")
+        if url != nil {
+            URLSession.shared.dataTask(with: url!, completionHandler: {(data, response, error) in // On load le PHP
+                if error != nil {
+                    print("******ERROR FATAL. URL NON FONCTIONNEL. ECHEC : \(String(describing: error))")
+                    
+                    let file = FileManager.default
+                    file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: error?.localizedDescription.data(using: String.Encoding.utf8), attributes: nil)
+                    
+                    
+                } else { // Si aucune erreur n'est survenu
+                    
+                    if let allDataUser = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSArray{ // On enregsitre le tableau total en JSON
+                        print("dataUser = \(String(describing: allDataUser))")
+                        if allDataUser != nil {
+                            let dataUser: NSDictionary = allDataUser![0] as! NSDictionary // On a qu'une seule valeur -> voir API
+                            //Pour une raison qui m'est obscure, les informations ne seront pas classés dans cet ordre ...
+                            var temporaryDictionnary: [String:String] = [:] // tableau temporaire qui sert à convertir les données avant de les enregsitrer
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "id") as! String, forKey: "id")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "Nom") as! String, forKey: "Nom")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "Statut") as! String, forKey: "Statut")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "DateNaissance") as! String, forKey: "DateNaissance")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "URLimg") as! String, forKey: "URLimg")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "Classe") as! String, forKey: "Classe")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "PointFidelite") as! String, forKey: "URLimg")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "Mdp") as! String, forKey: "Mdp")
+                            
+                            self.allInfo = [temporaryDictionnary] // et on ajoute notre nouveau dico au tableau général
+                            print("all info = \(self.allInfo)")
+                            reponse = "success"
+                        } else if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
+                            
+                            print("resulat = \(result)")
+                            
+                            if result! as String == "Autorisation refusée" { //Si la connexion est refusée
+                                reponse = "permission refusée"
+                                
+                            } else if result! as String == "Mdp incorrect" {
+                                reponse = "Mdp incorrect"
+                                
+                            }
                         }
+                    } else {
+                        print("bug")
+                    }
+                    OperationQueue.main.addOperation({ // Une fois l'action effectuée on envoie le resultat
+                        print("result message = \(reponse)")
+                        
+                        infosAdherent = self.allInfo[0] //On stock dans le tableau temporaire
+                        
+                        //On enregistre les données dans le local :
+                        let localData = LocalData()
+                        localData.stockDataTo(stockInfosAdherent)
+                        
+                        let file = FileManager.default
+                        file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: reponse.data(using: String.Encoding.utf8), attributes: nil)
                     })
                     
                 }
@@ -176,5 +257,81 @@ class APIConnexion {
             }
         }
        return text
+    }
+    
+    //Gère l'affichage des données d'un autre adhérent simple :
+    public func otherAdherentData(nom: String, dateNaissance: String){
+        //ATTENTION : Les données transmises par l'URL doivent être sûr. Il doit bien s'agir d'un nom suivit d'un prénom, et d'une date de la forme YYYY-MM-DD
+        //Les caractères spéciaux devront être remplacés
+        //L'API se charge juste de verifier et transmettre les données. Tout bug est donc de la responsbilité de l'application
+        
+        var reponse = "error"
+        let urlString = "http://192.168.1.64:8888/infoAdherent.php?Nom=\(nom)&DateNaissance=\(dateNaissance)"
+        let url = URL(string: urlString)
+        print("url = \(String(describing: url))")
+        if url != nil {
+            URLSession.shared.dataTask(with: url!, completionHandler: {(data, response, error) in // On load le PHP
+                if error != nil {
+                    print("******ERROR FATAL. URL NON FONCTIONNEL. ECHEC : \(String(describing: error))")
+                    
+                    let file = FileManager.default
+                    file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: error?.localizedDescription.data(using: String.Encoding.utf8), attributes: nil)
+                    
+                    
+                } else { // Si aucune erreur n'est survenu
+                    
+                    if let allDataUser = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSArray{ // On enregsitre le tableau total en JSON
+                        print("dataUser = \(String(describing: allDataUser))")
+                        if allDataUser != nil {
+                            let dataUser: NSDictionary = allDataUser![0] as! NSDictionary // On a qu'une seule valeur -> voir API
+                            //Pour une raison qui m'est obscure, les informations ne seront pas classés dans cet ordre ...
+                            var temporaryDictionnary: [String:String] = [:] // tableau temporaire qui sert à convertir les données avant de les enregsitrer
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "id") as! String, forKey: "id")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "Nom") as! String, forKey: "Nom")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "Statut") as! String, forKey: "Statut")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "DateNaissance") as! String, forKey: "DateNaissance")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "URLimg") as! String, forKey: "URLimg")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "Classe") as! String, forKey: "Classe")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "PointFidelite") as! String, forKey: "URLimg")
+                            self.allInfo = [temporaryDictionnary] // et on ajoute notre nouveau dico au tableau général
+                            print("all info = \(self.allInfo)")
+                            reponse = "success"
+                        } else if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
+                            //let pageConnexion = ConnexionAdmin()
+                            print("resulat = \(String(describing: result))")
+                            
+                            if result! as String == "Élève introuvable" { //Si la connexion est refusée
+                                reponse = "Élève introuvable"
+                                //print("permission refusée")
+                                //pageConnexion.errorWhileConnectingToDatabase(erreur: "Autorisation refusée")
+                            } else if result! as String == "Date de naissance incorrect" {
+                                reponse = "Date de naissance incorrect"
+                                //print("mdp incorrect")
+                                //pageConnexion.errorWhileConnectingToDatabase(erreur: "Mdp incorrect")
+                            }
+                        }
+                    } else {
+                        print("bug")
+                    }
+                    OperationQueue.main.addOperation({ // Une fois l'action effectuée on envoie le resultat
+                        print("result message = \(reponse)")
+                        //let adherentPage = ConnexionAdherent()
+                        //adherentPage.saveData(self.allInfo[1])
+                        infosOtherAdherent = self.allInfo[0] //On stock dans le tableau temporaire
+                        
+                        
+                        let file = FileManager.default
+                        file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: reponse.data(using: String.Encoding.utf8), attributes: nil)
+                    })
+                    
+                }
+            }).resume()
+        } else { //bug dans l'URL
+            print("url = nil")
+            let file = FileManager.default
+            file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: "Les informations saisies semblent comporter des caractères inconnus".data(using: String.Encoding.utf8), attributes: nil)
+            // let pageConnexion = ConnexionAdmin()
+            //pageConnexion.errorWhileConnectingToDatabase(erreur : "url nil")
+        }
     }
 }
