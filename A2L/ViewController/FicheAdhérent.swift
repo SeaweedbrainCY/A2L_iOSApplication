@@ -16,13 +16,13 @@ class FicheAdherent: UIViewController {
     @IBOutlet weak var modifierButton: UIBarButtonItem!
     
     var listeInfoAdherent = infosOtherAdherent //listeDeToutes les infos
-    var chargementView: UIActivityIndicatorView?
-    var imageView:UIImageView?
+    var chargementView: UIActivityIndicatorView? //sert pour la création du Qr code
+    var imageView:UIImageView? //imageView = photo d'identité adhérent
     var dateNaissanceLabelAnchor:NSLayoutConstraint? // doit pouvoir être désactivée si besoin
     var dateNaissanceLabel: UILabel?
     var pointFideliteLabel: UILabel?
     
-    var timer = Timer()
+    var timer = Timer() //comme partout on a l'habitude mtn
     
     override func viewDidLoad() { // lancée quand la vue load
         super.viewDidLoad()
@@ -187,28 +187,27 @@ class FicheAdherent: UIViewController {
         }
     }
     
-    @IBAction func modifierSelected(sender: UIBarButtonItem){
-        
+    @IBAction func modifierSelected(sender: UIBarButtonItem){ // Bouton modifier la fiche adhérent slectionné
         performSegue(withIdentifier: "modifier", sender: self)
     }
     
-    @objc private func stepperSelected(sender: UIStepper) {
-        if Int(listeInfoAdherent["PointFidelite"]!) != nil {
-            listeInfoAdherent.updateValue("\(Int(sender.value))", forKey: "PointFidelite")
-            pointFideliteLabel!.text = "Points de fidélité : \(listeInfoAdherent["PointFidelite"]!)"
+    @objc private func stepperSelected(sender: UIStepper) { // Lorsque le stepper (-|+) est selctionnée
+        if Int(listeInfoAdherent["PointFidelite"]!) != nil { // Convertion possible
+            listeInfoAdherent.updateValue("\(Int(sender.value))", forKey: "PointFidelite") //On dans la variable local le nombre
+            pointFideliteLabel!.text = "Points de fidélité : \(listeInfoAdherent["PointFidelite"]!)" //on update le text label
             let coloration = NSMutableAttributedString(string: pointFideliteLabel!.text!)
             coloration.setColorForText(textForAttribute: "Points de fidélité :", withColor: .black)
-            coloration.setFontForText(textForAttribute: "Points de fidélité :", withFont: UIFont(name: "Comfortaa-Bold", size: 18)!)
+            coloration.setFontForText(textForAttribute: "Points de fidélité :", withFont: UIFont(name: "Comfortaa-Bold", size: 18)!) //Pour la couleur et la police spéciale des titres
             pointFideliteLabel!.attributedText = coloration
             let pushData = PushDataServer()
-            pushData.updatePointFidelite(id: listeInfoAdherent["id"]!, pointFidelite: listeInfoAdherent["PointFidelite"]!)
+            pushData.updatePointFidelite(id: listeInfoAdherent["id"]!, pointFidelite: listeInfoAdherent["PointFidelite"]!) //On update cette version sur le serveur
         }
         
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) { //Avant d'envoyer de segue
         let modification = segue.destination as! AddNewAdherent
-        //modification.titre
+        //modification.titre //on préremplie les champs car on MODIFIE les infos d'un adhérent
         modification.oldNom = listeInfoAdherent["Nom"]!
         modification.oldClasse = listeInfoAdherent["Classe"]!
         modification.oldStatut = " \(listeInfoAdherent["Statut"]!)  "

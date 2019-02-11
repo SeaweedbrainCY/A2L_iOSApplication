@@ -14,6 +14,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var backgroundView: UIView!
     
+    //Sont réutilisés dans le code pour de nombreuses raisons
     var dateNaissanceVariable: UIButton?
     var datePickerView: UIDatePicker?
     var statutVariable: UIButton?
@@ -33,7 +34,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         scrollView.delegate = self
-        loadAllView()
+        loadAllView() // on load toutes les View
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -50,8 +51,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.view.endEditing(true)
-        
+        self.view.endEditing(true) // on enlève le clavier si on scroll
     }
     
     private func loadAllView(){ // load toutes les UIView
@@ -215,8 +215,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
             {
                 self.pickerStatutHeight!.isActive = false // on désactive sont ancienne height
                 self.pickerStatutHeight = self.pickerViewStatut!.heightAnchor.constraint(equalToConstant: 0) // On ajoute la nouvelle
-                self.pickerStatutHeight!.isActive = true
-                
+                self.pickerStatutHeight!.isActive = true //on active la nouvelle height
                 self.pickerViewStatut!.isHidden = true // on cache
             }
             
@@ -224,11 +223,11 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
             self.datePickerView!.isHidden = false // on affiche le notre
             self.datePickerHeight!.isActive = false // on désactive sont ancienne height
             self.datePickerHeight = self.datePickerView!.heightAnchor.constraint(equalToConstant: 190) // On ajoute la nouvelle
-            self.datePickerHeight!.isActive = true
+            self.datePickerHeight!.isActive = true // on active la nouvelle height
             
             let dateFormatteur = DateFormatter()
-            dateFormatteur.dateFormat = "dd/MM/yyyy"
-            self.datePickerView!.setDate(dateFormatteur.date(from: (self.dateNaissanceVariable?.currentTitle!)!)!, animated: true)
+            dateFormatteur.dateFormat = "dd/MM/yyyy" //format de la date
+            self.datePickerView!.setDate(dateFormatteur.date(from: (self.dateNaissanceVariable?.currentTitle!)!)!, animated: true)//Date picker prend la valeur de la date déjà inscrite
         } else { // on le cache car il est affiché
                 self.datePickerHeight!.isActive = false
                 self.datePickerHeight = self.datePickerView!.heightAnchor.constraint(equalToConstant: 0)
@@ -242,13 +241,14 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         let jour = Calendar.current.component(.day, from: sender.date)
         let mois = Calendar.current.component(.month, from: sender.date)
         let year = Calendar.current.component(.year, from: sender.date)
-        self.dateNaissanceVariable?.setTitle("\(jour)/\(mois)/\(year)", for: .normal)
+        self.dateNaissanceVariable?.setTitle("\(jour)/\(mois)/\(year)", for: .normal) // update de la date
     }
     
     @objc private func statutSelected(sender: UIButton) { // lorsqu'on clique sur le statut
         self.view.endEditing(true)
-       if self.pickerViewStatut!.isHidden {
-        if !self.datePickerView!.isHidden {
+       if self.pickerViewStatut!.isHidden { // Si il est caché
+        
+        if !self.datePickerView!.isHidden { //Si le datePicker est affciher alors on le cache
             self.datePickerHeight!.isActive = false
             self.datePickerHeight = self.datePickerView!.heightAnchor.constraint(equalToConstant: 0)
             self.datePickerHeight!.isActive = true
@@ -288,14 +288,15 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         self.statutVariable?.setTitle("\(liste[row])", for: .normal)
     }
     
-    @objc private func infoSelected(sender: UIButton) {
+    @objc private func infoSelected(sender: UIButton) { // affiche l'aide a propos de la modification des statuts. Pour ne pas faire n'importe quoi
         sender.setTitleColor(.white, for: .normal)
-        alert("Statuts :", message: "⌽Adhérent: Ils ont accès à leur fiche adhérent personnelle et se connectent avec leur nom/prénom et date de naissance\n⌽Membre du bureau : Ils ont accès aux fiches de tous les adhérents et peuvent scanner les QR code. Ils ne peuvent modifier que les points de fidélité. Ils se connectent avec un mot de passe.\n⌽Super-admin: Vous êtes un super-admin. Vous disposez donc de tous les privilèges et vous pouvez modifier toutes les informations des adhérents.\n⌽Developpeur: Ils disposent des mêmes droits que les super-admin, mais ne peuvent être déstitués.\n\nPour de plus amples informations consulter la page 'aide'")
+        alert("Statuts :", message: "✔︎Adhérent: Ils ont accès à leur fiche adhérent personnelle et se connectent avec leur nom/prénom et date de naissance\n✔︎Membre du bureau : Ils ont accès aux fiches de tous les adhérents et peuvent scanner les QR code. Ils ne peuvent modifier que les points de fidélité. Ils se connectent avec un mot de passe.\n✔︎Super-admin: Vous êtes un super-admin. Vous disposez donc de tous les privilèges et vous pouvez modifier toutes les informations des adhérents.\n✔︎Developpeur: Ils disposent des mêmes droits que les super-admin, mais ne peuvent être déstitués.\n\nPour de plus amples informations consulter la page 'aide'")
         sender.setTitleColor(.lightGray, for: .normal)
     }
     
-    @objc private func addImage(sender: UIButton) {
+    @objc private func addImage(sender: UIButton) { // quand on clique sur l'image
         
+        //On lui demande d'où elle veut prendre l'image : ici pas le choix : l'album photo
         let alert = UIAlertController(title: "Photo de profil adhérent", message: "Les photos sont stockées uniquement sur les serveurs de l'A2L et sont strictement privées à l'association.", preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Photo Library", style: .default) { _ in
             let image = UIImagePickerController()
@@ -311,9 +312,10 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         present(alert, animated: true)
     }
     
-    @objc private func supprAdherent(sender: UIButton){
+    @objc private func supprAdherent(sender: UIButton){ // Pour supprimer la fiche d'un adhérent
         sender.setTitleColor(.gray, for: .normal)
         
+        //On demande la confirmation
         let alert = UIAlertController(title: "Voulez vous vraiment supprimer cet adhérent", message: "En supprimant cette fiche, vous supprimer l'adhérent des registres de l'A2L. Cette action est définitive", preferredStyle: .alert)
         let annuler = UIAlertAction(title: "Annuler", style: UIAlertAction.Style.cancel, handler: { (_) in
             sender.setTitleColor(.red, for: .normal)
@@ -326,7 +328,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         self.present(alert, animated: true, completion: nil)
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) { //load l'image selectionnée
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
             self.imageButton?.setImage(rogneImage(image: image), for: .normal)
         } else {

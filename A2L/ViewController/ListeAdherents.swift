@@ -26,9 +26,9 @@ class ListeAdherent: UIViewController, UITableViewDataSource, UITableViewDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("infosAllAdhrent = \(infosAllAdherent)")
+       
+        //On stock manuelleme,t toutes les données dont on aura besoin pour le tableView
         for infos in infosAllAdherent {
-            print("infos = \(infos)")
             if infos != [:] {
                 let nom = "\(infos["Nom"]!)"
                 let statut = "\(infos["Statut"]!)"
