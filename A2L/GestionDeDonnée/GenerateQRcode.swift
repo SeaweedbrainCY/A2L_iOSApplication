@@ -55,15 +55,19 @@ class generateQRcode {
     func securityKey(withDate dateNaissance: String)-> Int { // calcul la clé de sécurité
         
         let dateFormatteur = DateFormatter()
-        dateFormatteur.dateFormat = "yyyy-MM-ddd"
+        dateFormatteur.dateFormat = "dd/MM/yyyy"
         
         //On calcule la clé de sécurité :
-        let date = dateFormatteur.date(from: dateNaissance)
-        let day = Calendar.current.component(.day, from: date!) // on formate notre date de naissance.
-        let month = Calendar.current.component(.month, from: date!)
-        let year = Calendar.current.component(.year, from: date!)
-        let nbr = day  + month  + year  // On calcule la somme voulue
-        return nbr % 10 // on regarde le reste dans le division euclidienne du nombre par 14.
+        if let date = dateFormatteur.date(from: dateNaissance) {
+            let day = Calendar.current.component(.day, from: date) // on formate notre date de naissance.
+            let month = Calendar.current.component(.month, from: date)
+            let year = Calendar.current.component(.year, from: date)
+            let nbr = day  + month  + year  // On calcule la somme voulue
+            return nbr % 10 // on regarde le reste dans le division euclidienne du nombre par 14.
+        } else {
+            return -1
+        }
+        
         
     }
 

@@ -28,11 +28,14 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
     
     override func viewDidLoad() { // lancée quand la vue load
         super.viewDidLoad()
+        
         let localData = LocalData()
         localData.returnDataFrom(stockInfosAdherent) // On enregistre la data de l'user dans la base local
         listeInfoAdherent = infosAdherent
         print("=> \(listeInfoAdherent)")
         if listeInfoAdherent != ["nil":"nil"]{ // Si on a les infos
+            let api = APIConnexion()
+            
             loadAllView()
         } 
         //On lance un timer pour verifier toutes les secondes si on a une réponse
@@ -79,6 +82,8 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         photoId.widthAnchor.constraint(equalToConstant: 300).isActive = true
         photoId.heightAnchor.constraint(equalToConstant: 300).isActive = true
         self.imageView = photoId
+        photoId.layer.cornerRadius = 20
+        photoId.clipsToBounds = true
         
         
         
@@ -102,7 +107,7 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         self.backgroundView.addSubview(classe)
         classe.translatesAutoresizingMaskIntoConstraints = false
         classe.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 2).isActive = true
-        classe.topAnchor.constraint(equalToSystemSpacingBelow: dateNaissance.bottomAnchor, multiplier: 4)
+        classe.topAnchor.constraint(equalToSystemSpacingBelow: dateNaissance.bottomAnchor, multiplier: 3).isActive = true
         classe.textColor = .blue
         classe.font = UIFont(name: "Comfortaa-Regular", size: 18)
         classe.text = "Classe : \(listeInfoAdherent["Classe"] ?? "Error")"
@@ -110,14 +115,14 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         coloration = NSMutableAttributedString(string: classe.text!)
         coloration.setColorForText(textForAttribute: "Classe :", withColor: .black)
         coloration.setFontForText(textForAttribute: "Classe :", withFont: UIFont(name: "Comfortaa-Bold", size: 18)!)
-        dateNaissance.attributedText = coloration
-        self.dateNaissanceLabel = classe
+        classe.attributedText = coloration
+        
         
         let statut = UILabel()
         self.backgroundView.addSubview(statut)
         statut.translatesAutoresizingMaskIntoConstraints = false
         statut.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 2).isActive = true
-        statut.topAnchor.constraint(equalToSystemSpacingBelow: classe.topAnchor, multiplier: 4).isActive = true
+        statut.topAnchor.constraint(equalToSystemSpacingBelow: classe.bottomAnchor, multiplier: 3).isActive = true
         statut.widthAnchor.constraint(equalToConstant: self.view.frame.size.width - 10).isActive = true
         statut.heightAnchor.constraint(equalToConstant: 50).isActive = true
         statut.lineBreakMode = .byClipping
@@ -141,7 +146,7 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         self.backgroundView.addSubview(pointFidelite)
         pointFidelite.translatesAutoresizingMaskIntoConstraints = false
         pointFidelite.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 2).isActive = true
-        pointFidelite.topAnchor.constraint(equalToSystemSpacingBelow: statut.bottomAnchor, multiplier: 4)
+        pointFidelite.topAnchor.constraint(equalToSystemSpacingBelow: statut.bottomAnchor, multiplier: 3).isActive = true
         pointFidelite.textColor = .blue
         pointFidelite.font = UIFont(name: "Comfortaa-Regular", size: 18)
         pointFidelite.text = "Points de fidélité : \(listeInfoAdherent["PointFidelite"] ?? "Error")"
@@ -149,8 +154,7 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         coloration = NSMutableAttributedString(string: pointFidelite.text!)
         coloration.setColorForText(textForAttribute: "Points de fidélité :", withColor: .black)
         coloration.setFontForText(textForAttribute: "Points de fidélité :", withFont: UIFont(name: "Comfortaa-Bold", size: 18)!)
-        dateNaissance.attributedText = coloration
-        self.dateNaissanceLabel = pointFidelite
+        pointFidelite.attributedText = coloration
         
     }
     
@@ -182,6 +186,8 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
     }
     
     @IBAction func afficheAllAdherentButtonSelected(sender:UIBarButtonItem){
+        sender.tintColor = .gray
+        sender.isEnabled = false // on empêche de cliquer 2 fois sinon BUUUUUUg youpi
         let api = APIConnexion()
         api.exctractAllData(nom: api.convertionToHexaCode(infosAdherent["Nom"] ?? "Error"), mdpHashed: api.convertionToHexaCode(infosAdherent["Mdp"] ?? "Error"))
         //On lance un timer pour verifier toutes les secondes si on a une réponse
@@ -198,6 +204,8 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         }
         if reponse != "nil" { // on detecte une réponse
             timer.invalidate() // on desactive le compteur il ne sert plus à rien
+            listeButtonItem.tintColor = .blue
+            listeButtonItem.isEnabled = true
             
             if reponse == "success" {
                 //On a réussi, on transmet les données et on change de view

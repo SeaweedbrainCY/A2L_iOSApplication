@@ -12,7 +12,7 @@ import MessageUI
 
 //Associé à la page des réglage (page 3/3)
 
-let testeur = "testeurProfil.txt" // "Super-admin"/"Membre du bureau"/"Adhérent"
+
 
 class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MFMailComposeViewControllerDelegate {
     
@@ -39,7 +39,7 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { // Cellules par section
         switch section {
-        case 0 : return 3
+        case 0 : return 2
         case 1 : return 2
         case 2 : return 2
         default : return 0
@@ -54,18 +54,10 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
         if indexPath.section == 0 {
             switch indexPath.row {
             case 0 :
-                var statut = ""
-                do { // on va chercher le statut, et on le met dans le titre
-                    statut = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(testeur), encoding: .utf8)
-                } catch {
-                    print("Fichier introuvable. ERREUR GRAVE")
-                }
-                cell.textLabel?.text = "📲 Testeur : \(statut)"
-            case 1 :
                 cell.textLabel?.text = "     Aide"
                 cell.iconCell.image = UIImage(named: "helpLocation")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
                 cell.iconCell.tintColor = .gray
-            case 2 :
+            case 1 :
                 cell.textLabel?.text = "     Contribuer au projet"
                 cell.iconCell.image = UIImage(named: "codeBalise")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
                 cell.iconCell.tintColor = .gray
@@ -117,21 +109,8 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) { // cellule selctionnée
         if indexPath.section == 0 {
             switch indexPath.row {
-            case 0 : // on affiche un menu avec 3 options pour choisir notre statut de bêta testeur
-                let alert = UIAlertController(title: "Changer de profil testeur", message: "Cette fonctionnalité ne sera disponible que durant les phases de tests de l'applications (toutes les droits sont présumés acquis)", preferredStyle: .actionSheet)
-                alert.addAction(UIAlertAction(title: "Adhérent", style: .default) { _ in
-                    self.nouveauStatut("Adhérent")
-                })
-                alert.addAction(UIAlertAction(title: "Membre du bureau", style: .default) { _ in
-                    self.nouveauStatut("Membre du bureau")
-                })
-                alert.addAction(UIAlertAction(title: "Super-admin", style: .default) { _ in
-                    self.nouveauStatut("Super-admin")
-                })
-                alert.addAction(UIAlertAction(title: "Annuler", style: UIAlertAction.Style.cancel, handler: nil)) // Retour
-                present(alert, animated: true)
-            case 1 : break
-            case 2:
+            case 0 : break
+            case 1:
                 let alert = UIAlertController(title: "Contribuer au projet 'A2Lé", message: "Ces liens donnent un accès aux codes sources du projet (GitHub)", preferredStyle: .actionSheet)
                 alert.addAction(UIAlertAction(title: "[GitHub] Code source application iOS", style: .default) { _ in
                     UIApplication.shared.open(URL(string: "https://github.com/DevNathan/A2L_Application")!, options: [:], completionHandler: nil)// on charge le lien dans le moteur de recherche par defaut de l'utilisateur
@@ -186,16 +165,6 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
-    
-    //est appelé lorsqu'on change notre statut et donc modifie les privilège
-    func nouveauStatut(_ statut : String){
-        //on stock le nouveau statut
-        let file = FileManager.default
-        file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(testeur).path, contents: statut.data(using: String.Encoding.utf8), attributes: nil)
-        self.tableView.reloadData()
-
-    }
-    
     
     
     //Méthode servant à envoyer un mail avec les protocoles d'Apple ou avec du HTML

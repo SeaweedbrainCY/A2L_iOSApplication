@@ -128,7 +128,7 @@ class ConnexionAdherent: UIViewController, UITextFieldDelegate {
             nom = database.convertionToHexaCode(nom)
             prenom = database.convertionToHexaCode(prenom) // On convertit pour qu'ils soient confromes à l'URL
             let nomPrenom = "\(nom)%20\(prenom)"
-            let dateNaissance = "\(self.anneeField.text!)%2d\(self.moisField.text!)%2d\(self.jourField.text!)"
+            let dateNaissance = "\(self.jourField.text!)/\(self.moisField.text!)/\(self.anneeField.text!)"
             database.adherentConnexion(nom: nomPrenom, dateNaissance: dateNaissance) // On lance la requète au serveur via le PHP
         }
     }

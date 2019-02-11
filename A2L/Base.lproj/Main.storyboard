@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -170,7 +169,7 @@
                         <viewLayoutGuide key="safeArea" id="1BL-zv-oZn"/>
                     </view>
                     <navigationItem key="navigationItem" title="Ma fiche" id="KoS-Aa-85x">
-                        <barButtonItem key="backBarButtonItem" title="Retour" id="oR8-oo-Fqr"/>
+                        <barButtonItem key="backBarButtonItem" title="Ma fiche" id="oR8-oo-Fqr"/>
                         <barButtonItem key="rightBarButtonItem" enabled="NO" id="mnv-DY-Qax">
                             <connections>
                                 <action selector="afficheAllAdherentButtonSelectedWithSender:" destination="LQH-vE-hoO" id="un9-wa-Ux3"/>
@@ -212,7 +211,16 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="QA7-xr-iDX"/>
                     </view>
+                    <navigationItem key="navigationItem" title="Liste des adhérents" id="7Wh-xU-VeR">
+                        <barButtonItem key="backBarButtonItem" title="Liste" id="pVQ-iB-wVY"/>
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" id="twN-mi-wd7">
+                            <connections>
+                                <segue destination="E2P-Ak-ptE" kind="show" id="Nk3-aN-PWC"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
+                        <outlet property="addButton" destination="twN-mi-wd7" id="zLX-ar-2VO"/>
                         <outlet property="tableView" destination="O3P-S2-XPq" id="hZs-4j-axx"/>
                         <segue destination="F8y-QO-ioX" kind="show" identifier="afficheFicheAdherent" id="eSj-Lz-PBB"/>
                     </connections>
@@ -220,6 +228,55 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nmR-F5-rsI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="485.60000000000002" y="-1039.4302848575712"/>
+        </scene>
+        <!--Ajouter un adhérent-->
+        <scene sceneID="fRW-z4-MtJ">
+            <objects>
+                <viewController id="E2P-Ak-ptE" customClass="AddNewAdherent" customModule="A2L" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="JP1-zj-cjs">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ltE-1Q-YcT">
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t75-8C-Akf">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="1300"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="375" id="ZQu-Ce-7WA"/>
+                                            <constraint firstAttribute="height" constant="1300" id="bpq-Zi-lrg"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="t75-8C-Akf" firstAttribute="top" secondItem="ltE-1Q-YcT" secondAttribute="top" id="hIJ-4X-LE3"/>
+                                    <constraint firstAttribute="trailing" secondItem="t75-8C-Akf" secondAttribute="trailing" id="hez-IS-q2c"/>
+                                    <constraint firstAttribute="bottom" secondItem="t75-8C-Akf" secondAttribute="bottom" id="kTO-p0-C7C"/>
+                                    <constraint firstItem="t75-8C-Akf" firstAttribute="leading" secondItem="ltE-1Q-YcT" secondAttribute="leading" id="zZ8-qp-t1T"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="ltE-1Q-YcT" firstAttribute="bottom" secondItem="UGf-gP-wt9" secondAttribute="bottom" id="TTB-b9-Cqt"/>
+                            <constraint firstItem="ltE-1Q-YcT" firstAttribute="trailing" secondItem="UGf-gP-wt9" secondAttribute="trailing" id="VP8-XV-7nm"/>
+                            <constraint firstItem="ltE-1Q-YcT" firstAttribute="leading" secondItem="UGf-gP-wt9" secondAttribute="leading" id="Y7c-Rm-gnW"/>
+                            <constraint firstItem="ltE-1Q-YcT" firstAttribute="top" secondItem="UGf-gP-wt9" secondAttribute="top" id="rhD-CC-7Zi"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="UGf-gP-wt9"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Ajouter un adhérent" id="VPQ-s4-Jho">
+                        <barButtonItem key="rightBarButtonItem" title="Valider" id="UqQ-Kb-R7N"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="backgroundView" destination="t75-8C-Akf" id="7f4-7a-raK"/>
+                        <outlet property="scrollView" destination="ltE-1Q-YcT" id="1eP-i9-7no"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hhr-Lb-O31" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1409" y="-1443"/>
         </scene>
         <!--Connexion Admin-->
         <scene sceneID="3iM-XI-8GQ">
@@ -422,9 +479,19 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="fRA-sg-M5i"/>
                     </view>
+                    <navigationItem key="navigationItem" title="Fiche adhérent" id="4oP-tR-oso">
+                        <barButtonItem key="backBarButtonItem" title="Adhérent" id="RXE-yj-vay"/>
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" id="KgC-7G-AA9">
+                            <connections>
+                                <action selector="modifierSelectedWithSender:" destination="F8y-QO-ioX" id="RzM-Eb-opT"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="backgroundView" destination="Bcc-8Z-e4T" id="QcN-3E-SsF"/>
+                        <outlet property="modifierButton" destination="KgC-7G-AA9" id="Tlt-ZA-ZEJ"/>
                         <outlet property="scrollView" destination="fsD-9K-BQN" id="fN6-tu-FzI"/>
+                        <segue destination="E2P-Ak-ptE" kind="show" identifier="modifier" id="9gR-4F-udq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Yc-fR-fen" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -593,5 +660,6 @@
         <segue reference="A1V-CK-4wQ"/>
         <segue reference="eSj-Lz-PBB"/>
         <segue reference="EJ2-NM-zzJ"/>
+        <segue reference="9gR-4F-udq"/>
     </inferredMetricsTieBreakers>
 </document>

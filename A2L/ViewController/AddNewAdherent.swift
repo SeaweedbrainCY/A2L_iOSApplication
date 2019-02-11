@@ -1,0 +1,377 @@
+//
+//  AddNewAdherent.swift
+//  A2L
+//
+//  Created by Nathan on 06/02/2019.
+//  Copyright © 2019 Nathan. All rights reserved.
+//
+
+import Foundation
+import UIKit
+
+class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var backgroundView: UIView!
+    
+    var dateNaissanceVariable: UIButton?
+    var datePickerView: UIDatePicker?
+    var statutVariable: UIButton?
+    var pickerViewStatut: UIPickerView?
+    var imageButton:UIButton?
+    var datePickerHeight :NSLayoutConstraint?
+    var pickerStatutHeight: NSLayoutConstraint?
+    
+    //Si on modifie la fiche d'un adhérent, on reporte ses infomrations dans les champs requis :
+    var titleView = "Ajouter un adhérent"
+    var oldNom = ""
+    var oldClasse = ""
+    var oldImage: UIImage?
+    var oldDateNaissance = "14/11/2002"
+    var oldStatut = " Adhérent  "
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        scrollView.delegate = self
+        loadAllView()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+    }
+    
+    func alert(_ title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let ok = UIAlertAction(title: "Ok", style: UIAlertAction.Style.cancel, handler: nil)
+        alert.addAction(ok)
+        self.present(alert, animated: true, completion: nil)
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        self.view.endEditing(true)
+        
+    }
+    
+    private func loadAllView(){ // load toutes les UIView
+        
+        let nomTitre = UILabel()
+        backgroundView.addSubview(nomTitre)
+        nomTitre.translatesAutoresizingMaskIntoConstraints = false
+        nomTitre.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 3).isActive = true
+        nomTitre.topAnchor.constraint(equalToSystemSpacingBelow: self.scrollView.topAnchor, multiplier: 4).isActive = true
+        nomTitre.text = "Nom Prénom : "
+        nomTitre.font = UIFont(name: "Comfortaa-Bold", size: 18)
+        
+        let nomField = UITextField()
+        nomField.delegate = self
+        backgroundView.addSubview(nomField)
+        nomField.translatesAutoresizingMaskIntoConstraints = false
+        nomField.widthAnchor.constraint(equalToConstant: self.view.frame.size.width  - 20).isActive = true
+        nomField.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 3).isActive = true
+        nomField.topAnchor.constraint(equalToSystemSpacingBelow: nomTitre.bottomAnchor, multiplier: 1.5).isActive = true
+        nomField.placeholder = "Nom Prénom"
+        nomField.borderStyle = .roundedRect
+        nomField.autocapitalizationType = .words
+        nomField.textColor = .blue
+        nomField.textContentType = .name
+        nomField.font = UIFont(name: "Arial Rounded MT Bold", size: 18)
+        nomField.text = self.oldNom // si on a déjà le nom de l'adhérent lors de la modification
+        
+        let classeTitre = UILabel()
+        backgroundView.addSubview(classeTitre)
+        classeTitre.translatesAutoresizingMaskIntoConstraints = false
+        classeTitre.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 3).isActive = true
+        classeTitre.topAnchor.constraint(equalToSystemSpacingBelow: nomField.bottomAnchor, multiplier: 4).isActive = true
+        classeTitre.text = "Classe : "
+        classeTitre.font = UIFont(name: "Comfortaa-Bold", size: 18)
+        
+        let classe = UITextField()
+        classe.delegate = self
+        backgroundView.addSubview(classe)
+        classe.translatesAutoresizingMaskIntoConstraints = false
+        classe.centerYAnchor.constraint(equalToSystemSpacingBelow: classeTitre.centerYAnchor, multiplier: 1).isActive = true
+        classe.leftAnchor.constraint(equalToSystemSpacingAfter: classeTitre.rightAnchor, multiplier: 3).isActive = true
+        classe.widthAnchor.constraint(equalToConstant: 90).isActive = true
+        classe.placeholder = "Classe"
+        classe.borderStyle = .roundedRect
+        classe.autocapitalizationType = .words
+        classe.textColor = .blue
+        classe.font = UIFont(name: "Arial Rounded MT Bold", size: 18)
+        classe.text = oldClasse
+        
+        let imageButton = UIButton()
+        self.backgroundView.addSubview(imageButton)
+        imageButton.translatesAutoresizingMaskIntoConstraints = false
+        imageButton.widthAnchor.constraint(equalToConstant: 300).isActive = true
+        imageButton.heightAnchor.constraint(equalToConstant: 300).isActive = true
+        imageButton.topAnchor.constraint(equalToSystemSpacingBelow: classe.bottomAnchor, multiplier: 4).isActive = true
+        imageButton.centerXAnchor.constraint(equalToSystemSpacingAfter: scrollView.centerXAnchor, multiplier: 1).isActive = true
+        imageButton.imageView!.layer.cornerRadius = 20
+        imageButton.addTarget(self, action: #selector(addImage), for: .touchUpInside)
+        self.imageButton = imageButton
+        if let oldImageAdherent = self.oldImage {
+            self.imageButton?.setImage(oldImageAdherent, for: .normal)
+        } else {
+            imageButton.setImage(UIImage(named:"addImage"), for: .normal)
+        }
+        
+        
+        let dateNaissanceTitre = UILabel()
+        backgroundView.addSubview(dateNaissanceTitre)
+        dateNaissanceTitre.translatesAutoresizingMaskIntoConstraints = false
+        dateNaissanceTitre.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 3).isActive = true
+        dateNaissanceTitre.topAnchor.constraint(equalToSystemSpacingBelow: imageButton.bottomAnchor, multiplier: 5).isActive = true
+        dateNaissanceTitre.text = "Date de naissance : "
+        dateNaissanceTitre.font = UIFont(name: "Comfortaa-Bold", size: 18)
+        
+        let dateNaissanceButton = UIButton()
+        backgroundView.addSubview(dateNaissanceButton)
+        dateNaissanceButton.translatesAutoresizingMaskIntoConstraints = false
+        dateNaissanceButton.leftAnchor.constraint(equalToSystemSpacingAfter: dateNaissanceTitre.rightAnchor, multiplier: 1).isActive = true
+        dateNaissanceButton.centerYAnchor.constraint(equalToSystemSpacingBelow: dateNaissanceTitre.centerYAnchor, multiplier: 5).isActive = true
+        dateNaissanceButton.widthAnchor.constraint(equalToConstant: 120).isActive = true
+        dateNaissanceButton.setTitleColor(.blue, for: .normal)
+        dateNaissanceButton.tintColor = .blue
+        self.dateNaissanceVariable = dateNaissanceButton
+        dateNaissanceButton.titleLabel?.font = UIFont(name: "Comfortaa-Regular", size: 18)
+        dateNaissanceButton.setBorderCorner()
+        dateNaissanceButton.addTarget(self, action: #selector(dateNaissanceSelected) , for: .touchUpInside)
+        dateNaissanceButton.setTitle(self.oldDateNaissance, for: .normal)
+        
+        let datePicker = UIDatePicker()
+        self.backgroundView.addSubview(datePicker)
+        datePicker.translatesAutoresizingMaskIntoConstraints = false
+        datePicker.widthAnchor.constraint(equalToConstant: self.view.frame.size.width - 70).isActive = true
+        self.datePickerHeight = datePicker.heightAnchor.constraint(equalToConstant: 0)
+        self.datePickerHeight?.isActive = true
+        datePicker.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
+        datePicker.topAnchor.constraint(equalToSystemSpacingBelow: dateNaissanceButton.bottomAnchor, multiplier: 1.5).isActive = true
+        datePicker.datePickerMode = .date
+        datePicker.addTarget(self, action: #selector(newDateNaissance), for: .valueChanged)
+        let localisation = Locale(identifier: "fr")
+        datePicker.locale = localisation
+        self.datePickerView = datePicker
+
+        
+        let statutTitre = UILabel()
+        backgroundView.addSubview(statutTitre)
+        statutTitre.translatesAutoresizingMaskIntoConstraints = false
+        statutTitre.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 3).isActive = true
+        statutTitre.topAnchor.constraint(equalToSystemSpacingBelow: datePicker.bottomAnchor, multiplier: 3).isActive = true
+        statutTitre.text = "Statut : "
+        statutTitre.font = UIFont(name: "Comfortaa-Bold", size: 18)
+        
+        let statutButton = UIButton()
+        backgroundView.addSubview(statutButton)
+        statutButton.translatesAutoresizingMaskIntoConstraints = false
+        statutButton.leftAnchor.constraint(equalToSystemSpacingAfter: statutTitre.rightAnchor, multiplier: 1).isActive = true
+        statutButton.centerYAnchor.constraint(equalToSystemSpacingBelow: statutTitre.centerYAnchor, multiplier: 5).isActive = true
+        statutButton.setTitleColor(.blue, for: .normal)
+        statutButton.tintColor = .blue
+        self.statutVariable = statutButton
+        statutButton.setBorderCorner()
+        statutButton.titleLabel?.font = UIFont(name: "Comfortaa-Regular", size: 18)
+        statutButton.addTarget(self, action: #selector(statutSelected) , for: .touchUpInside)
+        statutButton.setTitle(self.oldStatut, for: .normal)
+        
+        let pickerView = UIPickerView()
+        pickerView.delegate = self
+        pickerView.dataSource = self
+        self.backgroundView.addSubview(pickerView)
+        pickerView.translatesAutoresizingMaskIntoConstraints = false
+        pickerView.widthAnchor.constraint(equalToConstant: self.view.frame.size.width - 70).isActive = true
+        self.pickerStatutHeight = pickerView.heightAnchor.constraint(equalToConstant: 0)
+        self.pickerStatutHeight?.isActive = true
+        pickerView.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
+        pickerView.topAnchor.constraint(equalToSystemSpacingBelow: statutTitre.bottomAnchor, multiplier: 1.5).isActive = true
+        self.pickerViewStatut = pickerView
+        
+        let infosButton = UIButton()
+        backgroundView.addSubview(infosButton)
+        infosButton.translatesAutoresizingMaskIntoConstraints = false
+        infosButton.centerYAnchor.constraint(equalToSystemSpacingBelow: statutTitre.centerYAnchor, multiplier: 1).isActive = true
+        infosButton.leftAnchor.constraint(equalToSystemSpacingAfter: statutButton.rightAnchor, multiplier: 6).isActive = true
+        infosButton.setTitle("Infos?", for: .normal)
+        infosButton.setTitleColor(.lightGray, for: .normal)
+        infosButton.titleLabel!.font = UIFont(name: "Comfortaa-Light", size: 18)
+        infosButton.addTarget(self, action: #selector(infoSelected), for: .touchUpInside)
+        
+        let supprButton = UIButton()
+        self.backgroundView.addSubview(supprButton)
+        supprButton.translatesAutoresizingMaskIntoConstraints = false
+        supprButton.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
+        supprButton.topAnchor.constraint(equalToSystemSpacingBelow: pickerView.bottomAnchor, multiplier: 5).isActive = true
+        supprButton.setTitleColor(.red, for: .normal)
+        supprButton.setTitle("Supprimer cet adhérent", for: .normal)
+        supprButton.addTarget(self, action: #selector(supprAdherent), for: .touchUpInside)
+    }
+    
+    @objc private func dateNaissanceSelected(sender: UIButton) { // Quand on clique sur la date de naissance
+        if datePickerView!.isHidden { // on l'affiche car il est caché
+            //Si l'autre est affiché on l'enlève
+            if !self.pickerViewStatut!.isHidden
+            {
+                self.pickerStatutHeight!.isActive = false // on désactive sont ancienne height
+                self.pickerStatutHeight = self.pickerViewStatut!.heightAnchor.constraint(equalToConstant: 0) // On ajoute la nouvelle
+                self.pickerStatutHeight!.isActive = true
+                
+                self.pickerViewStatut!.isHidden = true // on cache
+            }
+            
+            self.view.endEditing(true) // on enlève le clavier
+            self.datePickerView!.isHidden = false // on affiche le notre
+            self.datePickerHeight!.isActive = false // on désactive sont ancienne height
+            self.datePickerHeight = self.datePickerView!.heightAnchor.constraint(equalToConstant: 190) // On ajoute la nouvelle
+            self.datePickerHeight!.isActive = true
+            
+            let dateFormatteur = DateFormatter()
+            dateFormatteur.dateFormat = "dd/MM/yyyy"
+            self.datePickerView!.setDate(dateFormatteur.date(from: (self.dateNaissanceVariable?.currentTitle!)!)!, animated: true)
+        } else { // on le cache car il est affiché
+                self.datePickerHeight!.isActive = false
+                self.datePickerHeight = self.datePickerView!.heightAnchor.constraint(equalToConstant: 0)
+                self.datePickerHeight!.isActive = true
+            self.datePickerView!.isHidden = true
+        }
+        
+    }
+    
+    @objc private func newDateNaissance(sender: UIDatePicker) { // Est appelé lorsqu'on modifie la date
+        let jour = Calendar.current.component(.day, from: sender.date)
+        let mois = Calendar.current.component(.month, from: sender.date)
+        let year = Calendar.current.component(.year, from: sender.date)
+        self.dateNaissanceVariable?.setTitle("\(jour)/\(mois)/\(year)", for: .normal)
+    }
+    
+    @objc private func statutSelected(sender: UIButton) { // lorsqu'on clique sur le statut
+        self.view.endEditing(true)
+       if self.pickerViewStatut!.isHidden {
+        if !self.datePickerView!.isHidden {
+            self.datePickerHeight!.isActive = false
+            self.datePickerHeight = self.datePickerView!.heightAnchor.constraint(equalToConstant: 0)
+            self.datePickerHeight!.isActive = true
+            self.datePickerView!.isHidden = true
+        }
+        
+        self.pickerViewStatut!.isHidden = false // on affiche le notre
+        self.pickerStatutHeight!.isActive = false // on désactive sont ancienne height
+        self.pickerStatutHeight = self.datePickerView!.heightAnchor.constraint(equalToConstant: 50) // On ajoute la nouvelle
+        self.pickerStatutHeight!.isActive = true
+        } else { // il est déjà afficher alors on le cache
+                self.pickerStatutHeight!.isActive = false // on désactive sont ancienne height
+                self.pickerStatutHeight = self.pickerViewStatut!.heightAnchor.constraint(equalToConstant: 0) // On ajoute la nouvelle
+                self.pickerStatutHeight!.isActive = true
+
+            self.pickerViewStatut!.isHidden = true // on cache
+        }
+        
+    }
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int { // nombre de colonne
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int { //nombre de ligne
+        return 3
+        
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        let liste = [" Adhérent  ", " Membre du bureau  ", " Super-admin  "]
+        return liste[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        let liste = [" Adhérent  ", " Membre du bureau  ", " Super-admin  "]
+        self.statutVariable?.setTitle("\(liste[row])", for: .normal)
+    }
+    
+    @objc private func infoSelected(sender: UIButton) {
+        sender.setTitleColor(.white, for: .normal)
+        alert("Statuts :", message: "⌽Adhérent: Ils ont accès à leur fiche adhérent personnelle et se connectent avec leur nom/prénom et date de naissance\n⌽Membre du bureau : Ils ont accès aux fiches de tous les adhérents et peuvent scanner les QR code. Ils ne peuvent modifier que les points de fidélité. Ils se connectent avec un mot de passe.\n⌽Super-admin: Vous êtes un super-admin. Vous disposez donc de tous les privilèges et vous pouvez modifier toutes les informations des adhérents.\n⌽Developpeur: Ils disposent des mêmes droits que les super-admin, mais ne peuvent être déstitués.\n\nPour de plus amples informations consulter la page 'aide'")
+        sender.setTitleColor(.lightGray, for: .normal)
+    }
+    
+    @objc private func addImage(sender: UIButton) {
+        
+        let alert = UIAlertController(title: "Photo de profil adhérent", message: "Les photos sont stockées uniquement sur les serveurs de l'A2L et sont strictement privées à l'association.", preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Photo Library", style: .default) { _ in
+            let image = UIImagePickerController()
+            image.delegate = self
+            
+            image.sourceType = UIImagePickerController.SourceType.photoLibrary
+            self.present(image, animated: true)
+            {
+                //une fois effectué (?)
+            }
+        })
+        alert.addAction(UIAlertAction(title: "Annuler", style: UIAlertAction.Style.cancel, handler: nil)) // Retour
+        present(alert, animated: true)
+    }
+    
+    @objc private func supprAdherent(sender: UIButton){
+        sender.setTitleColor(.gray, for: .normal)
+        
+        let alert = UIAlertController(title: "Voulez vous vraiment supprimer cet adhérent", message: "En supprimant cette fiche, vous supprimer l'adhérent des registres de l'A2L. Cette action est définitive", preferredStyle: .alert)
+        let annuler = UIAlertAction(title: "Annuler", style: UIAlertAction.Style.cancel, handler: { (_) in
+            sender.setTitleColor(.red, for: .normal)
+        })
+        let supprimer = UIAlertAction(title: "Supprimer", style: UIAlertAction.Style.destructive, handler: { (_) in
+            sender.setTitleColor(.red, for: .normal)
+        })
+        alert.addAction(annuler)
+        alert.addAction(supprimer)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
+            self.imageButton?.setImage(rogneImage(image: image), for: .normal)
+        } else {
+            print("Image non reconnue (l.143)")
+        }
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func rogneImage(image: UIImage) -> UIImage { // rogne les images en carrés parfaits 300/300
+        
+        let cgimage = image.cgImage!
+        let contextImage: UIImage = UIImage(cgImage: cgimage)
+        let contextSize: CGSize = contextImage.size
+        var posX: CGFloat = 0.0
+        var posY: CGFloat = 0.0
+        var cgwidth: CGFloat = CGFloat(300)
+        var cgheight: CGFloat = CGFloat(300)
+        
+        // See what size is longer and create the center off of that
+        if contextSize.width > contextSize.height {
+            posX = ((contextSize.width - contextSize.height) / 2)
+            posY = 0
+            cgwidth = contextSize.height
+            cgheight = contextSize.height
+        } else {
+            posX = 0
+            posY = ((contextSize.height - contextSize.width) / 2)
+            cgwidth = contextSize.width
+            cgheight = contextSize.width
+        }
+        
+        let rect: CGRect = CGRect(x: posX, y: posY, width: cgwidth, height: cgheight)
+        
+        // Create bitmap image from context using the rect
+        let imageRef: CGImage = cgimage.cropping(to: rect)!
+        
+        // Create a new image based on the imageRef and rotate back to the original orientation
+        let image: UIImage = UIImage(cgImage: imageRef, scale: image.scale, orientation: image.imageOrientation)
+        
+        return image
+    }
+    
+    //On n'autorise pas les charactères suivants : impossible de les tapes ou les coller dans les champs
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        return string.rangeOfCharacter(from: CharacterSet(charactersIn: "\"\\/.;,%:()»«¿¡[]{}|~<>•")) == nil
+    }
+    
+}

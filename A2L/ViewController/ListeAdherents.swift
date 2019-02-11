@@ -14,11 +14,13 @@ import UIKit
 class ListeAdherent: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var addButton: UIBarButtonItem!
     
     //Sert a la bêta
     var listeAdherentsNom:[String] = []
     var listeStatuts:[String] = []
     var listeDateNaissance:[String] = [] // sert à la connexion au serveur pour afficher les infos
+    var chargement = UIActivityIndicatorView()
     
     var timer = Timer()
     
@@ -54,6 +56,20 @@ class ListeAdherent: UIViewController, UITableViewDataSource, UITableViewDelegat
         tableView.dataSource = self
         
         tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: "cell") //on associe la tableView au custom de Style/customeCelleTableView.swift
+        
+        //On instancie le viewActivity :
+        chargement.hidesWhenStopped = true
+        chargement.style = .whiteLarge
+        chargement.color = .red
+        self.tableView.addSubview(chargement)
+        chargement.center = CGPoint(x: self.view.center.x, y: self.view.center.y)
+        
+        //Si on est super-admin ou developpeur on peut ajouter des élèves :
+        if infosAdherent["Statut"] == "Developpeur" || infosAdherent["Statut"] == "Super-admin" {
+            self.addButton.image = UIImage(named: "add")
+            self.addButton.isEnabled = true
+        }
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -112,6 +128,7 @@ class ListeAdherent: UIViewController, UITableViewDataSource, UITableViewDelegat
                 api.otherAdherentData(nom: api.convertionToHexaCode(listeAdherentsNom[i]), dateNaissance: listeDateNaissance[i])
                 //On lance un timer pour verifier toutes les secondes si on a une réponse
                 timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(listeSelectedVerificationReponse), userInfo: nil, repeats: true)
+                chargement.startAnimating()
             }
         }
         tableView.deselectRow(at: indexPath, animated: true)
@@ -128,6 +145,7 @@ class ListeAdherent: UIViewController, UITableViewDataSource, UITableViewDelegat
             timer.invalidate() // on desactive le compteur il ne sert plus à rien
             
             if reponse == "success" {
+                chargement.stopAnimating()
                 //On a réussi, on transmet les données et on change de view
                 performSegue(withIdentifier: "afficheFicheAdherent", sender: self)
             } else { // Une erreur est survenue

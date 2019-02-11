@@ -26,18 +26,27 @@ class LocalData {
                         let dataUser: NSDictionary = allDataUser![0] as! NSDictionary // On a qu'une seule valeur -> voir API
                         //Pour une raison qui m'est obscure, les informations ne seront pas classés dans cet ordre ...
                         var temporaryDictionnary: [String:String] = [:] // tableau temporaire qui sert à convertir les données avant de les enregsitrer
-                        temporaryDictionnary.updateValue(dataUser.value(forKey: "id") as! String, forKey: "id")
-                        temporaryDictionnary.updateValue(dataUser.value(forKey: "Nom") as! String, forKey: "Nom")
-                        temporaryDictionnary.updateValue(dataUser.value(forKey: "Statut") as! String, forKey: "Statut")
-                        temporaryDictionnary.updateValue(dataUser.value(forKey: "DateNaissance") as! String, forKey: "DateNaissance")
-                        temporaryDictionnary.updateValue(dataUser.value(forKey: "URLimg") as! String, forKey: "URLimg")
-                        temporaryDictionnary.updateValue(dataUser.value(forKey: "Classe") as! String, forKey: "Classe")
-                        temporaryDictionnary.updateValue(dataUser.value(forKey: "PointFidelite") as! String, forKey: "URLimg")
-                        if let _ = dataUser.value(forKey: "Mdp") {
-                            temporaryDictionnary.updateValue(dataUser.value(forKey: "Mdp") as! String, forKey: "Mdp")
+                        var isOkay = true
+                        let listeKey = ["id", "Nom", "Statut", "DateNaissance", "URLimg", "Classe", "PointFidelite"]
+                        for key in listeKey {
+                            if dataUser.value(forKey: key) == nil { // On véréfie que toutes les données recherchées sont bien là. Suite à des mise a jour, il es possible qu'un bug apparaisse entre les ancienne et nouvelles données. Si on detecte un bug on relance un connexion tout simplementù`
+                                isOkay = false
+                            }
+                        }
+                        if isOkay {
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "id") as! String, forKey: "id")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "Nom") as! String, forKey: "Nom")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "Statut") as! String, forKey: "Statut")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "DateNaissance") as! String, forKey: "DateNaissance")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "URLimg") as! String, forKey: "URLimg")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "Classe") as! String, forKey: "Classe")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "PointFidelite") as! String, forKey: "PointFidelite")
+                            if let _ = dataUser.value(forKey: "Mdp") {
+                                temporaryDictionnary.updateValue(dataUser.value(forKey: "Mdp") as! String, forKey: "Mdp")
+                            }
+                            self.allInfo = [temporaryDictionnary] // et on ajoute notre nouveau dico au tableau général
                         }
                         
-                        self.allInfo = [temporaryDictionnary] // et on ajoute notre nouveau dico au tableau général
                         print("all info local = \(self.allInfo)")
                         infosAdherent = allInfo[0]
                     }

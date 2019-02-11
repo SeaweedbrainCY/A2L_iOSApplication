@@ -12,8 +12,10 @@ import UIKit
 class APIConnexion {
     
     var allInfo: [[String:String]] = [[:]]// Voila le tableau qui résumera toutes les données de tous les adhérents
+     //adresseIPServeurMaison = "192.168.1.64"
+     //adresseIPServeurTelephone = "172.20.10.2"
+    let adresseIPServeur = "192.168.1.64"
     
-
     //Va chercher et convertie les données codées en JSON.
     public func exctractAllData(nom: String, mdpHashed: String) {
         //l'URL de l'API avec les données voulues.
@@ -22,7 +24,7 @@ class APIConnexion {
         //Les caractères spéciaux devront être remplacés
         //L'API se charge juste de verifier et transmettre les données. Tout bug est donc de la responsbilité de l'application
         var reponse = "error"
-        let urlString = "http://192.168.1.64:8888/returnAllData.php?Nom=\(nom)&Mdp=\(mdpHashed)"
+        let urlString = "http://\(adresseIPServeur):8888/returnAllData.php?Nom=\(nom)&Mdp=\(mdpHashed)"
         let url = URL(string: urlString)
         
         print("url \(String(describing: url))")
@@ -49,7 +51,7 @@ class APIConnexion {
                                     temporaryDictionnary.updateValue(information.value(forKey: "DateNaissance") as! String, forKey: "dateNaissance")
                                     temporaryDictionnary.updateValue(information.value(forKey: "URLimg") as! String, forKey: "URLimg")
                                     temporaryDictionnary.updateValue(information.value(forKey: "Classe") as! String, forKey: "Classe")
-                                    temporaryDictionnary.updateValue(information.value(forKey: "PointFidelite") as! String, forKey: "URLimg")
+                                    temporaryDictionnary.updateValue(information.value(forKey: "PointFidelite") as! String, forKey: "PointFidelite")
                                     self.allInfo.append(temporaryDictionnary) // et on ajoute notre nouveau dico au tableau général
                                     reponse = "success"
                                 }
@@ -95,7 +97,7 @@ class APIConnexion {
         //L'API se charge juste de verifier et transmettre les données. Tout bug est donc de la responsbilité de l'application
         
         var reponse = "error"
-        let urlString = "http://192.168.1.64:8888/infoAdherent.php?Nom=\(nom)&DateNaissance=\(dateNaissance)"
+        let urlString = "http://\(adresseIPServeur):8888/infoAdherent.php?Nom=\(nom)&DateNaissance=\(dateNaissance)"
         let url = URL(string: urlString)
         print("url = \(url)")
         if url != nil {
@@ -121,7 +123,7 @@ class APIConnexion {
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "DateNaissance") as! String, forKey: "DateNaissance")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "URLimg") as! String, forKey: "URLimg")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Classe") as! String, forKey: "Classe")
-                            temporaryDictionnary.updateValue(dataUser.value(forKey: "PointFidelite") as! String, forKey: "URLimg")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "PointFidelite") as! String, forKey: "PointFidelite")
                             self.allInfo = [temporaryDictionnary] // et on ajoute notre nouveau dico au tableau général
                             print("all info = \(self.allInfo)")
                             reponse = "success"
@@ -175,7 +177,7 @@ class APIConnexion {
         //L'API se charge juste de verifier et transmettre les données. Tout bug est donc de la responsbilité de l'application
         
         var reponse = "error"
-        let urlString = "http://192.168.1.64:8888/infoAdmin.php?Nom=\(nom)&Mdp=\(mdpHashed)"
+        let urlString = "http://\(adresseIPServeur):8888/infoAdmin.php?Nom=\(nom)&Mdp=\(mdpHashed)"
         let url = URL(string: urlString)
         print("url = \(url)")
         if url != nil {
@@ -201,7 +203,7 @@ class APIConnexion {
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "DateNaissance") as! String, forKey: "DateNaissance")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "URLimg") as! String, forKey: "URLimg")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Classe") as! String, forKey: "Classe")
-                            temporaryDictionnary.updateValue(dataUser.value(forKey: "PointFidelite") as! String, forKey: "URLimg")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "PointFidelite") as! String, forKey: "PointFidelite")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Mdp") as! String, forKey: "Mdp")
                             
                             self.allInfo = [temporaryDictionnary] // et on ajoute notre nouveau dico au tableau général
@@ -266,7 +268,7 @@ class APIConnexion {
         //L'API se charge juste de verifier et transmettre les données. Tout bug est donc de la responsbilité de l'application
         
         var reponse = "error"
-        let urlString = "http://192.168.1.64:8888/infoAdherent.php?Nom=\(nom)&DateNaissance=\(dateNaissance)"
+        let urlString = "http://\(adresseIPServeur):8888/infoAdherent.php?Nom=\(nom)&DateNaissance=\(dateNaissance)"
         let url = URL(string: urlString)
         print("url = \(String(describing: url))")
         if url != nil {
@@ -292,7 +294,7 @@ class APIConnexion {
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "DateNaissance") as! String, forKey: "DateNaissance")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "URLimg") as! String, forKey: "URLimg")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Classe") as! String, forKey: "Classe")
-                            temporaryDictionnary.updateValue(dataUser.value(forKey: "PointFidelite") as! String, forKey: "URLimg")
+                            temporaryDictionnary.updateValue(dataUser.value(forKey: "PointFidelite") as! String, forKey: "PointFidelite")
                             self.allInfo = [temporaryDictionnary] // et on ajoute notre nouveau dico au tableau général
                             print("all info = \(self.allInfo)")
                             reponse = "success"

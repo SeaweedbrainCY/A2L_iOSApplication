@@ -17,4 +17,11 @@ public extension UIButton {
         self.layer.cornerRadius = 20
         
     }
+    
+    func setBorderCorner(){
+        layer.borderColor = UIColor.lightGray.cgColor
+        layer.borderWidth = 0.8
+        layer.cornerRadius = 10
+        
+    }
 }
