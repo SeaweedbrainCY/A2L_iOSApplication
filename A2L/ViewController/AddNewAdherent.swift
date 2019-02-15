@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-var loadAnOtherAdherent = "nil"
+var loadAnOtherAdherent = "nil" // est utilisé pour load les infos d'un adhérents automatiquement
 
 class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
