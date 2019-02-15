@@ -11,7 +11,7 @@
 		D83D1C9421F7B471001F88CD /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83D1C9321F7B471001F88CD /* CustomTextField.swift */; };
 		D89124E221E7A97500B77D0C /* GenerateQRcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89124E121E7A97500B77D0C /* GenerateQRcode.swift */; };
 		D89124E421E7AEA100B77D0C /* FicheAdhérent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89124E321E7AEA100B77D0C /* FicheAdhérent.swift */; };
-		D8E4B4842216BD65004C6063 /* PrivateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E4B4832216BD65004C6063 /* PrivateData.swift */; };
+		D8E4B4862216C46B004C6063 /* PrivateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E4B4852216C46B004C6063 /* PrivateData.swift */; };
 		D8E7DAA421E54DD200A3E420 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7DAA321E54DD200A3E420 /* AppDelegate.swift */; };
 		D8E7DAA621E54DD200A3E420 /* MaFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7DAA521E54DD200A3E420 /* MaFiche.swift */; };
 		D8E7DAA921E54DD300A3E420 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8E7DAA721E54DD300A3E420 /* Main.storyboard */; };
@@ -64,7 +64,7 @@
 		D83D1C9321F7B471001F88CD /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		D89124E121E7A97500B77D0C /* GenerateQRcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateQRcode.swift; sourceTree = "<group>"; };
 		D89124E321E7AEA100B77D0C /* FicheAdhérent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FicheAdhérent.swift"; sourceTree = "<group>"; };
-		D8E4B4832216BD65004C6063 /* PrivateData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateData.swift; sourceTree = "<group>"; };
+		D8E4B4852216C46B004C6063 /* PrivateData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateData.swift; sourceTree = "<group>"; };
 		D8E7DAA021E54DD200A3E420 /* A2L.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = A2L.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8E7DAA321E54DD200A3E420 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8E7DAA521E54DD200A3E420 /* MaFiche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaFiche.swift; sourceTree = "<group>"; };
@@ -220,7 +220,7 @@
 				D8FD1BFE2203A6C50064790E /* gifGenerator.swift */,
 				D8FD1C032204C18A0064790E /* LocalData.swift */,
 				D8FD1C052204E70C0064790E /* NoClassVariable.swift */,
-				D8E4B4832216BD65004C6063 /* PrivateData.swift */,
+				D8E4B4852216C46B004C6063 /* PrivateData.swift */,
 			);
 			name = "GestionDeDonnée";
 			path = "GestionDeDonnée";
@@ -388,7 +388,7 @@
 				D8FD1C0C221223330064790E /* PushDataServer.swift in Sources */,
 				D8FD1C042204C18A0064790E /* LocalData.swift in Sources */,
 				D8FD1BFF2203A6C50064790E /* gifGenerator.swift in Sources */,
-				D8E4B4842216BD65004C6063 /* PrivateData.swift in Sources */,
+				D8E4B4862216C46B004C6063 /* PrivateData.swift in Sources */,
 				D89124E221E7A97500B77D0C /* GenerateQRcode.swift in Sources */,
 				D8FD1BFD220102240064790E /* CustomeImage.swift in Sources */,
 				D83D1C9421F7B471001F88CD /* CustomTextField.swift in Sources */,
