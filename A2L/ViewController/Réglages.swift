@@ -112,7 +112,7 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
             case 1:
                 let alert = UIAlertController(title: "Contribuer au projet 'A2Lé", message: "Ces liens donnent un accès aux codes sources du projet (GitHub)", preferredStyle: .actionSheet)
                 alert.addAction(UIAlertAction(title: "[GitHub] Code source application iOS", style: .default) { _ in
-                    UIApplication.shared.open(URL(string: "https://github.com/DevNathan/A2L_Application")!, options: [:], completionHandler: nil)// on charge le lien dans le moteur de recherche par defaut de l'utilisateur
+                    UIApplication.shared.open(URL(string: "https://github.com/DevNathan/A2L_iOSApplication")!, options: [:], completionHandler: nil)// on charge le lien dans le moteur de recherche par defaut de l'utilisateur
                 })
                 
                 alert.addAction(UIAlertAction(title: "[GitHub] Code source application Android", style: .default) { _ in
