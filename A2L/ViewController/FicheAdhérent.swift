@@ -21,8 +21,11 @@ class FicheAdherent: UIViewController {
     var dateNaissanceLabelAnchor:NSLayoutConstraint? // doit pouvoir être désactivée si besoin
     var dateNaissanceLabel: UILabel?
     var pointFideliteLabel: UILabel?
+    var stepper: UIStepper?
+    var lastValidateNbrPoint = 0 // contient le nombre de point de fidélité validé par le serveur
     
-    var timer = Timer() //comme partout on a l'habitude mtn
+    var timerImage = Timer() //comme partout on a l'habitude mtn
+    var timerPointFidelité = Timer()
     
     override func viewDidLoad() { // lancée quand la vue load
         super.viewDidLoad()
@@ -38,9 +41,17 @@ class FicheAdherent: UIViewController {
         super.viewDidAppear(animated)
         
         //On lance un timer pour verifier toutes les secondes si on a une réponse
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
+        timerImage = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
+
     }
     
+    func alert(_ title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "Ok", style: UIAlertAction.Style.cancel, handler: nil)
+        alert.addAction(ok)
+        self.present(alert, animated: true, completion: nil)
+    }
+
     private func loadAllView(){ // est appelé pour agencé les différents élements de la page
         let api = APIConnexion()
         let nomAdherent = UILabel()
@@ -135,8 +146,9 @@ class FicheAdherent: UIViewController {
         stepper.leftAnchor.constraint(equalToSystemSpacingAfter: pointFidelite.rightAnchor, multiplier: 2).isActive = true
         stepper.minimumValue = 0
         stepper.maximumValue = 10
-        stepper.value = Double(listeInfoAdherent["PointFidelite"]!)!
+        stepper.value = Double(listeInfoAdherent["PointFidelite"]!) ?? 0
         stepper.stepValue = 1
+        self.stepper = stepper
         stepper.addTarget(self, action: #selector(stepperSelected), for: .touchUpInside)
         
         let qrCode = UIImageView()
@@ -153,7 +165,7 @@ class FicheAdherent: UIViewController {
         
     }
     
-    @objc func verificationReponse() { // Est appelé pour verifier si on a une réponse ou non du serveur
+    @objc func verificationReponse() { // Est appelé pour verifier si on a une réponse ou non du serveur pour le chargement de l'image
         if reponseURLRequestImage != "nil" && reponseURLRequestImage != "success" && imageView != nil{
             self.imageView?.image = UIImage(named: "binaireWorld") //image de bug
             self.imageView?.widthAnchor.constraint(equalToConstant: 150).isActive = true
@@ -176,10 +188,9 @@ class FicheAdherent: UIViewController {
             dateNaissanceLabelAnchor?.isActive = false // On la désactive pour en instancier une nouvelle
             dateNaissanceLabel?.topAnchor.constraint(equalToSystemSpacingBelow: errorLabel.bottomAnchor, multiplier: 2).isActive = true
             
-            timer.invalidate()
+            timerImage.invalidate()
         } else {
-            
-            if infosAdherent["Statut"] == "Developpeur" || infosAdherent["Statut"] == "Super-admin" {
+            if infosAdherent["Statut"] == "Développeur" || infosAdherent["Statut"] == "Super-admin" {
                 modifierButton.title = "Modifier"
                 modifierButton.isEnabled = true
             }
@@ -192,28 +203,49 @@ class FicheAdherent: UIViewController {
     }
     
     @objc private func stepperSelected(sender: UIStepper) { // Lorsque le stepper (-|+) est selctionnée
-        if Int(listeInfoAdherent["PointFidelite"]!) != nil { // Convertion possible
-            listeInfoAdherent.updateValue("\(Int(sender.value))", forKey: "PointFidelite") //On dans la variable local le nombre
-            pointFideliteLabel!.text = "Points de fidélité : \(listeInfoAdherent["PointFidelite"]!)" //on update le text label
-            let coloration = NSMutableAttributedString(string: pointFideliteLabel!.text!)
-            coloration.setColorForText(textForAttribute: "Points de fidélité :", withColor: .black)
-            coloration.setFontForText(textForAttribute: "Points de fidélité :", withFont: UIFont(name: "Comfortaa-Bold", size: 18)!) //Pour la couleur et la police spéciale des titres
-            pointFideliteLabel!.attributedText = coloration
+        if Int(stepper!.value) != nil { // Convertion possible
             let pushData = PushDataServer()
-            pushData.updatePointFidelite(id: listeInfoAdherent["id"]!, pointFidelite: listeInfoAdherent["PointFidelite"]!) //On update cette version sur le serveur
+            pushData.updatePointFidelite(id: listeInfoAdherent["id"]!, pointFidelite: String(Int(stepper!.value))) //On update cette version sur le serveur
+            timerPointFidelité = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(verificationReponsePointFidelite), userInfo: nil, repeats: true)
+            sender.tintColor = .gray // on le déactive en attendant une réponse du serveur
+            sender.isEnabled = false
         }
         
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) { //Avant d'envoyer de segue
         let modification = segue.destination as! AddNewAdherent
-        //modification.titre //on préremplie les champs car on MODIFIE les infos d'un adhérent
+        //on préremplie les champs car on MODIFIE les infos d'un adhérent
+        modification.titleView = "Modifier les infos"
         modification.oldNom = listeInfoAdherent["Nom"]!
         modification.oldClasse = listeInfoAdherent["Classe"]!
         modification.oldStatut = " \(listeInfoAdherent["Statut"]!)  "
         modification.oldDateNaissance = listeInfoAdherent["DateNaissance"]!
         modification.oldImage = imageView!.image!
+        modification.id = listeInfoAdherent["id"]!
     }
     
-    
+    @objc private func verificationReponsePointFidelite() { // est appelé pour verifier les réponse du serveur
+        if serveurReponse != "nil" {
+            timerPointFidelité.invalidate()
+            self.stepper!.isEnabled = true // on le réactive
+            self.stepper?.tintColor = .blue
+            if serveurReponse == "success" { // si on a une bonne réponse du serveur on met à jour les points de fidelité :
+                listeInfoAdherent.updateValue("\(Int(self.stepper!.value))", forKey: "PointFidelite") //On dans la variable local le nombre
+                pointFideliteLabel!.text = "Points de fidélité : \(listeInfoAdherent["PointFidelite"]!)" //on update le text label
+                let coloration = NSMutableAttributedString(string: pointFideliteLabel!.text!)
+                coloration.setColorForText(textForAttribute: "Points de fidélité :", withColor: .black)
+                coloration.setFontForText(textForAttribute: "Points de fidélité :", withFont: UIFont(name: "Comfortaa-Bold", size: 18)!) //Pour la couleur et la police spéciale des titres
+                pointFideliteLabel!.attributedText = coloration
+                lastValidateNbrPoint = Int(self.stepper!.value) // on met a jour la dernière value priseen compte par le serveur
+                
+                print("stepper.value = \(stepper!.value)")
+            } else { // sinon alert :
+                print("\nreponse finale = \(serveurReponse)")
+                alert("Une erreur serveur est survenue", message: serveurReponse)
+                stepper!.value = Double(lastValidateNbrPoint) // on le réinitialise à sa derniere valeur car le serveur n'a pas validé la requète
+            }
+        }
+        serveurReponse = "nil"
+    }
 }

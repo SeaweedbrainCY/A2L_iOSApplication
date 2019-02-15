@@ -41,8 +41,8 @@ class LocalData {
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "URLimg") as! String, forKey: "URLimg")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Classe") as! String, forKey: "Classe")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "PointFidelite") as! String, forKey: "PointFidelite")
-                            if let _ = dataUser.value(forKey: "Mdp") {
-                                temporaryDictionnary.updateValue(dataUser.value(forKey: "Mdp") as! String, forKey: "Mdp")
+                            if let _ = dataUser.value(forKey: "MdpHashed") {
+                                temporaryDictionnary.updateValue(dataUser.value(forKey: "MdpHashed") as! String, forKey: "MdpHashed")
                             }
                             self.allInfo = [temporaryDictionnary] // et on ajoute notre nouveau dico au tableau général
                         }

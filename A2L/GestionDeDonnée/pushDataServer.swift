@@ -10,27 +10,66 @@ import Foundation
 import UIKit
 
 class PushDataServer {// APIConnexion reçoit les données du serveur, cette classe là les envoie au serveur
+    
+    
+    var reponseServeur = "nil"
+    
+    
     public func updatePointFidelite(id: String, pointFidelite: String) {
-        //adresseIPServeurMaison = "192.168.1.64"
-        //adresseIPServeurTelephone = "172.20.10.2"
-        let adresseIPServeur = "192.168.1.64"
         let url = "http://\(adresseIPServeur):8888/stockNewPointFidelite.php"
-        
         let request = NSMutableURLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
-        let postString:String = "id=\(id)&PointFidelite=\(pointFidelite)"
+        let postString:String = "id=\(id)&PointFidelite=\(pointFidelite)&idAdmin=\(infosAdherent["id"]!)&mdpAdmin=\(infosAdherent["MdpHashed"]!)"
+        print("\npostString = \(postString)")
         request.httpBody = postString.data(using: .utf8)
         
-        let task = URLSession.shared.dataTask(with: request as URLRequest) { data, response, error in
+        URLSession.shared.dataTask(with: request as URLRequest, completionHandler : { (data, response, error) in
             if error != nil {
                 print("error = \(String(describing: error))")
+                serveurReponse = (error?.localizedDescription)!
             } else {
                 print("response = \(String(describing: response))")
-                let responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
-                print("responseString = \(String(describing: responseString))")
+                if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
+                    print("result = \(result)")
+                    if result! as String == "Accès au serveur refusé" { //Si la connexion est refusée
+                        serveurReponse = "Accès au serveur refusé"
+                    } else {
+                        serveurReponse = "success"
+                    }
+                } else {
+                    serveurReponse = "success"
+                }
+                print("serveur = \(serveurReponse)")
             }
             
-        }
-        task.resume()
+        }).resume()
+    }
+    
+    public func updateAllInfo(id: String, nom: String, classe: String, URLimg: String, dateNaissance: String, statut: String){
+            
+        let url = "http://\(adresseIPServeur):8888/updateAllInfo.php"
+        let request = NSMutableURLRequest(url: URL(string: url)!)
+        request.httpMethod = "POST"
+        let postString:String = "id=\(id)&Nom=\(nom)&Classe=\(classe)&URLimg=\(URLimg)&DateNaissance=\(dateNaissance)&Statut=\(statut)&idAdmin=\(infosAdherent["id"]!)&mdpAdmin=\(infosAdherent["MdpHashed"]!)"
+        print("post = \(postString)")
+        request.httpBody = postString.data(using: .utf8)
+        
+        URLSession.shared.dataTask(with: request as URLRequest, completionHandler : { (data, response, error) in
+            if error != nil {
+                print("error = \(String(describing: error))")
+                serveurReponse = (error?.localizedDescription)!
+            } else {
+                print("response = \(String(describing: response))")
+                if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
+                    if result! as String == "Accès au serveur refusé" { //Si la connexion est refusée
+                        serveurReponse = "Accès au serveur refusé"
+                    } else {
+                        serveurReponse = "success"
+                    }
+                } else {
+                    serveurReponse = "success"
+                }
+            }
+        }).resume()
     }
 }

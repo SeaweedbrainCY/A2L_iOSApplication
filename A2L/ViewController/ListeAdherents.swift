@@ -22,6 +22,8 @@ class ListeAdherent: UIViewController, UITableViewDataSource, UITableViewDelegat
     var listeDateNaissance:[String] = [] // sert à la connexion au serveur pour afficher les infos
     var chargement = UIActivityIndicatorView()
     
+    var loadAdherent = "nil"
+    
     var timer = Timer()
     
     override func viewDidLoad() {
@@ -48,32 +50,42 @@ class ListeAdherent: UIViewController, UITableViewDataSource, UITableViewDelegat
                 } else {
                     listeDateNaissance.append(dateNaissance)
                 }
+                
             }
+            print("listeNom =\(listeAdherentsNom)")
+            tableView.delegate = self
+            tableView.dataSource = self
             
+            tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: "cell") //on associe la tableView au custom de Style/customeCelleTableView.swift
+            
+            //On instancie le viewActivity :
+            chargement.hidesWhenStopped = true
+            chargement.style = .whiteLarge
+            chargement.color = .red
+            self.tableView.addSubview(chargement)
+            chargement.center = CGPoint(x: self.view.center.x, y: self.view.center.y)
+            
+            //Si on est super-admin ou developpeur on peut ajouter des élèves :
+            if infosAdherent["Statut"] == "Développeur" || infosAdherent["Statut"] == "Super-admin" {
+                self.addButton.image = UIImage(named: "add")
+                self.addButton.isEnabled = true
+            }
         }
-        print("listeNom =\(listeAdherentsNom)")
-        tableView.delegate = self
-        tableView.dataSource = self
         
-        tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: "cell") //on associe la tableView au custom de Style/customeCelleTableView.swift
-        
-        //On instancie le viewActivity :
-        chargement.hidesWhenStopped = true
-        chargement.style = .whiteLarge
-        chargement.color = .red
-        self.tableView.addSubview(chargement)
-        chargement.center = CGPoint(x: self.view.center.x, y: self.view.center.y)
-        
-        //Si on est super-admin ou developpeur on peut ajouter des élèves :
-        if infosAdherent["Statut"] == "Developpeur" || infosAdherent["Statut"] == "Super-admin" {
-            self.addButton.image = UIImage(named: "add")
-            self.addButton.isEnabled = true
-        }
         
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        if loadAdherent != "nil"{
+            let infos = loadAdherent.split(separator: "%")
+            let api = APIConnexion()
+            api.otherAdherentData(nom: api.convertionToHexaCode(String(infos[0])), dateNaissance: String(infos[1]))
+            //On lance un timer pour verifier toutes les secondes si on a une réponse
+            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(listeSelectedVerificationReponse), userInfo: nil, repeats: true)
+            chargement.startAnimating()
+            loadAdherent = "nil" //on réinitialise 
+        }
     }
     
     func alert(_ title: String, message: String) {
@@ -135,24 +147,16 @@ class ListeAdherent: UIViewController, UITableViewDataSource, UITableViewDelegat
     }
     
     @objc private func listeSelectedVerificationReponse(){
-        var reponse = "nil"
-        do {// On regarde l'erreur qui est actuellement enregistrée dans les fichiers
-            reponse = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur), encoding: .utf8)
-        } catch {
-            print("Fichier introuvable. ERREUR GRAVE")
-        }
-        if reponse != "nil" { // on detecte une réponse
+        if serveurReponse != "nil" { // on detecte une réponse
             timer.invalidate() // on desactive le compteur il ne sert plus à rien
-            
-            if reponse == "success" {
-                chargement.stopAnimating()
+            chargement.stopAnimating()
+            if serveurReponse == "success" {
                 //On a réussi, on transmet les données et on change de view
                 performSegue(withIdentifier: "afficheFicheAdherent", sender: self)
             } else { // Une erreur est survenue
-                self.alert("Erreur lors de la connexion au serveur", message: reponse)
+                self.alert("Erreur lors de la connexion au serveur", message: serveurReponse)
             }
-            let file = FileManager.default
-            file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: "nil".data(using: String.Encoding.utf8), attributes: nil)
+            serveurReponse = "nil"
         }
     }
 }

@@ -9,12 +9,17 @@
 import Foundation
 import UIKit
 
+var loadAnOtherAdherent = "nil"
+
 class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var backgroundView: UIView!
+    @IBOutlet weak var tabBarTitle: UINavigationItem!
     
     //Sont réutilisés dans le code pour de nombreuses raisons
+    var nomTextField: UITextField?
+    var classeTextField: UITextField?
     var dateNaissanceVariable: UIButton?
     var datePickerView: UIDatePicker?
     var statutVariable: UIButton?
@@ -22,19 +27,44 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
     var imageButton:UIButton?
     var datePickerHeight :NSLayoutConstraint?
     var pickerStatutHeight: NSLayoutConstraint?
+    let chargement = UIActivityIndicatorView()
+    let chargementView = UIView()
     
     //Si on modifie la fiche d'un adhérent, on reporte ses infomrations dans les champs requis :
     var titleView = "Ajouter un adhérent"
+    var id = "nil"
     var oldNom = ""
     var oldClasse = ""
     var oldImage: UIImage?
     var oldDateNaissance = "14/11/2002"
     var oldStatut = " Adhérent  "
     
+    var waitForServeur = Timer()
+    var imageExtension = "unknown"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         scrollView.delegate = self
+        self.tabBarTitle.title = titleView
         loadAllView() // on load toutes les View
+        //On instancie le chargement
+        chargement.style = .whiteLarge
+        chargement.color = .blue
+        self.backgroundView.addSubview(chargement)
+        chargement.translatesAutoresizingMaskIntoConstraints = false
+        chargement.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
+        chargement.centerYAnchor.constraint(equalToSystemSpacingBelow: self.scrollView.centerYAnchor, multiplier: 1).isActive = true
+        chargement.hidesWhenStopped = true
+        chargement.stopAnimating()
+        //On instancie le vue de chargement :
+        self.backgroundView.addSubview(chargementView)
+        chargementView.translatesAutoresizingMaskIntoConstraints = false
+        chargementView.widthAnchor.constraint(equalToConstant: self.view.frame.size.width).isActive = true
+        chargementView.heightAnchor.constraint(equalToConstant: self.view.frame.size.height).isActive = true
+        chargementView.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
+        chargementView.centerYAnchor.constraint(equalToSystemSpacingBelow: self.scrollView.centerYAnchor, multiplier: 1).isActive = true
+        chargementView.backgroundColor = UIColor.init(red: 1, green: 1, blue: 1, alpha: 0.5)
+        chargementView.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -68,7 +98,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         nomField.delegate = self
         backgroundView.addSubview(nomField)
         nomField.translatesAutoresizingMaskIntoConstraints = false
-        nomField.widthAnchor.constraint(equalToConstant: self.view.frame.size.width  - 20).isActive = true
+        nomField.widthAnchor.constraint(equalToConstant: self.view.frame.size.width  - 40).isActive = true
         nomField.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 3).isActive = true
         nomField.topAnchor.constraint(equalToSystemSpacingBelow: nomTitre.bottomAnchor, multiplier: 1.5).isActive = true
         nomField.placeholder = "Nom Prénom"
@@ -78,6 +108,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         nomField.textContentType = .name
         nomField.font = UIFont(name: "Arial Rounded MT Bold", size: 18)
         nomField.text = self.oldNom // si on a déjà le nom de l'adhérent lors de la modification
+        self.nomTextField = nomField
         
         let classeTitre = UILabel()
         backgroundView.addSubview(classeTitre)
@@ -86,6 +117,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         classeTitre.topAnchor.constraint(equalToSystemSpacingBelow: nomField.bottomAnchor, multiplier: 4).isActive = true
         classeTitre.text = "Classe : "
         classeTitre.font = UIFont(name: "Comfortaa-Bold", size: 18)
+        
         
         let classe = UITextField()
         classe.delegate = self
@@ -100,6 +132,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         classe.textColor = .blue
         classe.font = UIFont(name: "Arial Rounded MT Bold", size: 18)
         classe.text = oldClasse
+        self.classeTextField = classe
         
         let imageButton = UIButton()
         self.backgroundView.addSubview(imageButton)
@@ -245,28 +278,87 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
     }
     
     @objc private func statutSelected(sender: UIButton) { // lorsqu'on clique sur le statut
-        self.view.endEditing(true)
-       if self.pickerViewStatut!.isHidden { // Si il est caché
-        
-        if !self.datePickerView!.isHidden { //Si le datePicker est affciher alors on le cache
-            self.datePickerHeight!.isActive = false
-            self.datePickerHeight = self.datePickerView!.heightAnchor.constraint(equalToConstant: 0)
-            self.datePickerHeight!.isActive = true
-            self.datePickerView!.isHidden = true
-        }
-        
-        self.pickerViewStatut!.isHidden = false // on affiche le notre
-        self.pickerStatutHeight!.isActive = false // on désactive sont ancienne height
-        self.pickerStatutHeight = self.datePickerView!.heightAnchor.constraint(equalToConstant: 50) // On ajoute la nouvelle
-        self.pickerStatutHeight!.isActive = true
-        } else { // il est déjà afficher alors on le cache
+        if statutVariable!.currentTitle! == " Développeur  " {
+            alert("Les développeurs ne peuvent être dégradés", message: "Je suis désolé, je ne fais que suivre leurs instructions ...")
+        } else {
+            self.view.endEditing(true)
+            if self.pickerViewStatut!.isHidden { // Si il est caché
+                
+                if !self.datePickerView!.isHidden { //Si le datePicker est affciher alors on le cache
+                    self.datePickerHeight!.isActive = false
+                    self.datePickerHeight = self.datePickerView!.heightAnchor.constraint(equalToConstant: 0)
+                    self.datePickerHeight!.isActive = true
+                    self.datePickerView!.isHidden = true
+                }
+                
+                self.pickerViewStatut!.isHidden = false // on affiche le notre
+                self.pickerStatutHeight!.isActive = false // on désactive sont ancienne height
+                self.pickerStatutHeight = self.datePickerView!.heightAnchor.constraint(equalToConstant: 50) // On ajoute la nouvelle
+                self.pickerStatutHeight!.isActive = true
+            } else { // il est déjà afficher alors on le cache
                 self.pickerStatutHeight!.isActive = false // on désactive sont ancienne height
                 self.pickerStatutHeight = self.pickerViewStatut!.heightAnchor.constraint(equalToConstant: 0) // On ajoute la nouvelle
                 self.pickerStatutHeight!.isActive = true
-
-            self.pickerViewStatut!.isHidden = true // on cache
+                
+                self.pickerViewStatut!.isHidden = true // on cache
+            }
         }
         
+        
+    }
+    
+    @IBAction func saveSelected(sender: UIBarButtonItem) {
+        // On vérifie que tius les champs sont remplis :
+        var isCorrect = true
+        if nomTextField!.text != nil || nomTextField!.text != "" { // Le champ Nom Prénom est rempli
+            if  !nomTextField!.text!.contains(" ") { // ne contient que le prénom ou que le nom
+                isCorrect = false
+                nomTextField!.shake()
+            }
+        } else { // Le nom n'est pas rensigné
+            isCorrect = false
+            nomTextField!.shake()
+        }
+        if classeTextField!.text == nil || classeTextField!.text == "" { // aucune classe renseigné
+            isCorrect = false
+            classeTextField!.shake()
+        }
+        if imageButton!.image(for: .normal) == UIImage(named: "addImage") { // la pdp n'a pas été modifiée A GARDER ??? A VOIR
+            isCorrect = false
+            imageButton!.shake()
+            alert("Aucune photo de profil renseignée", message: "Ajouter une photo de profil en cliquant sur le cadre bleu")
+        }
+        
+        
+        if isCorrect { // on envoie les infos au serveur si tout est correct
+            chargement.startAnimating()
+            self.chargementView.isHidden = false
+            self.scrollView.isScrollEnabled = false
+            if id == "nil" { // si on a pas d'id cela veut dire que la fiche est en cours de création et non de modification. Il n'a donc aucun Id pour l'instant
+                
+            } else { // si on a un id alors l'adhérent existe déjà, on l'utilise donc:
+                //On enlève les espaces :
+                var statut = ""
+                switch self.statutVariable!.currentTitle! {
+                case " Adhérent  " : statut = "Adhérent"
+                case " Membre du bureau  ": statut = "Membre du bureau"
+                case " Super-admin  ": statut = "Super-amdin"
+                case " Développeur  ": statut = "Développeur"
+                default : statut = "Adhérent"
+                }
+                
+                if id != "nil" {
+                    let split = infosOtherAdherent["URLimg"]?.split(separator: ".")
+                    self.imageExtension = String(split![1])
+                }
+                
+                let pushData = PushDataServer()
+                let convertion = APIConnexion()
+                pushData.updateAllInfo(id: id, nom: nomTextField!.text!, classe: classeTextField!.text!, URLimg: "\(convertion.convertionToHexaCode(nomTextField!.text!)).\(self.imageExtension)", dateNaissance: dateNaissanceVariable!.currentTitle!, statut: statut)
+                
+                waitForServeur = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
+            }
+        }
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int { // nombre de colonne
@@ -279,13 +371,13 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        let liste = [" Adhérent  ", " Membre du bureau  ", " Super-admin  "]
+        let liste = ["Adhérent", "Membre du bureau", "Super-admin"]
         return liste[row]
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let liste = [" Adhérent  ", " Membre du bureau  ", " Super-admin  "]
-        self.statutVariable?.setTitle("\(liste[row])", for: .normal)
+        let liste = ["Adhérent", "Membre du bureau", "Super-admin"]
+        self.statutVariable?.setTitle(" \(liste[row])  ", for: .normal)
     }
     
     @objc private func infoSelected(sender: UIButton) { // affiche l'aide a propos de la modification des statuts. Pour ne pas faire n'importe quoi
@@ -328,12 +420,33 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         self.present(alert, animated: true, completion: nil)
     }
     
+    @objc private func verificationReponse(){
+        if serveurReponse != "nil" {
+            waitForServeur.invalidate()
+            chargement.stopAnimating()
+            self.chargementView.isHidden = true
+            self.scrollView.isScrollEnabled = true
+            if serveurReponse == "success" {
+                loadAnOtherAdherent = "\(nomTextField!.text!)%\(dateNaissanceVariable!.currentTitle!)"
+                performSegue(withIdentifier: "returnHome", sender: self)
+            } else {
+                alert("Erreur lors de l'enregistrement", message: "Une erreur est survenue : \(serveurReponse)")
+            }
+        }
+    }
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) { //load l'image selectionnée
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
+            if info[UIImagePickerController.InfoKey.imageURL] != nil {
+                self.imageExtension = URL(fileURLWithPath: "\(info[UIImagePickerController.InfoKey.imageURL]!)").pathExtension
+                print("URL = \(self.imageExtension)")
+            }
             self.imageButton?.setImage(rogneImage(image: image), for: .normal)
         } else {
             print("Image non reconnue (l.143)")
         }
+        
+        
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -375,5 +488,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         return string.rangeOfCharacter(from: CharacterSet(charactersIn: "\"\\/.;,%:()»«¿¡[]{}|~<>•")) == nil
     }
+    
+    
     
 }

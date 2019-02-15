@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 //ATTENTION : Cette fichier ne sert qu'a stocker en un seul fichier les variables qui sont sorties des class. Elles sont donc utilisable directement dans toute l'application. Est-ce utilisable sur le long terme ? Est-ce optimisé ? est ce qu'on a la droit ? 
 
-let reponseServeur = "reponseServeur.text" // reponse de notre chère serveur : erreur
+var serveurReponse = "nil" // reponse de notre chère serveur : erreur
 var infosAdherent = ["nil": "nil"] //Infos de bases de l'adhérents qui servent dans l'immédiat
 let stockInfosAdherent = "stockInfosAdherent.text"
 let nbrInvalidateMdpPath = "nbrInvalidateMdp.text" // Nombre de fois qu'un mot de passe a été refusé = lutte contre la brut force

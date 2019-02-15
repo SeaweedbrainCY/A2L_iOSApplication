@@ -34,7 +34,7 @@ class QRCode: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) { // lancée quand la vue load
         super.viewDidAppear(animated)
-        if let _ = listeInfoAdherent["Mdp"]{ // connecté en tant qu'admin
+        if let _ = listeInfoAdherent["MdpHashed"]{ // connecté en tant qu'admin
             scanner.title = "Scanner"
             scanner.tintColor = self.nomLabel.textColor
             scanner.isEnabled = true

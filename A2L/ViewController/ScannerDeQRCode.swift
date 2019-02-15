@@ -150,23 +150,16 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     }
     
     @objc private func verificationReponse() { // check les réponses du serveur
-        var reponse = "nil"
-        do {// On regarde l'erreur qui est actuellement enregistrée dans les fichiers
-            reponse = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur), encoding: .utf8)
-        } catch {
-            print("Fichier introuvable. ERREUR GRAVE")
-        }
-        if reponse != "nil" { // on detecte une réponse
+        if serveurReponse != "nil" { // on detecte une réponse
             timer.invalidate() // on desactive le compteur il ne sert plus à rien
             
-             if reponse == "success" {
+             if serveurReponse == "success" {
                 //On a réussi, on transmet les données et on change de view
                 performSegue(withIdentifier: "afficheAdherentFiche", sender: self)
             } else { // Une erreur est survenue
-                self.alert("Erreur lors de la connexion au serveur", message: reponse)
+                self.alert("Erreur lors de la connexion au serveur", message: serveurReponse)
             }
-            let file = FileManager.default
-            file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: "nil".data(using: String.Encoding.utf8), attributes: nil)
+            serveurReponse = "nil"
         }
     }
 }

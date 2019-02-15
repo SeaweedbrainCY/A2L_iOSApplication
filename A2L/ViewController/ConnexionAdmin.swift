@@ -22,7 +22,6 @@ class ConnexionAdmin: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var switchToAdherentPage: UIButton!
     
     var timer = Timer()
-    var reponse = "nil" //réponse fictive du serveur
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,9 +85,10 @@ class ConnexionAdmin: UIViewController, UITextFieldDelegate {
             self.chargement.startAnimating() // Pour afficher le chargement
             //On associe le nom et prénom :
             let database = APIConnexion()
+            let hash = HashProtocol()
             var nom = self.nomField.text!
             var prenom = self.prenomField.text!
-            var mdp = database.convertionToHexaCode(self.mdpField.text!) // DOIT ÊTRE IMPÉRATIVEMENT HASHER EN DEHORS DES PERIODES DE TEST
+            let mdp = hash.SHA256(text: self.mdpField.text!) // DOIT ÊTRE IMPÉRATIVEMENT HASHER EN DEHORS DES PERIODES DE TEST
             
             if nom.contains(" "){ // Si on detecte un epsace
                 let splitSpace = nom.split(separator: " ")
@@ -130,20 +130,16 @@ class ConnexionAdmin: UIViewController, UITextFieldDelegate {
     }
     
     @objc private func verificationReponse(){ // est appelé par le compteur pour verifier si on a une réponse
-        do {// On regarde l'erreur qui est actuellement enregistrée dans les fichiers
-            reponse = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur), encoding: .utf8)
-        } catch {
-            print("Fichier introuvable. ERREUR GRAVE")
-        }
-        if reponse != "nil" { // on detecte une erreur
+        
+        if serveurReponse != "nil" { // on detecte une erreur
             timer.invalidate() // on desactive le compteur il ne sert plus à rien
             
             //Voici les différents types d'erreur qui peuvent arriver :
-            if reponse == "inconnue" {
+            if serveurReponse == "inconnue" {
                 self.alert("Aucune réponse du serveur", message: "J'crois que le serveur s'est mis en mode avion ...")
-            } else if reponse == "permission refusée" {
+            } else if serveurReponse == "permission refusée" {
                 self.alert("Permission refusée", message: "Rendez-vous à la prochaine AG de l'A2L, pour devenir membre du bureau ;)")
-            } else if reponse == "Mdp incorrect" {
+            } else if serveurReponse == "Mdp incorrect" {
                 self.alert("Mot de passe incorrect", message: "Il faut noter son mot de passe voyons !")
                 //On regarde s'il y a déjà eu des erreur dans le mot de passe :
                 var nbrErreurString = "0"
@@ -158,21 +154,20 @@ class ConnexionAdmin: UIViewController, UITextFieldDelegate {
                 } else if nbrErreur > 5 {
                     
                 }
-            } else if reponse == "success" {
+            } else if serveurReponse == "success" {
                 //On a réussi, on transmet les données et on change de view
                 performSegue(withIdentifier: "connexionReussie", sender: self)
             } else { // pour les erreurs inconnues
-                self.alert("Impossible de se connecter au serveur", message: reponse)
+                self.alert("Impossible de se connecter au serveur", message: serveurReponse)
             }
             //On réinitialise l'erreur :
             
-            if reponse != "success" { // On vide les champs
+            if serveurReponse != "success" { // On vide les champs
                 self.nomField.text = ""
                 self.prenomField.text = ""
                 self.mdpField.text = ""
             }
-            let file = FileManager.default
-            file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: "nil".data(using: String.Encoding.utf8), attributes: nil)
+            serveurReponse = "nil"
             self.chargement.stopAnimating()
             self.connexionButton.isHidden = false // On réactive tout
             self.switchToAdherentPage.isHidden = false

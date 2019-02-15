@@ -24,7 +24,6 @@ class ConnexionAdherent: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var switchToAdminPage: UIButton!
     
     var timer = Timer() //Compteur pour le chrono
-    var reponse = "nil" // réponse du serveur
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -138,20 +137,16 @@ class ConnexionAdherent: UIViewController, UITextFieldDelegate {
     }
     
     @objc private func verificationReponse(){ // est appelé par le compteur pour verifier si on a une réponse
-        do { // Va chercher dans les mémoires si on a une réponse d'enregistrée
-            reponse = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur), encoding: .utf8)
-        } catch {
-            print("Fichier introuvable. ERREUR GRAVE")
-        }
-        if reponse != "nil" { // Si on a une réponse
+        
+        if serveurReponse != "nil" { // Si on a une réponse
             timer.invalidate() // On désactive le timer il ne sert plus a rien
             
             //Voici les différents type d'erreur qui peuvent arriver:
-            if reponse == "inconnue" {
+            if serveurReponse == "inconnue" {
                 self.alert("Aucune réponse du serveur", message: "J'crois que le serveur s'est mis en mode avion ...")
-            } else if reponse == "Date de naissance incorrect" {
+            } else if serveurReponse == "Date de naissance incorrect" {
                 self.alert("Date de naissance non valide", message: "Tu n'aurais quand même pas oublié ta propre date de naissance ?????")
-            } else if reponse == "Élève introuvable" {
+            } else if serveurReponse == "Élève introuvable" {
                 self.alert("Adhérent introuvable", message: "T'es sûr et certain d'avoir payé ta cotisisation ? ;)")
                 //On regarde s'il y a déjà eu des erreur dans le mot de passe :
                 var nbrErreurString = "0"
@@ -166,13 +161,13 @@ class ConnexionAdherent: UIViewController, UITextFieldDelegate {
                 } else if nbrErreur > 5 {
                     
                 }
-            } else if reponse == "success" {
+            } else if serveurReponse == "success" {
                 //La connexion est réussi et acceptée par le serveur
                 performSegue(withIdentifier: "connexionReussie", sender: self)
             } else { // erreur inconnue
-                self.alert("Impossible de se connecter au serveur", message: reponse)
+                self.alert("Impossible de se connecter au serveur", message: serveurReponse)
             }
-            if reponse != "success" { // On vide les champs si la connexion n'est pas réussie
+            if serveurReponse != "success" { // On vide les champs si la connexion n'est pas réussie
                 self.nomField.text = ""
                 self.prenomField.text = ""
                 self.anneeField.text = ""
@@ -180,8 +175,7 @@ class ConnexionAdherent: UIViewController, UITextFieldDelegate {
                 self.jourField.text = ""
             }
             //On réinitialise l'erreur :
-            let file = FileManager.default
-            file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: "nil".data(using: String.Encoding.utf8), attributes: nil)
+            serveurReponse = "nil"
             self.chargement.stopAnimating()
             self.connexionButton.isHidden = false
             self.switchToAdminPage.isHidden = false

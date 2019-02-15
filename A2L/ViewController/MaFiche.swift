@@ -24,6 +24,8 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
     var dateNaissanceLabelAnchor:NSLayoutConstraint? // doit pouvoir être désactivée si besoin
     var dateNaissanceLabel: UILabel?
     
+    
+    
     var timer = Timer()
     
     override func viewDidLoad() { // lancée quand la vue load
@@ -37,21 +39,28 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
             let api = APIConnexion()
             
             loadAllView()
-        } 
+        }
         //On lance un timer pour verifier toutes les secondes si on a une réponse
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(verificationReponseImage), userInfo: nil, repeats: true)
         
-        if let _ = listeInfoAdherent["Mdp"] {
+        if let _ = listeInfoAdherent["MdpHashed"] {
             listeButtonItem.image = UIImage(named: "liste")
             listeButtonItem.isEnabled = true
         }
+        
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if listeInfoAdherent == ["nil":"nil"]{ // On ne detecte aucune informations en local, on ne sait pas qui est l'adhérent donc on load la page de connexion
-            performSegue(withIdentifier: "connexionAdherent", sender: self)
+        if loadAnOtherAdherent != "nil" {
+            self.afficheAllAdherentButtonSelected(sender: self.listeButtonItem)
+        } else {
+            if listeInfoAdherent == ["nil":"nil"]{ // On ne detecte aucune informations en local, on ne sait pas qui est l'adhérent donc on load la page de connexion
+                performSegue(withIdentifier: "connexionAdherent", sender: self)
+            }
         }
+        
     }
     
     func alert(_ title: String, message: String) {
@@ -130,7 +139,7 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         statut.textColor = .blue
         statut.font = UIFont(name: "Comfortaa-Regular", size: 18)
         var statutText = "Statut : \(listeInfoAdherent["Statut"] ?? "Error")"
-        if let _ = listeInfoAdherent["Mdp"]{ // On indique comment il est connecté
+        if let _ = listeInfoAdherent["MdpHashed"]{ // On indique comment il est connecté
             statutText.append(" (connecté \(listeInfoAdherent["Statut"]!))")
         } else {
             statutText.append(" (connecté adhérent)")
@@ -158,7 +167,7 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         
     }
     
-    @objc func verificationReponse() { // Est appelé pour verifier si on a une réponse ou non du serveur
+    @objc func verificationReponseImage() { // Est appelé pour verifier si on a une réponse ou non du serveur
         if reponseURLRequestImage != "nil" && reponseURLRequestImage != "success" && imageView != nil{
             self.imageView?.image = UIImage(named: "binaireWorld") //image de bug
             self.imageView?.widthAnchor.constraint(equalToConstant: 150).isActive = true
@@ -189,32 +198,64 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         sender.tintColor = .gray
         sender.isEnabled = false // on empêche de cliquer 2 fois sinon BUUUUUUg youpi
         let api = APIConnexion()
-        api.exctractAllData(nom: api.convertionToHexaCode(infosAdherent["Nom"] ?? "Error"), mdpHashed: api.convertionToHexaCode(infosAdherent["Mdp"] ?? "Error"))
+        api.exctractAllData(nom: api.convertionToHexaCode(infosAdherent["Nom"] ?? "Error"), mdpHashed: infosAdherent["MdpHashed"] ?? "Error")
         //On lance un timer pour verifier toutes les secondes si on a une réponse
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(listeSelectedVerificationReponse), userInfo: nil, repeats: true)
     }
     
     
     @objc private func listeSelectedVerificationReponse(){
-        var reponse = "nil"
-        do {// On regarde l'erreur qui est actuellement enregistrée dans les fichiers
-            reponse = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur), encoding: .utf8)
-        } catch {
-            print("Fichier introuvable. ERREUR GRAVE")
-        }
-        if reponse != "nil" { // on detecte une réponse
+        
+        if serveurReponse != "nil" { // on detecte une réponse
             timer.invalidate() // on desactive le compteur il ne sert plus à rien
             listeButtonItem.tintColor = .blue
             listeButtonItem.isEnabled = true
             
-            if reponse == "success" {
+            if serveurReponse == "success" {
                 //On a réussi, on transmet les données et on change de view
                 performSegue(withIdentifier: "afficheAllAdherent", sender: self)
             } else { // Une erreur est survenue
-                self.alert("Erreur lors de la connexion au serveur", message: reponse)
+                self.alert("Erreur lors de la connexion au serveur", message: serveurReponse)
             }
-            let file = FileManager.default
-            file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: "nil".data(using: String.Encoding.utf8), attributes: nil)
+            serveurReponse = "nil"
+        }
+    }
+    
+    var waitReponse = Timer()
+    func searchForData() { // regarde si on peut acceder au serveur et chargé les données les plus récentes :
+        let api = APIConnexion()
+        if let mdp = listeInfoAdherent["MdpHashed"] { // connecté admin
+            api.adminConnexion(nom: api.convertionToHexaCode(listeInfoAdherent["Nom"]!), mdpHashed: api.convertionToHexaCode(mdp))
+        } else { // connecté adhérent
+            api.adherentConnexion(nom: api.convertionToHexaCode(listeInfoAdherent["Nom"]!), dateNaissance: listeInfoAdherent["DateNaissance"]!)
+        }
+        
+        
+        waitReponse = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(reponseServeurDataAdherent), userInfo: nil, repeats: true)
+    }
+    
+    @objc private func reponseServeurDataAdherent() { // attend la réponse du serveur dans la recherche de données de l'utulisateur
+        if serveurReponse != "nil" { // Si on a une réponse
+            waitReponse.invalidate() // On désactive le timer il ne sert plus a rien
+            print("reponse mafiche = \(serveurReponse)")
+            
+            if serveurReponse == "success" {
+                listeInfoAdherent = infosAdherent // on actualise la variable local
+            }
+            
+            loadAllView()
+            
+            //On réinitialise l'erreur :
+            serveurReponse = "nil"
+            
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "afficheAllAdherent" && loadAnOtherAdherent != "nil"{
+            let transfere = segue.destination as! ListeAdherent
+            transfere.loadAdherent = loadAnOtherAdherent
+            loadAnOtherAdherent = "nil" // on réinitilise
         }
     }
 }

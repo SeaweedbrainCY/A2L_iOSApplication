@@ -12,9 +12,8 @@ import UIKit
 class APIConnexion {
     
     var allInfo: [[String:String]] = [[:]]// Voila le tableau qui résumera toutes les données de tous les adhérents
-     //adresseIPServeurMaison = "192.168.1.64"
-     //adresseIPServeurTelephone = "172.20.10.2"
-    let adresseIPServeur = "192.168.1.64"
+     
+    
     
     //Va chercher et convertie les données codées en JSON.
     public func exctractAllData(nom: String, mdpHashed: String) {
@@ -33,8 +32,7 @@ class APIConnexion {
                 if error != nil {
                     print("******ERROR FATAL. URL NON FONCTIONNEL. ECHEC : \(String(describing: error))")
                     
-                    let file = FileManager.default
-                    file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: error?.localizedDescription.data(using: String.Encoding.utf8), attributes: nil)
+                    serveurReponse = error!.localizedDescription
                     
                     
                 } else { // Si aucune erreur n'est survenu
@@ -76,10 +74,8 @@ class APIConnexion {
                         if reponse == "success" {// On stock les infos
                             infosAllAdherent = self.allInfo
                         }
-                        let file = FileManager.default
-                        file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: reponse.data(using: String.Encoding.utf8), attributes: nil)
+                        serveurReponse = reponse
                     })
-
                 }
             }).resume()
         } else { //bug dans l'URL
@@ -105,8 +101,7 @@ class APIConnexion {
                 if error != nil {
                     print("******ERROR FATAL. URL NON FONCTIONNEL. ECHEC : \(String(describing: error))")
                     
-                    let file = FileManager.default
-                    file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: error?.localizedDescription.data(using: String.Encoding.utf8), attributes: nil)
+                    serveurReponse = error!.localizedDescription
                     
                     
                 } else { // Si aucune erreur n'est survenu
@@ -154,16 +149,14 @@ class APIConnexion {
                         let localData = LocalData()
                         localData.stockDataTo(stockInfosAdherent)
                         
-                        let file = FileManager.default
-                        file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: reponse.data(using: String.Encoding.utf8), attributes: nil)
+                        serveurReponse = reponse
                     })
                     
                 }
             }).resume()
         } else { //bug dans l'URL
             print("url = nil")
-            let file = FileManager.default
-            file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: "Les informations saisies semblent comporter des caractères inconnus".data(using: String.Encoding.utf8), attributes: nil)
+            serveurReponse = "Les informations saisies semblent comporter des caractères inconnus"
             // let pageConnexion = ConnexionAdmin()
             //pageConnexion.errorWhileConnectingToDatabase(erreur : "url nil")
         }
@@ -185,8 +178,7 @@ class APIConnexion {
                 if error != nil {
                     print("******ERROR FATAL. URL NON FONCTIONNEL. ECHEC : \(String(describing: error))")
                     
-                    let file = FileManager.default
-                    file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: error?.localizedDescription.data(using: String.Encoding.utf8), attributes: nil)
+                    serveurReponse = (error?.localizedDescription)!
                     
                     
                 } else { // Si aucune erreur n'est survenu
@@ -204,7 +196,7 @@ class APIConnexion {
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "URLimg") as! String, forKey: "URLimg")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Classe") as! String, forKey: "Classe")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "PointFidelite") as! String, forKey: "PointFidelite")
-                            temporaryDictionnary.updateValue(dataUser.value(forKey: "Mdp") as! String, forKey: "Mdp")
+                            temporaryDictionnary.updateValue(mdpHashed, forKey: "MdpHashed") //Le serveur ne nous retourne jamais de mot de passe. De plus il ne correspond pas au bon hash. On garde donc le nôtre
                             
                             self.allInfo = [temporaryDictionnary] // et on ajoute notre nouveau dico au tableau général
                             print("all info = \(self.allInfo)")
@@ -233,18 +225,14 @@ class APIConnexion {
                         let localData = LocalData()
                         localData.stockDataTo(stockInfosAdherent)
                         
-                        let file = FileManager.default
-                        file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: reponse.data(using: String.Encoding.utf8), attributes: nil)
+                        serveurReponse = reponse
                     })
                     
                 }
             }).resume()
         } else { //bug dans l'URL
             print("url = nil")
-            let file = FileManager.default
-            file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: "Les informations saisies semblent comporter des caractères inconnus".data(using: String.Encoding.utf8), attributes: nil)
-            // let pageConnexion = ConnexionAdmin()
-            //pageConnexion.errorWhileConnectingToDatabase(erreur : "url nil")
+            serveurReponse = "Les informations saisies semblent comporter des caractères inconnus"
         }
     }
     
@@ -276,8 +264,7 @@ class APIConnexion {
                 if error != nil {
                     print("******ERROR FATAL. URL NON FONCTIONNEL. ECHEC : \(String(describing: error))")
                     
-                    let file = FileManager.default
-                    file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: error?.localizedDescription.data(using: String.Encoding.utf8), attributes: nil)
+                    serveurReponse = error!.localizedDescription
                     
                     
                 } else { // Si aucune erreur n'est survenu
@@ -321,17 +308,14 @@ class APIConnexion {
                         //adherentPage.saveData(self.allInfo[1])
                         infosOtherAdherent = self.allInfo[0] //On stock dans le tableau temporaire
                         
-                        
-                        let file = FileManager.default
-                        file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: reponse.data(using: String.Encoding.utf8), attributes: nil)
+                        serveurReponse = reponse
                     })
                     
                 }
             }).resume()
         } else { //bug dans l'URL
             print("url = nil")
-            let file = FileManager.default
-            file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: "Les informations saisies semblent comporter des caractères inconnus".data(using: String.Encoding.utf8), attributes: nil)
+            serveurReponse = "Les informations saisies semblent comporter des caractères inconnus"
             // let pageConnexion = ConnexionAdmin()
             //pageConnexion.errorWhileConnectingToDatabase(erreur : "url nil")
         }

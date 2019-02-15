@@ -71,6 +71,7 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
                 cell.iconCell.tintColor = .gray
             case 1 :
                 cell.textLabel?.text = "     Visiter le site du developpeur"
+                
                 cell.iconCell.image = UIImage(named: "codePhone")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
                 cell.iconCell.tintColor = .gray
             default : cell.textLabel?.text = "ERROR"
@@ -78,7 +79,7 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
         } else {
             switch indexPath.row {
             case 0 :
-                cell.textLabel?.text = "     Actualiser mes privilèges"
+                cell.textLabel?.text = "     Actualiser mes infos"
                 cell.iconCell.image = UIImage(named: "refresh")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
                 cell.iconCell.tintColor = .gray
             case 1 :
@@ -90,8 +91,6 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
             }
             
         }
-        //On colore l'image en rouge
-        
         return cell
     }
     
@@ -217,8 +216,8 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
     func actualisationInformations(){
         let api = APIConnexion()
         let nom = api.convertionToHexaCode("\(infosAdherent["Nom"]!)")
-        if let mdp = infosAdherent["Mdp"] { // Si on detecte un mdp c'est qu'on est admin
-            api.adminConnexion(nom: nom, mdpHashed: mdp)
+        if let mdp = infosAdherent["MdpHashed"] { // Si on detecte un mdp c'est qu'on est admin
+            api.adminConnexion(nom: nom, mdpHashed: api.convertionToHexaCode(mdp))
         } else { // sinon non
             api.adherentConnexion(nom: nom, dateNaissance: infosAdherent["DateNaissance"]!)
         }
@@ -229,15 +228,10 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
 
 
 @objc private func verificationReponse(){ // est appelé par le compteur pour verifier si on a une réponse
-    var reponse = "nil"
-    do { // Va chercher dans les mémoires si on a une réponse d'enregistrée
-        reponse = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur), encoding: .utf8)
-    } catch {
-        print("Fichier introuvable. ERREUR GRAVE")
-    }
-    if reponse != "nil" { // Si on a une réponse
+    
+    if serveurReponse != "nil" { // Si on a une réponse
         timer.invalidate() // On désactive le timer il ne sert plus a rien
-         if reponse == "success" { // Si on y arrive on réinstalle les données
+         if serveurReponse == "success" { // Si on y arrive on réinstalle les données
             //La connexion est réussi et acceptée par le serveur
             performSegue(withIdentifier: "backToHomePage", sender: self)
          } else { // sinon on se reconnecte : ex si le prénom à changé, on est obligé de déconnecter
@@ -245,10 +239,9 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
         }
     } else {
         
-        }
+    }
         //On réinitialise l'erreur :
-        let file = FileManager.default
-        file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(reponseServeur).path, contents: "nil".data(using: String.Encoding.utf8), attributes: nil)
+        serveurReponse = "nil"
         
     }
 }
