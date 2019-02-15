@@ -12,9 +12,6 @@ import UIKit
 class APIConnexion {
     
     var allInfo: [[String:String]] = [[:]]// Voila le tableau qui résumera toutes les données de tous les adhérents
-     
-    
-    
     //Va chercher et convertie les données codées en JSON.
     public func exctractAllData(nom: String, mdpHashed: String) {
         //l'URL de l'API avec les données voulues.
