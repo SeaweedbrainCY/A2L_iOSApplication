@@ -26,6 +26,8 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
     
     
     
+    var waitReponseImage = Timer()
+    
     var timer = Timer()
     
     override func viewDidLoad() { // lancée quand la vue load
@@ -41,7 +43,7 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
             loadAllView()
         }
         //On lance un timer pour verifier toutes les secondes si on a une réponse
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(verificationReponseImage), userInfo: nil, repeats: true)
+        waitReponseImage = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(verificationReponseImage), userInfo: nil, repeats: true)
         
         if let _ = listeInfoAdherent["MdpHashed"] {
             listeButtonItem.image = UIImage(named: "liste")
@@ -86,8 +88,8 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         photoId.translatesAutoresizingMaskIntoConstraints = false
         photoId.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
         photoId.topAnchor.constraint(equalToSystemSpacingBelow: nomAdherent.bottomAnchor, multiplier: 2).isActive = true
-        photoId.loadGif(name: "chargementGif")
-        photoId.imageFromUrl(urlString: "http://192.168.1.64:8888/\(api.convertionToHexaCode(listeInfoAdherent["URLimg"]!))")
+        photoId.image = UIImage(named: "chargementEnCours")
+        photoId.imageFromDatabase(idAdherent: listeInfoAdherent["id"]!)
         photoId.widthAnchor.constraint(equalToConstant: 300).isActive = true
         photoId.heightAnchor.constraint(equalToConstant: 300).isActive = true
         self.imageView = photoId
@@ -168,30 +170,37 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
     }
     
     @objc func verificationReponseImage() { // Est appelé pour verifier si on a une réponse ou non du serveur
-        if reponseURLRequestImage != "nil" && reponseURLRequestImage != "success" && imageView != nil{
-            self.imageView?.image = UIImage(named: "binaireWorld") //image de bug
-            self.imageView?.widthAnchor.constraint(equalToConstant: 150).isActive = true
-            self.imageView?.heightAnchor.constraint(equalToConstant: 150).isActive = true
-            
-            let errorLabel = UILabel()
-            self.backgroundView.addSubview(errorLabel)
-            errorLabel.translatesAutoresizingMaskIntoConstraints = false
-            errorLabel.widthAnchor.constraint(equalToConstant: 390).isActive = true
-            errorLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
-            errorLabel.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
-            errorLabel.topAnchor.constraint(equalToSystemSpacingBelow: (self.imageView?.bottomAnchor)!, multiplier: -0.5).isActive = true
-            errorLabel.numberOfLines = 3
-            errorLabel.textColor = .red
-            errorLabel.font = UIFont(name: "Comfortaa-Light", size: 12)
-            errorLabel.text = "\(reponseURLRequestImage)"
-            errorLabel.textAlignment = .center
-            
-            
-            dateNaissanceLabelAnchor?.isActive = false // On la désactive pour en instancier une nouvelle
-            dateNaissanceLabel?.topAnchor.constraint(equalToSystemSpacingBelow: errorLabel.bottomAnchor, multiplier: 2).isActive = true
-            
-            timer.invalidate()
+        print("verifcation image MaFiche = \(reponseURLRequestImage)")
+        if reponseURLRequestImage != "nil" {
+            if reponseURLRequestImage != "success" && imageView != nil{
+                self.imageView?.image = UIImage(named: "binaireWorld") //image de bug
+                self.imageView?.widthAnchor.constraint(equalToConstant: 150).isActive = true
+                self.imageView?.heightAnchor.constraint(equalToConstant: 150).isActive = true
+                
+                let errorLabel = UILabel()
+                self.backgroundView.addSubview(errorLabel)
+                errorLabel.translatesAutoresizingMaskIntoConstraints = false
+                errorLabel.widthAnchor.constraint(equalToConstant: 390).isActive = true
+                errorLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
+                errorLabel.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
+                errorLabel.topAnchor.constraint(equalToSystemSpacingBelow: (self.imageView?.bottomAnchor)!, multiplier: -0.5).isActive = true
+                errorLabel.numberOfLines = 3
+                errorLabel.textColor = .red
+                errorLabel.font = UIFont(name: "Comfortaa-Light", size: 12)
+                errorLabel.text = "\(reponseURLRequestImage)"
+                errorLabel.textAlignment = .center
+                
+                
+                dateNaissanceLabelAnchor?.isActive = false // On la désactive pour en instancier une nouvelle
+                dateNaissanceLabel?.topAnchor.constraint(equalToSystemSpacingBelow: errorLabel.bottomAnchor, multiplier: 2).isActive = true
+            } else {
+                self.imageView?.image = imageId!
+            }
+            reponseURLRequestImage = "nil"
+            waitReponseImage.invalidate()
         }
+        
+        
     }
     
     @IBAction func afficheAllAdherentButtonSelected(sender:UIBarButtonItem){
@@ -237,7 +246,6 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
     @objc private func reponseServeurDataAdherent() { // attend la réponse du serveur dans la recherche de données de l'utulisateur
         if serveurReponse != "nil" { // Si on a une réponse
             waitReponse.invalidate() // On désactive le timer il ne sert plus a rien
-            print("reponse mafiche = \(serveurReponse)")
             
             if serveurReponse == "success" {
                 listeInfoAdherent = infosAdherent // on actualise la variable local

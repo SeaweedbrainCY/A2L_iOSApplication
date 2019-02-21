@@ -92,7 +92,6 @@ class APIConnexion {
         var reponse = "error"
         let urlString = "http://\(adresseIPServeur):8888/infoAdherent.php?Nom=\(nom)&DateNaissance=\(dateNaissance)"
         let url = URL(string: urlString)
-        print("url = \(url)")
         if url != nil {
             URLSession.shared.dataTask(with: url!, completionHandler: {(data, response, error) in // On load le PHP
                 if error != nil {
@@ -104,7 +103,6 @@ class APIConnexion {
                 } else { // Si aucune erreur n'est survenu
                     
                     if let allDataUser = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSArray{ // On enregsitre le tableau total en JSON
-                        print("dataUser = \(String(describing: allDataUser))")
                         if allDataUser != nil {
                             let dataUser: NSDictionary = allDataUser![0] as! NSDictionary // On a qu'une seule valeur -> voir API
                             //Pour une raison qui m'est obscure, les informations ne seront pas classés dans cet ordre ...
@@ -120,26 +118,17 @@ class APIConnexion {
                             print("all info = \(self.allInfo)")
                             reponse = "success"
                         } else if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
-                            //let pageConnexion = ConnexionAdmin()
-                            print("resulat = \(result)")
                             
                             if result! as String == "Élève introuvable" { //Si la connexion est refusée
                                 reponse = "Élève introuvable"
-                                //print("permission refusée")
-                                //pageConnexion.errorWhileConnectingToDatabase(erreur: "Autorisation refusée")
                             } else if result! as String == "Date de naissance incorrect" {
                                 reponse = "Date de naissance incorrect"
-                                //print("mdp incorrect")
-                                //pageConnexion.errorWhileConnectingToDatabase(erreur: "Mdp incorrect")
                             }
                         }
                     } else {
-                        print("bug")
+                        print("erreur ligne 29 APIConnexion.swift")
                     }
                     OperationQueue.main.addOperation({ // Une fois l'action effectuée on envoie le resultat
-                        print("result message = \(reponse)")
-                        //let adherentPage = ConnexionAdherent()
-                        //adherentPage.saveData(self.allInfo[1])
                         infosAdherent = self.allInfo[0] //On stock dans le tableau temporaire
                         
                         //On enregistre les données dans le local :
@@ -152,10 +141,7 @@ class APIConnexion {
                 }
             }).resume()
         } else { //bug dans l'URL
-            print("url = nil")
             serveurReponse = "Les informations saisies semblent comporter des caractères inconnus"
-            // let pageConnexion = ConnexionAdmin()
-            //pageConnexion.errorWhileConnectingToDatabase(erreur : "url nil")
         }
     }
     
@@ -169,7 +155,6 @@ class APIConnexion {
         var reponse = "error"
         let urlString = "http://\(adresseIPServeur):8888/infoAdmin.php?Nom=\(nom)&Mdp=\(mdpHashed)"
         let url = URL(string: urlString)
-        print("url = \(url)")
         if url != nil {
             URLSession.shared.dataTask(with: url!, completionHandler: {(data, response, error) in // On load le PHP
                 if error != nil {
@@ -181,7 +166,6 @@ class APIConnexion {
                 } else { // Si aucune erreur n'est survenu
                     
                     if let allDataUser = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSArray{ // On enregsitre le tableau total en JSON
-                        print("dataUser = \(String(describing: allDataUser))")
                         if allDataUser != nil {
                             let dataUser: NSDictionary = allDataUser![0] as! NSDictionary // On a qu'une seule valeur -> voir API
                             //Pour une raison qui m'est obscure, les informations ne seront pas classés dans cet ordre ...
@@ -199,25 +183,17 @@ class APIConnexion {
                             print("all info = \(self.allInfo)")
                             reponse = "success"
                         } else if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
-                            
-                            print("resulat = \(result)")
-                            
                             if result! as String == "Autorisation refusée" { //Si la connexion est refusée
                                 reponse = "permission refusée"
-                                
                             } else if result! as String == "Mdp incorrect" {
                                 reponse = "Mdp incorrect"
-                                
                             }
                         }
                     } else {
-                        print("bug")
+                        print("erreur ligne 193 APIConnexion.swift")
                     }
                     OperationQueue.main.addOperation({ // Une fois l'action effectuée on envoie le resultat
-                        print("result message = \(reponse)")
-                        
                         infosAdherent = self.allInfo[0] //On stock dans le tableau temporaire
-                        
                         //On enregistre les données dans le local :
                         let localData = LocalData()
                         localData.stockDataTo(stockInfosAdherent)
@@ -228,7 +204,6 @@ class APIConnexion {
                 }
             }).resume()
         } else { //bug dans l'URL
-            print("url = nil")
             serveurReponse = "Les informations saisies semblent comporter des caractères inconnus"
         }
     }
@@ -255,7 +230,6 @@ class APIConnexion {
         var reponse = "error"
         let urlString = "http://\(adresseIPServeur):8888/infoAdherent.php?Nom=\(nom)&DateNaissance=\(dateNaissance)"
         let url = URL(string: urlString)
-        print("url = \(String(describing: url))")
         if url != nil {
             URLSession.shared.dataTask(with: url!, completionHandler: {(data, response, error) in // On load le PHP
                 if error != nil {
@@ -267,7 +241,6 @@ class APIConnexion {
                 } else { // Si aucune erreur n'est survenu
                     
                     if let allDataUser = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSArray{ // On enregsitre le tableau total en JSON
-                        print("dataUser = \(String(describing: allDataUser))")
                         if allDataUser != nil {
                             let dataUser: NSDictionary = allDataUser![0] as! NSDictionary // On a qu'une seule valeur -> voir API
                             //Pour une raison qui m'est obscure, les informations ne seront pas classés dans cet ordre ...
@@ -283,17 +256,11 @@ class APIConnexion {
                             print("all info = \(self.allInfo)")
                             reponse = "success"
                         } else if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
-                            //let pageConnexion = ConnexionAdmin()
-                            print("resulat = \(String(describing: result))")
                             
                             if result! as String == "Élève introuvable" { //Si la connexion est refusée
                                 reponse = "Élève introuvable"
-                                //print("permission refusée")
-                                //pageConnexion.errorWhileConnectingToDatabase(erreur: "Autorisation refusée")
                             } else if result! as String == "Date de naissance incorrect" {
                                 reponse = "Date de naissance incorrect"
-                                //print("mdp incorrect")
-                                //pageConnexion.errorWhileConnectingToDatabase(erreur: "Mdp incorrect")
                             }
                         }
                     } else {
@@ -301,10 +268,7 @@ class APIConnexion {
                     }
                     OperationQueue.main.addOperation({ // Une fois l'action effectuée on envoie le resultat
                         print("result message = \(reponse)")
-                        //let adherentPage = ConnexionAdherent()
-                        //adherentPage.saveData(self.allInfo[1])
                         infosOtherAdherent = self.allInfo[0] //On stock dans le tableau temporaire
-                        
                         serveurReponse = reponse
                     })
                     
@@ -313,8 +277,6 @@ class APIConnexion {
         } else { //bug dans l'URL
             print("url = nil")
             serveurReponse = "Les informations saisies semblent comporter des caractères inconnus"
-            // let pageConnexion = ConnexionAdmin()
-            //pageConnexion.errorWhileConnectingToDatabase(erreur : "url nil")
         }
     }
 }

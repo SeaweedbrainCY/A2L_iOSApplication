@@ -151,6 +151,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         }
         
         
+        
         let dateNaissanceTitre = UILabel()
         backgroundView.addSubview(dateNaissanceTitre)
         dateNaissanceTitre.translatesAutoresizingMaskIntoConstraints = false
@@ -354,8 +355,18 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
                 
                 let pushData = PushDataServer()
                 let convertion = APIConnexion()
-                pushData.updateAllInfo(id: id, nom: nomTextField!.text!, classe: classeTextField!.text!, URLimg: "\(convertion.convertionToHexaCode(nomTextField!.text!)).\(self.imageExtension)", dateNaissance: dateNaissanceVariable!.currentTitle!, statut: statut)
+                if imageButton!.currentImage! != oldImage { // l'image a changé : on l'upload
+                    let imageData = self.imageButton!.currentImage!.jpegData(compressionQuality: 0.2)
+                    let imageStr = imageData!.base64EncodedString(options:.endLineWithCarriageReturn)
+                    let stringData = convertion.convertionToHexaCode("\(imageStr)")
+                    print("nbr charactere finale : \(stringData.count)")
+                    pushData.uploadImage(imageDataString: stringData, id: infosOtherAdherent["id"]!)
+                    
+                } else { // on a pas changé l'image
+                    reponseURLRequestImage = "success" // on fait comme si on avait réussi l'upload
+                }
                 
+                pushData.updateAllInfo(id: id, nom: nomTextField!.text!, classe: classeTextField!.text!, URLimg: "\(convertion.convertionToHexaCode(nomTextField!.text!)).\(self.imageExtension)", dateNaissance: dateNaissanceVariable!.currentTitle!, statut: statut)
                 waitForServeur = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
             }
         }
@@ -387,7 +398,6 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
     }
     
     @objc private func addImage(sender: UIButton) { // quand on clique sur l'image
-        
         //On lui demande d'où elle veut prendre l'image : ici pas le choix : l'album photo
         let alert = UIAlertController(title: "Photo de profil adhérent", message: "Les photos sont stockées uniquement sur les serveurs de l'A2L et sont strictement privées à l'association.", preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Photo Library", style: .default) { _ in
@@ -421,27 +431,47 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
     }
     
     @objc private func verificationReponse(){
-        if serveurReponse != "nil" {
+        print("Reponse serveur = \(serveurReponse)")
+        print("Reponse URL = \(reponseURLRequestImage)")
+        if serveurReponse != "nil" && reponseURLRequestImage != "nil"{ // 2 réponse
             waitForServeur.invalidate()
             chargement.stopAnimating()
             self.chargementView.isHidden = true
             self.scrollView.isScrollEnabled = true
-            if serveurReponse == "success" {
+            if serveurReponse == "success" && reponseURLRequestImage == "success"{
                 loadAnOtherAdherent = "\(nomTextField!.text!)%\(dateNaissanceVariable!.currentTitle!)"
                 performSegue(withIdentifier: "returnHome", sender: self)
             } else {
-                alert("Erreur lors de l'enregistrement", message: "Une erreur est survenue : \(serveurReponse)")
+                if serveurReponse == "sucess" { // image impossible
+                    alert("Enregistrement de l'image impossible", message: "Les autres données ont bien pu être sauvegardées")
+                } else if reponseURLRequestImage == "success" { //données impossibke
+                    alert("Enregistrement des informations impossible", message: "L'image a elle été enregistrée avec succès")
+                } else { // les deux impossible
+                    alert("Aucune donnée n'a pas être transmise au serveur", message: "\(serveurReponse). Veuillez réessayerw")
+                }
             }
+            serveurReponse = "nil"
+            reponseURLRequestImage = "nil"
         }
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) { //load l'image selectionnée
-        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
+        if var image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
             if info[UIImagePickerController.InfoKey.imageURL] != nil {
                 self.imageExtension = URL(fileURLWithPath: "\(info[UIImagePickerController.InfoKey.imageURL]!)").pathExtension
-                print("URL = \(self.imageExtension)")
+                print("\(String(describing: info[UIImagePickerController.InfoKey.originalImage]))")
+                print("extension = \(self.imageExtension)")
+                image = UIImage(cgImage: image.cgImage!, scale: image.scale, orientation: UIImage.Orientation(rawValue: 0)!)
+                
+                let defintiveImage = rogneImage(image: image)
+                
+                let convertion = APIConnexion()
+                self.imageButton?.setImage(defintiveImage, for: .normal)
+                let imageData = self.imageButton!.currentImage!.jpegData(compressionQuality: 0.2)
+                let imageStr = imageData!.base64EncodedString(options:.endLineWithCarriageReturn)
+                print("nbr charactere finale : \(imageStr.count)")
             }
-            self.imageButton?.setImage(rogneImage(image: image), for: .normal)
+            
         } else {
             print("Image non reconnue (l.143)")
         }

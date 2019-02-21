@@ -39,9 +39,6 @@ class FicheAdherent: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        //On lance un timer pour verifier toutes les secondes si on a une réponse
-        timerImage = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
 
     }
     
@@ -68,13 +65,15 @@ class FicheAdherent: UIViewController {
         photoId.translatesAutoresizingMaskIntoConstraints = false
         photoId.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
         photoId.topAnchor.constraint(equalToSystemSpacingBelow: nomAdherent.bottomAnchor, multiplier: 2).isActive = true
-        photoId.loadGif(name: "chargementGif")
-        photoId.imageFromUrl(urlString: "http://192.168.1.64:8888/\(api.convertionToHexaCode(listeInfoAdherent["URLimg"]!))")
+        photoId.image = UIImage(named: "chargementEnCours")
+        photoId.imageFromDatabase(idAdherent: listeInfoAdherent["id"]!)
         photoId.widthAnchor.constraint(equalToConstant: 300).isActive = true
         photoId.heightAnchor.constraint(equalToConstant: 300).isActive = true
         self.imageView = photoId
         photoId.layer.cornerRadius = 20
         photoId.clipsToBounds = true
+        //On lance un timer pour verifier toutes les secondes si on a une réponse
+        timerImage = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
         
         let dateNaissance = UILabel()
         self.backgroundView.addSubview(dateNaissance)
@@ -166,36 +165,47 @@ class FicheAdherent: UIViewController {
     }
     
     @objc func verificationReponse() { // Est appelé pour verifier si on a une réponse ou non du serveur pour le chargement de l'image
-        if reponseURLRequestImage != "nil" && reponseURLRequestImage != "success" && imageView != nil{
-            self.imageView?.image = UIImage(named: "binaireWorld") //image de bug
-            self.imageView?.widthAnchor.constraint(equalToConstant: 150).isActive = true
-            self.imageView?.heightAnchor.constraint(equalToConstant: 150).isActive = true
-            
-            let errorLabel = UILabel()
-            self.backgroundView.addSubview(errorLabel)
-            errorLabel.translatesAutoresizingMaskIntoConstraints = false
-            errorLabel.widthAnchor.constraint(equalToConstant: 390).isActive = true
-            errorLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
-            errorLabel.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
-            errorLabel.topAnchor.constraint(equalToSystemSpacingBelow: (self.imageView?.bottomAnchor)!, multiplier: -0.5).isActive = true
-            errorLabel.numberOfLines = 3
-            errorLabel.textColor = .red
-            errorLabel.font = UIFont(name: "Comfortaa-Light", size: 12)
-            errorLabel.text = "\(reponseURLRequestImage)"
-            errorLabel.textAlignment = .center
-            
-            
-            dateNaissanceLabelAnchor?.isActive = false // On la désactive pour en instancier une nouvelle
-            dateNaissanceLabel?.topAnchor.constraint(equalToSystemSpacingBelow: errorLabel.bottomAnchor, multiplier: 2).isActive = true
-            
-            timerImage.invalidate()
-        } else {
+        print("reponseURL = \(reponseURLRequestImage)")
+        if reponseURLRequestImage != "nil" {
+            print("reponseUrl != nil")
+            if reponseURLRequestImage != "success" && imageView != nil{
+                print("image bug detected")
+                self.imageView?.image = UIImage(named: "binaireWorld") //image de bug
+                self.imageView?.widthAnchor.constraint(equalToConstant: 150).isActive = true
+                self.imageView?.heightAnchor.constraint(equalToConstant: 150).isActive = true
+                
+                let errorLabel = UILabel()
+                self.backgroundView.addSubview(errorLabel)
+                errorLabel.translatesAutoresizingMaskIntoConstraints = false
+                errorLabel.widthAnchor.constraint(equalToConstant: 390).isActive = true
+                errorLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
+                errorLabel.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
+                errorLabel.topAnchor.constraint(equalToSystemSpacingBelow: (self.imageView?.bottomAnchor)!, multiplier: -0.5).isActive = true
+                errorLabel.numberOfLines = 3
+                errorLabel.textColor = .red
+                errorLabel.font = UIFont(name: "Comfortaa-Light", size: 12)
+                errorLabel.text = "\(reponseURLRequestImage)"
+                errorLabel.textAlignment = .center
+                
+                dateNaissanceLabelAnchor?.isActive = false // On la désactive pour en instancier une nouvelle
+                dateNaissanceLabel?.topAnchor.constraint(equalToSystemSpacingBelow: errorLabel.bottomAnchor, multiplier: 2).isActive = true
+                
+                reponseURLRequestImage = "nil"
+                timerImage.invalidate()
+            } else {
+                print("reponse = success")
+                self.imageView?.image = imageId!
+                reponseURLRequestImage = "nil"
+                timerImage.invalidate()
+            }
             if infosAdherent["Statut"] == "Développeur" || infosAdherent["Statut"] == "Super-admin" {
                 modifierButton.title = "Modifier"
                 modifierButton.isEnabled = true
             }
             
         }
+        
+        
     }
     
     @IBAction func modifierSelected(sender: UIBarButtonItem){ // Bouton modifier la fiche adhérent slectionné
@@ -238,10 +248,7 @@ class FicheAdherent: UIViewController {
                 coloration.setFontForText(textForAttribute: "Points de fidélité :", withFont: UIFont(name: "Comfortaa-Bold", size: 18)!) //Pour la couleur et la police spéciale des titres
                 pointFideliteLabel!.attributedText = coloration
                 lastValidateNbrPoint = Int(self.stepper!.value) // on met a jour la dernière value priseen compte par le serveur
-                
-                print("stepper.value = \(stepper!.value)")
             } else { // sinon alert :
-                print("\nreponse finale = \(serveurReponse)")
                 alert("Une erreur serveur est survenue", message: serveurReponse)
                 stepper!.value = Double(lastValidateNbrPoint) // on le réinitialise à sa derniere valeur car le serveur n'a pas validé la requète
             }

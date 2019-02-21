@@ -45,7 +45,6 @@ class QRCode: UIViewController {
         
         let qrCodeGenerator = generateQRcode()
         let stringForQRCode = qrCodeGenerator.generateStringQRCode(nom: nom, dateNaissance: listeInfoAdherent["DateNaissance"] ?? "Error")
-        print("string generated = \(stringForQRCode)")
         QRCodeImage.image = qrCodeGenerator.generateQRCode(from: stringForQRCode)
         
     }

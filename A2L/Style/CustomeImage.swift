@@ -41,6 +41,39 @@ extension UIImageView {
         animation.values = [-5.0, 5.0, -5.0, 5.0, -5.0, 5.0, -2.0, 2.0, 0.0 ]
         layer.add(animation, forKey: "transform.translation.x")
     }
+    
+    public func imageFromDatabase(idAdherent id: String){
+        let url = URL(string: "http://\(adresseIPServeur):8888/loadImage.php")
+        let request = NSMutableURLRequest(url: url!)
+        request.httpMethod = "POST"
+        let postString:String = "idAdherent=\(id)&idAdmin=\(infosAdherent["id"]!)&MdpAdmin=\(infosAdherent["MdpHashed"]!)"
+        request.httpBody = postString.data(using: .utf8)
+        
+       
+        URLSession.shared.dataTask(with: request as URLRequest, completionHandler: {(data, response, error) in // On load le PHP
+            if error != nil {
+                print("******ERROR FATAL. URL NON FONCTIONNEL. ECHEC : \(String(describing: error))")
+                
+                serveurReponse = error!.localizedDescription
+                
+                
+            } else { // Si aucune erreur n'est survenu
+                if let dataString = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString{ // On enregsitre la data  en JSON
+                    if dataString == "Accès au serveur refusé" { // erreur
+                        reponseURLRequestImage = "Une erreur s'est produite lors de la connexion au serveur"
+                    } else if dataString == "Aucune données"{ // erreur
+                        reponseURLRequestImage = "Impossible de trouver la photo associée"
+                    } else { // pas d'erreur
+                        let string = String(dataString! as String)
+                        print("nombre de caractère = \(string.count)")
+                        let image: UIImage = UIImage(data:Data(base64Encoded: string)!)!
+                        imageId = image
+                        reponseURLRequestImage = "success"
+                    }
+                }
+            }
+        }).resume()
+    }
 }
 
 
