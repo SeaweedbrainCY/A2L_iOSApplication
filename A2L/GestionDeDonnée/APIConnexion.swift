@@ -44,7 +44,6 @@ class APIConnexion {
                                     temporaryDictionnary.updateValue(information.value(forKey: "Nom") as! String, forKey: "Nom")
                                     temporaryDictionnary.updateValue(information.value(forKey: "Statut") as! String, forKey: "Statut")
                                     temporaryDictionnary.updateValue(information.value(forKey: "DateNaissance") as! String, forKey: "dateNaissance")
-                                    temporaryDictionnary.updateValue(information.value(forKey: "URLimg") as! String, forKey: "URLimg")
                                     temporaryDictionnary.updateValue(information.value(forKey: "Classe") as! String, forKey: "Classe")
                                     temporaryDictionnary.updateValue(information.value(forKey: "PointFidelite") as! String, forKey: "PointFidelite")
                                     self.allInfo.append(temporaryDictionnary) // et on ajoute notre nouveau dico au tableau général
@@ -111,7 +110,6 @@ class APIConnexion {
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Nom") as! String, forKey: "Nom")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Statut") as! String, forKey: "Statut")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "DateNaissance") as! String, forKey: "DateNaissance")
-                            temporaryDictionnary.updateValue(dataUser.value(forKey: "URLimg") as! String, forKey: "URLimg")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Classe") as! String, forKey: "Classe")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "PointFidelite") as! String, forKey: "PointFidelite")
                             self.allInfo = [temporaryDictionnary] // et on ajoute notre nouveau dico au tableau général
@@ -174,7 +172,6 @@ class APIConnexion {
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Nom") as! String, forKey: "Nom")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Statut") as! String, forKey: "Statut")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "DateNaissance") as! String, forKey: "DateNaissance")
-                            temporaryDictionnary.updateValue(dataUser.value(forKey: "URLimg") as! String, forKey: "URLimg")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Classe") as! String, forKey: "Classe")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "PointFidelite") as! String, forKey: "PointFidelite")
                             temporaryDictionnary.updateValue(mdpHashed, forKey: "MdpHashed") //Le serveur ne nous retourne jamais de mot de passe. De plus il ne correspond pas au bon hash. On garde donc le nôtre
@@ -249,7 +246,6 @@ class APIConnexion {
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Nom") as! String, forKey: "Nom")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Statut") as! String, forKey: "Statut")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "DateNaissance") as! String, forKey: "DateNaissance")
-                            temporaryDictionnary.updateValue(dataUser.value(forKey: "URLimg") as! String, forKey: "URLimg")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Classe") as! String, forKey: "Classe")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "PointFidelite") as! String, forKey: "PointFidelite")
                             self.allInfo = [temporaryDictionnary] // et on ajoute notre nouveau dico au tableau général

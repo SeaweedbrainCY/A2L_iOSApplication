@@ -22,26 +22,27 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="QRCodeImage" translatesAutoresizingMaskIntoConstraints="NO" id="kzn-AU-9cb">
-                                <rect key="frame" x="37.5" y="183.5" width="300" height="300"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="300" id="2v5-1B-UoG"/>
-                                    <constraint firstAttribute="height" constant="300" id="OeZ-xc-sDV"/>
-                                </constraints>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Chargement..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tem-wr-iEE">
                                 <rect key="frame" x="90" y="119" width="195.5" height="30.5"/>
                                 <fontDescription key="fontDescription" name="Comfortaa-Bold" family="Comfortaa" pointSize="27"/>
                                 <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JVA-mm-p4q">
+                                <rect key="frame" x="37.5" y="183.5" width="300" height="300"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="568-eD-cKW"/>
+                                    <constraint firstAttribute="height" constant="300" id="d3h-lT-87U"/>
+                                </constraints>
+                                <state key="normal" image="chargementEnCours"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="tem-wr-iEE" firstAttribute="top" secondItem="W7m-V4-43O" secondAttribute="top" constant="55" id="KXx-yu-sO4"/>
-                            <constraint firstItem="kzn-AU-9cb" firstAttribute="centerY" secondItem="0jc-aA-thB" secondAttribute="centerY" id="Xcv-BW-uq0"/>
                             <constraint firstItem="tem-wr-iEE" firstAttribute="centerX" secondItem="0jc-aA-thB" secondAttribute="centerX" id="e6p-l6-3K6"/>
-                            <constraint firstItem="kzn-AU-9cb" firstAttribute="centerX" secondItem="0jc-aA-thB" secondAttribute="centerX" id="f2i-Fp-uao"/>
+                            <constraint firstItem="JVA-mm-p4q" firstAttribute="centerX" secondItem="0jc-aA-thB" secondAttribute="centerX" id="gVU-tb-W2w"/>
+                            <constraint firstItem="JVA-mm-p4q" firstAttribute="centerY" secondItem="0jc-aA-thB" secondAttribute="centerY" id="o6T-cs-84K"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="W7m-V4-43O"/>
                     </view>
@@ -53,7 +54,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="QRCodeImage" destination="kzn-AU-9cb" id="hI8-B8-kIf"/>
+                        <outlet property="QRCodeImage" destination="JVA-mm-p4q" id="1Lw-Un-Fal"/>
                         <outlet property="nomLabel" destination="tem-wr-iEE" id="Mkh-2G-gCk"/>
                         <outlet property="scanner" destination="sg4-41-2Fw" id="hrM-vG-tIc"/>
                     </connections>
@@ -215,7 +216,7 @@
                         <barButtonItem key="backBarButtonItem" title="Liste" id="pVQ-iB-wVY"/>
                         <barButtonItem key="rightBarButtonItem" enabled="NO" id="twN-mi-wd7">
                             <connections>
-                                <segue destination="E2P-Ak-ptE" kind="show" id="Nk3-aN-PWC"/>
+                                <segue destination="E2P-Ak-ptE" kind="show" identifier="addNewAdherent" id="Nk3-aN-PWC"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -658,7 +659,7 @@
     </scenes>
     <resources>
         <image name="MaFiche" width="54" height="54"/>
-        <image name="QRCodeImage" width="250" height="250"/>
+        <image name="chargementEnCours" width="566" height="570"/>
         <image name="qrCode" width="54" height="54"/>
         <image name="settings" width="36" height="36"/>
     </resources>

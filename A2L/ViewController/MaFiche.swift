@@ -167,6 +167,7 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         coloration.setFontForText(textForAttribute: "Points de fidélité :", withFont: UIFont(name: "Comfortaa-Bold", size: 18)!)
         pointFidelite.attributedText = coloration
         
+        
     }
     
     @objc func verificationReponseImage() { // Est appelé pour verifier si on a une réponse ou non du serveur

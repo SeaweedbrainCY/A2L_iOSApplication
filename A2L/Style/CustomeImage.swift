@@ -12,27 +12,6 @@ import UIKit
 
 
 extension UIImageView {
-    public func imageFromUrl(urlString: String) { // Pour download une image à partir d'une url
-        print("urlString image = \(urlString)")
-        if let url = URL(string: urlString) {
-            print("url image = \(url)")
-            DispatchQueue.main.async {
-                URLSession.shared.dataTask(with: url, completionHandler: {(data, response, error) in
-                    if error != nil {
-                        reponseURLRequestImage = (error?.localizedDescription)!
-                    } else { // Aucune erreur
-                        if let imageData = data as Data? {
-                            self.image = UIImage(data: imageData as Data)
-                            reponseURLRequestImage = "success"
-                        }
-                    }
-                }).resume()
-                
-            }
-        } else { // URL non valide
-            reponseURLRequestImage = "Accès aux données demandées impossible"
-        }
-    }
     
     public func shake() {
         let animation = CAKeyframeAnimation(keyPath: "transform.translation.x")
@@ -66,9 +45,15 @@ extension UIImageView {
                     } else { // pas d'erreur
                         let string = String(dataString! as String)
                         print("nombre de caractère = \(string.count)")
-                        let image: UIImage = UIImage(data:Data(base64Encoded: string)!)!
-                        imageId = image
-                        reponseURLRequestImage = "success"
+                        if UIImage(data:Data(base64Encoded: string)!) != nil  {
+                            let image: UIImage = UIImage(data:Data(base64Encoded: string)!)!
+                            imageId = image
+                            reponseURLRequestImage = "success"
+                        } else { //l'image n'est pas compatible
+                            reponseURLRequestImage = "Impossible de charger le fichier : L'image demandée n'est pas compatible"
+                        }
+                        
+                        
                     }
                 }
             }

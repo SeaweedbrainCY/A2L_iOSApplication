@@ -43,11 +43,11 @@ class PushDataServer {// APIConnexion reçoit les données du serveur, cette cla
     
 
     
-    public func updateAllInfo(id: String, nom: String, classe: String, URLimg: String, dateNaissance: String, statut: String){
+    public func updateAllInfo(id: String, nom: String, classe: String, dateNaissance: String, statut: String){
         let url = "http://\(adresseIPServeur):8888/updateAllInfo.php"
         let request = NSMutableURLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
-        let postString:String = "id=\(id)&Nom=\(nom)&Classe=\(classe)&URLimg=\(URLimg)&DateNaissance=\(dateNaissance)&Statut=\(statut)&idAdmin=\(infosAdherent["id"]!)&MdpAdmin=\(infosAdherent["MdpHashed"]!)"
+        let postString:String = "id=\(id)&Nom=\(nom)&Classe=\(classe)&DateNaissance=\(dateNaissance)&Statut=\(statut)&idAdmin=\(infosAdherent["id"]!)&MdpAdmin=\(infosAdherent["MdpHashed"]!)"
         print("post = \(postString)")
         request.httpBody = postString.data(using: .utf8)
         
@@ -98,6 +98,76 @@ class PushDataServer {// APIConnexion reçoit les données du serveur, cette cla
                 }
             }
             print("\n\n****** REPONSE ===== \(serveurReponse)")
+        }).resume()
+    }
+    
+    /*----------------------------------------------------------------------------------------------
+                                   AJOUT D'UN NOUVEL ADHÉRENT
+     ---------------------------------------------------------------------------------------------*/
+    
+    public func addAdherent(nom: String, classe: String, imageData: String, dateNaissance: String, statut: String){
+        let url = "http://\(adresseIPServeur):8888/addAdherent.php"
+        let request = NSMutableURLRequest(url: URL(string: url)!)
+        request.httpMethod = "POST"
+        let postString:String = "Nom=\(nom)&Classe=\(classe)&ImageData=\(imageData)&DateNaissance=\(dateNaissance)&Statut=\(statut)&idAdmin=\(infosAdherent["id"]!)&MdpAdmin=\(infosAdherent["MdpHashed"]!)"
+        request.httpBody = postString.data(using: .utf8)
+        
+        URLSession.shared.dataTask(with: request as URLRequest, completionHandler : { (data, response, error) in
+            if error != nil {
+                print("error = \(String(describing: error))")
+                serveurReponse = (error?.localizedDescription)!
+            } else {
+                if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
+                    if result! as String == "Accès au serveur refusé" { //Si la connexion est refusée
+                        serveurReponse = "Accès au serveur refusé"
+                        reponseURLRequestImage = "Accès au serveur refusé"
+                    } else if result! as String == "success"{
+                        serveurReponse = "success"
+                        reponseURLRequestImage = "success"
+                    } else {
+                        serveurReponse = "Une erreur inconnue est survenue lors de la connexion au serveur. \(result!)"
+                        reponseURLRequestImage = "Une erreur inconnue est survenue lors de la connexion au serveur"
+                    }
+                } else {
+                    serveurReponse = "Une erreur inconnue est survenue et empêche la connexion au serveur"
+                    reponseURLRequestImage = "Une erreur inconnue est survenue et empêche la connexion au serveur"
+                }
+            }
+        }).resume()
+    }
+    
+    /*----------------------------------------------------------------------------------------------
+                                    SUPPRESSION D'UN ADHÉRENT
+     ---------------------------------------------------------------------------------------------*/
+    
+    public func removeAdherent(nom: String, id:String){ // 2 paramètres pour s'assurer qu'on supprime le bonne adéhrent
+        let url = "http://\(adresseIPServeur):8888/removeAdherent.php"
+        let request = NSMutableURLRequest(url: URL(string: url)!)
+        request.httpMethod = "POST"
+        let postString:String = "Nom=\(nom)&id=\(id)&idAdmin=\(infosAdherent["id"]!)&MdpAdmin=\(infosAdherent["MdpHashed"]!)"
+        request.httpBody = postString.data(using: .utf8)
+        
+        URLSession.shared.dataTask(with: request as URLRequest, completionHandler : { (data, response, error) in
+            if error != nil {
+                print("error = \(String(describing: error))")
+                serveurReponse = (error?.localizedDescription)!
+            } else {
+                if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
+                    if result! as String == "Accès au serveur refusé" { //Si la connexion est refusée
+                        serveurReponse = "Accès au serveur refusé"
+                        reponseURLRequestImage = "Accès au serveur refusé"
+                    } else if result! as String == "success"{
+                        serveurReponse = "success"
+                        reponseURLRequestImage = "success"
+                    } else {
+                        serveurReponse = "Une erreur inconnue est survenue lors de la connexion au serveur. \(result!)"
+                        reponseURLRequestImage = "Une erreur inconnue est survenue lors de la connexion au serveur"
+                    }
+                } else {
+                    serveurReponse = "Une erreur inconnue est survenue et empêche la connexion au serveur"
+                    reponseURLRequestImage = "Une erreur inconnue est survenue et empêche la connexion au serveur"
+                }
+            }
         }).resume()
     }
 }

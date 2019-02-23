@@ -26,7 +26,7 @@ class LocalData {
                         //Pour une raison qui m'est obscure, les informations ne seront pas classés dans cet ordre ...
                         var temporaryDictionnary: [String:String] = [:] // tableau temporaire qui sert à convertir les données avant de les enregsitrer
                         var isOkay = true
-                        let listeKey = ["id", "Nom", "Statut", "DateNaissance", "URLimg", "Classe", "PointFidelite"]
+                        let listeKey = ["id", "Nom", "Statut", "DateNaissance", "Classe", "PointFidelite"]
                         for key in listeKey {
                             if dataUser.value(forKey: key) == nil { // On véréfie que toutes les données recherchées sont bien là. Suite à des mise a jour, il es possible qu'un bug apparaisse entre les ancienne et nouvelles données. Si on detecte un bug on relance un connexion tout simplementù`
                                 isOkay = false
@@ -37,7 +37,6 @@ class LocalData {
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Nom") as! String, forKey: "Nom")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Statut") as! String, forKey: "Statut")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "DateNaissance") as! String, forKey: "DateNaissance")
-                            temporaryDictionnary.updateValue(dataUser.value(forKey: "URLimg") as! String, forKey: "URLimg")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Classe") as! String, forKey: "Classe")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "PointFidelite") as! String, forKey: "PointFidelite")
                             if let _ = dataUser.value(forKey: "MdpHashed") {

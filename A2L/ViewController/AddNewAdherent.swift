@@ -38,6 +38,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
     var oldImage: UIImage?
     var oldDateNaissance = "14/11/2002"
     var oldStatut = " Adhérent  "
+    var listeAllNom:[String] = [] // liste le nom de tous les adhérents
     
     var waitForServeur = Timer()
     var imageExtension = "unknown"
@@ -232,14 +233,18 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         infosButton.titleLabel!.font = UIFont(name: "Comfortaa-Light", size: 18)
         infosButton.addTarget(self, action: #selector(infoSelected), for: .touchUpInside)
         
-        let supprButton = UIButton()
-        self.backgroundView.addSubview(supprButton)
-        supprButton.translatesAutoresizingMaskIntoConstraints = false
-        supprButton.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
-        supprButton.topAnchor.constraint(equalToSystemSpacingBelow: pickerView.bottomAnchor, multiplier: 5).isActive = true
-        supprButton.setTitleColor(.red, for: .normal)
-        supprButton.setTitle("Supprimer cet adhérent", for: .normal)
-        supprButton.addTarget(self, action: #selector(supprAdherent), for: .touchUpInside)
+        
+        if id != "nil" || oldStatut == "Dévloppeur" || oldNom == infosAdherent["Nom"]{ // on ne supprime pas un adhérent pas encore créé ou un developpeur ou soi même
+            let supprButton = UIButton()
+            self.backgroundView.addSubview(supprButton)
+            supprButton.translatesAutoresizingMaskIntoConstraints = false
+            supprButton.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
+            supprButton.topAnchor.constraint(equalToSystemSpacingBelow: pickerView.bottomAnchor, multiplier: 5).isActive = true
+            supprButton.setTitleColor(.red, for: .normal)
+            supprButton.setTitle("Supprimer cet adhérent", for: .normal)
+            supprButton.addTarget(self, action: #selector(supprAdherent), for: .touchUpInside)
+        }
+        
     }
     
     @objc private func dateNaissanceSelected(sender: UIButton) { // Quand on clique sur la date de naissance
@@ -310,11 +315,16 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
     
     @IBAction func saveSelected(sender: UIBarButtonItem) {
         // On vérifie que tius les champs sont remplis :
+        print("listeAllNom = \(listeAllNom)")
         var isCorrect = true
         if nomTextField!.text != nil || nomTextField!.text != "" { // Le champ Nom Prénom est rempli
             if  !nomTextField!.text!.contains(" ") { // ne contient que le prénom ou que le nom
                 isCorrect = false
                 nomTextField!.shake()
+            } else if listeAllNom.contains(nomTextField!.text!){ // Le nom existe déjà
+                isCorrect = false
+                nomTextField!.shake()
+                alert("Cet adhérent est déjà enregistré", message: "La chance il aurait pu apparaitre 2 fois !")
             }
         } else { // Le nom n'est pas rensigné
             isCorrect = false
@@ -336,6 +346,25 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
             self.chargementView.isHidden = false
             self.scrollView.isScrollEnabled = false
             if id == "nil" { // si on a pas d'id cela veut dire que la fiche est en cours de création et non de modification. Il n'a donc aucun Id pour l'instant
+                //On enlève les espaces :
+                var statut = ""
+                switch self.statutVariable!.currentTitle! {
+                case " Adhérent  " : statut = "Adhérent"
+                case " Membre du bureau  ": statut = "Membre du bureau"
+                case " Super-admin  ": statut = "Super-amdin"
+                case " Développeur  ": statut = "Développeur"
+                default : statut = "Adhérent"
+                }
+                
+                let pushData = PushDataServer()
+                let convertion = APIConnexion()
+                let imageData = self.imageButton!.currentImage!.jpegData(compressionQuality: 0.2)
+                let imageStr = imageData!.base64EncodedString(options:.endLineWithCarriageReturn)
+                let stringData = convertion.convertionToHexaCode("\(imageStr)")
+                print("nbr charactere finale : \(stringData.count)")
+                pushData.addAdherent(nom: nomTextField!.text!, classe: classeTextField!.text!, imageData: stringData, dateNaissance: dateNaissanceVariable!.currentTitle!, statut: statut)
+                    
+                waitForServeur = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
                 
             } else { // si on a un id alors l'adhérent existe déjà, on l'utilise donc:
                 //On enlève les espaces :
@@ -348,10 +377,6 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
                 default : statut = "Adhérent"
                 }
                 
-                if id != "nil" {
-                    let split = infosOtherAdherent["URLimg"]?.split(separator: ".")
-                    self.imageExtension = String(split![1])
-                }
                 
                 let pushData = PushDataServer()
                 let convertion = APIConnexion()
@@ -366,7 +391,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
                     reponseURLRequestImage = "success" // on fait comme si on avait réussi l'upload
                 }
                 
-                pushData.updateAllInfo(id: id, nom: nomTextField!.text!, classe: classeTextField!.text!, URLimg: "\(convertion.convertionToHexaCode(nomTextField!.text!)).\(self.imageExtension)", dateNaissance: dateNaissanceVariable!.currentTitle!, statut: statut)
+                pushData.updateAllInfo(id: id, nom: nomTextField!.text!, classe: classeTextField!.text!, dateNaissance: dateNaissanceVariable!.currentTitle!, statut: statut)
                 waitForServeur = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
             }
         }
@@ -424,6 +449,10 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         })
         let supprimer = UIAlertAction(title: "Supprimer", style: UIAlertAction.Style.destructive, handler: { (_) in
             sender.setTitleColor(.red, for: .normal)
+            let pushData = PushDataServer()
+            pushData.removeAdherent(nom: self.oldNom, id: self.id) // on ne supprime qu'un adhérent déjà enregistré donc on a forcément ses infos
+            self.waitForServeur = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.verificationReponse), userInfo: nil, repeats: true)
+            
         })
         alert.addAction(annuler)
         alert.addAction(supprimer)
@@ -447,7 +476,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
                 } else if reponseURLRequestImage == "success" { //données impossibke
                     alert("Enregistrement des informations impossible", message: "L'image a elle été enregistrée avec succès")
                 } else { // les deux impossible
-                    alert("Aucune donnée n'a pas être transmise au serveur", message: "\(serveurReponse). Veuillez réessayerw")
+                    alert("Aucune donnée n'a pas être transmise au serveur", message: "\(serveurReponse). Veuillez réessayer")
                 }
             }
             serveurReponse = "nil"
@@ -456,16 +485,13 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) { //load l'image selectionnée
-        if var image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
             if info[UIImagePickerController.InfoKey.imageURL] != nil {
                 self.imageExtension = URL(fileURLWithPath: "\(info[UIImagePickerController.InfoKey.imageURL]!)").pathExtension
                 print("\(String(describing: info[UIImagePickerController.InfoKey.originalImage]))")
-                print("extension = \(self.imageExtension)")
-                image = UIImage(cgImage: image.cgImage!, scale: image.scale, orientation: UIImage.Orientation(rawValue: 0)!)
                 
                 let defintiveImage = rogneImage(image: image)
                 
-                let convertion = APIConnexion()
                 self.imageButton?.setImage(defintiveImage, for: .normal)
                 let imageData = self.imageButton!.currentImage!.jpegData(compressionQuality: 0.2)
                 let imageStr = imageData!.base64EncodedString(options:.endLineWithCarriageReturn)

@@ -23,6 +23,7 @@ class FicheAdherent: UIViewController {
     var pointFideliteLabel: UILabel?
     var stepper: UIStepper?
     var lastValidateNbrPoint = 0 // contient le nombre de point de fidélité validé par le serveur
+    var listeAllNom:[String] = [] // contient le nom de tous les adhérents. Il sera passé a 'addNewAdhérent'
     
     var timerImage = Timer() //comme partout on a l'habitude mtn
     var timerPointFidelité = Timer()
@@ -224,6 +225,10 @@ class FicheAdherent: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) { //Avant d'envoyer de segue
+        //On enlève le nom de l'adhérent
+        var listeNomWithoutAdherentName = self.listeAllNom
+        listeNomWithoutAdherentName.remove(at: self.listeAllNom.firstIndex(of: self.listeInfoAdherent["Nom"]!)!)
+        
         let modification = segue.destination as! AddNewAdherent
         //on préremplie les champs car on MODIFIE les infos d'un adhérent
         modification.titleView = "Modifier les infos"
@@ -233,6 +238,7 @@ class FicheAdherent: UIViewController {
         modification.oldDateNaissance = listeInfoAdherent["DateNaissance"]!
         modification.oldImage = imageView!.image!
         modification.id = listeInfoAdherent["id"]!
+        modification.listeAllNom = listeNomWithoutAdherentName
     }
     
     @objc private func verificationReponsePointFidelite() { // est appelé pour verifier les réponse du serveur

@@ -159,4 +159,14 @@ class ListeAdherent: UIViewController, UITableViewDataSource, UITableViewDelegat
             serveurReponse = "nil"
         }
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "afficheFicheAdherent" {
+            let transfere = segue.destination as! FicheAdherent
+            transfere.listeAllNom = self.listeAdherentsNom
+        } else if segue.identifier == "addNewAdherent" {
+            let destination = segue.destination as! AddNewAdherent
+            destination.listeAllNom = self.listeAdherentsNom
+        }
+    }
 }
