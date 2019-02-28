@@ -248,6 +248,7 @@ class APIConnexion {
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "DateNaissance") as! String, forKey: "DateNaissance")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Classe") as! String, forKey: "Classe")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "PointFidelite") as! String, forKey: "PointFidelite")
+                             temporaryDictionnary.updateValue(dataUser.value(forKey: "HadMdp") as! String, forKey: "HadMdp")
                             self.allInfo = [temporaryDictionnary] // et on ajoute notre nouveau dico au tableau général
                             print("all info = \(self.allInfo)")
                             reponse = "success"
@@ -275,4 +276,40 @@ class APIConnexion {
             serveurReponse = "Les informations saisies semblent comporter des caractères inconnus"
         }
     }
+    
+    /*----------------------------------------------------------------------------------------------
+                                   Code temporaire confidentiel
+     ---------------------------------------------------------------------------------------------*/
+    public func checkCodeTemporaire(nom: String, codeTemporaire: String){
+        let url = "http://\(adresseIPServeur):8888/checkCodeTemporaire.php"
+        let request = NSMutableURLRequest(url: URL(string: url)!)
+        request.httpMethod = "POST"
+        let postString:String = "Nom=\(nom)&CodeTemporaire=\(codeTemporaire)"
+        request.httpBody = postString.data(using: .utf8)
+        
+        URLSession.shared.dataTask(with: request as URLRequest, completionHandler : { (data, response, error) in
+            if error != nil {
+                print("error = \(String(describing: error))")
+                serveurReponse = (error?.localizedDescription)!
+            } else {
+                if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
+                    if result! as String == "Accès au serveur refusé" { //Si la connexion est refusée
+                        serveurReponse = "Accès au serveur refusé"
+                    } else if result! as String == "Success"{
+                        serveurReponse = "success"
+                    }else if result! as String == "Aucun code temporaire"{
+                        serveurReponse = "Aucun code temporaire"
+                    } else if result! as String == "Code temporaire faux"{
+                        serveurReponse = "Code temporaire faux"
+                    } else {
+                        serveurReponse = "Une erreur inconnue est survenue lors de la connexion au serveur."
+                    }
+                } else {
+                    serveurReponse = "Une erreur inconnue est survenue et empêche la connexion au serveur"
+                    reponseURLRequestImage = "Une erreur inconnue est survenue et empêche la connexion au serveur"
+                }
+            }
+        }).resume()
+    }
+    
 }

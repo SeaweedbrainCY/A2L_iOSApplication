@@ -59,6 +59,7 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
             self.afficheAllAdherentButtonSelected(sender: self.listeButtonItem)
         } else {
             if listeInfoAdherent == ["nil":"nil"]{ // On ne detecte aucune informations en local, on ne sait pas qui est l'adhérent donc on load la page de connexion
+                reponseURLRequestImage = "Le chargement a été interrompu;( Pas cool .."
                 performSegue(withIdentifier: "connexionAdherent", sender: self)
             }
         }
@@ -211,6 +212,9 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         api.exctractAllData(nom: api.convertionToHexaCode(infosAdherent["Nom"] ?? "Error"), mdpHashed: infosAdherent["MdpHashed"] ?? "Error")
         //On lance un timer pour verifier toutes les secondes si on a une réponse
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(listeSelectedVerificationReponse), userInfo: nil, repeats: true)
+        if waitReponseImage.isValid{
+            reponseURLRequestImage = "Le chargement a été interrompu;( Pas cool .."
+        }
     }
     
     

@@ -167,13 +167,6 @@ class ConnexionAdherent: UIViewController, UITextFieldDelegate {
             } else { // erreur inconnue
                 self.alert("Impossible de se connecter au serveur", message: serveurReponse)
             }
-            if serveurReponse != "success" { // On vide les champs si la connexion n'est pas réussie
-                self.nomField.text = ""
-                self.prenomField.text = ""
-                self.anneeField.text = ""
-                self.moisField.text = ""
-                self.jourField.text = ""
-            }
             //On réinitialise l'erreur :
             serveurReponse = "nil"
             self.chargement.stopAnimating()

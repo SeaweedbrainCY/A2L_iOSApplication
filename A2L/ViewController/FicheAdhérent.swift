@@ -19,14 +19,19 @@ class FicheAdherent: UIViewController {
     var chargementView: UIActivityIndicatorView? //sert pour la création du Qr code
     var imageView:UIImageView? //imageView = photo d'identité adhérent
     var dateNaissanceLabelAnchor:NSLayoutConstraint? // doit pouvoir être désactivée si besoin
+    var generatedCodeLabelAnchor: NSLayoutConstraint?
+    var generatedCodeLabel: UILabel?
     var dateNaissanceLabel: UILabel?
     var pointFideliteLabel: UILabel?
+    var generateCodeButton: UIButton?
     var stepper: UIStepper?
     var lastValidateNbrPoint = 0 // contient le nombre de point de fidélité validé par le serveur
     var listeAllNom:[String] = [] // contient le nom de tous les adhérents. Il sera passé a 'addNewAdhérent'
+    var nombreAléatoire = "0000" // nombre aléatoire généré lors du clic
     
     var timerImage = Timer() //comme partout on a l'habitude mtn
     var timerPointFidelité = Timer()
+    var timerCode = Timer()
     
     override func viewDidLoad() { // lancée quand la vue load
         super.viewDidLoad()
@@ -163,6 +168,58 @@ class FicheAdherent: UIViewController {
         qrCode.heightAnchor.constraint(equalToConstant: 130).isActive = true
         //self.imageView = qrCode
         
+        //Générer un code temporaire
+        if self.listeInfoAdherent["HadMdp"] == "false" && self.listeInfoAdherent["Statut"] != "Adhérent"{
+            let generateCode = UIButton()
+            backgroundView.addSubview(generateCode)
+            generateCode.translatesAutoresizingMaskIntoConstraints = false
+            generateCode.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 2).isActive = true
+            generateCode.topAnchor.constraint(equalToSystemSpacingBelow: qrCode.bottomAnchor, multiplier: 5).isActive = true
+            generateCode.setTitleColor(UIColor(red: 0.26, green: 0.58, blue: 0.96, alpha: 1), for: .normal)
+            generateCode.tintColor = .blue
+            generateCode.titleLabel!.font = UIFont(name: "Comfortaa-Bold", size: 16)
+            generateCode.addTarget(self, action: #selector(generateCodeSelected) , for: .touchUpInside)
+            generateCode.setTitle("Générer un code confidentiel temporaire", for: .normal)
+            self.generateCodeButton = generateCode
+            
+            let generatedCode = UILabel()
+            backgroundView.addSubview(generatedCode)
+            generatedCode.translatesAutoresizingMaskIntoConstraints = false
+            generatedCode.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
+            generatedCode.topAnchor.constraint(equalToSystemSpacingBelow: generateCode.bottomAnchor, multiplier: 3).isActive = true
+            generatedCode.widthAnchor.constraint(equalToConstant: 300).isActive = true
+            self.generatedCodeLabelAnchor = generatedCode.heightAnchor.constraint(equalToConstant:0)
+            self.generatedCodeLabelAnchor!.isActive = true
+            generatedCode.isHidden = true
+            generatedCode.layer.borderColor = UIColor.blue.cgColor
+            generatedCode.layer.borderWidth = 0.7
+            generatedCode.layer.cornerRadius = 20
+            generatedCode.font = UIFont(name: "Comfortaa-Bold", size: 60)
+            generatedCode.textColor = .magenta
+            generatedCode.shadowColor = .gray
+            generatedCode.shadowOffset = CGSize(width: 0.2, height: 0.2)
+            generatedCode.text = "6789"
+            generatedCode.textAlignment = .center
+            //On change la couleur que d'une seule partie du texte :
+            coloration = NSMutableAttributedString(string: generatedCode.text!)
+            let listeCouleur: [UIColor] = [.black, .blue, .red, .green, .magenta, .gray, .purple, .brown, .cyan, .orange]
+            for i in 0 ..< listeCouleur.count {
+                coloration.setColorForText(textForAttribute: "\(i)", withColor: listeCouleur[i])
+            }
+            generatedCode.attributedText = coloration
+            self.generatedCodeLabel = generatedCode
+            
+            let infos = UIButton()
+            backgroundView.addSubview(infos)
+            infos.translatesAutoresizingMaskIntoConstraints = false
+            infos.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 2).isActive = true
+            infos.topAnchor.constraint(equalToSystemSpacingBelow: generatedCode.bottomAnchor, multiplier: 1.5).isActive = true
+            infos.setTitleColor(.gray, for: .normal)
+            infos.titleLabel!.font = UIFont(name: "Comfortaa-Light", size: 14)
+            infos.addTarget(self, action: #selector(infosSelected) , for: .touchUpInside)
+            infos.setTitle("Bah ouais ok mais c'est quoi ?", for: .normal)
+        }
+        
     }
     
     @objc func verificationReponse() { // Est appelé pour verifier si on a une réponse ou non du serveur pour le chargement de l'image
@@ -214,13 +271,11 @@ class FicheAdherent: UIViewController {
     }
     
     @objc private func stepperSelected(sender: UIStepper) { // Lorsque le stepper (-|+) est selctionnée
-        if Int(stepper!.value) != nil { // Convertion possible
             let pushData = PushDataServer()
             pushData.updatePointFidelite(id: listeInfoAdherent["id"]!, pointFidelite: String(Int(stepper!.value))) //On update cette version sur le serveur
             timerPointFidelité = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(verificationReponsePointFidelite), userInfo: nil, repeats: true)
             sender.tintColor = .gray // on le déactive en attendant une réponse du serveur
             sender.isEnabled = false
-        }
         
     }
     
@@ -260,5 +315,60 @@ class FicheAdherent: UIViewController {
             }
         }
         serveurReponse = "nil"
+    }
+    
+    @objc private func generateCodeSelected(sender: UIButton) {
+        sender.setTitleColor(.gray, for: .normal)
+        sender.isEnabled = false
+        
+        let formatter = NumberFormatter()
+        formatter.minimumIntegerDigits = 4
+        self.nombreAléatoire = formatter.string(from: Int.random(in: 1 ..< 9999) as NSNumber)!
+        let pushData = PushDataServer()
+        pushData.stockCodeTemporaire(id: "\(self.listeInfoAdherent["id"]!)", codeTemporaire: "\(self.nombreAléatoire)")
+        timerCode = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(verificationReponseCode), userInfo: nil, repeats: true)
+       
+        
+        
+    }
+    
+    @objc private func verificationReponseCode(){
+        if serveurReponse != "nil" {
+            timerCode.invalidate()
+            if serveurReponse == "success" {
+                self.generatedCodeLabel!.text = "\(self.nombreAléatoire)"
+                let coloration = NSMutableAttributedString(string: generatedCodeLabel!.text!)
+                let listeCouleur: [UIColor] = [.black, .blue, .red, .green, .magenta, .gray, .purple, .brown, .cyan, .orange]
+                for i in 0 ..< listeCouleur.count {
+                    coloration.setColorForText(textForAttribute: "\(i)", withColor: listeCouleur[i])
+                }
+                self.generatedCodeLabel!.attributedText = coloration
+                
+                
+                if self.generatedCodeLabel!.isHidden {
+                    self.generatedCodeLabel!.isHidden = false
+                    let animation = UIViewPropertyAnimator(duration: 12, dampingRatio: 0.7, animations: {
+                        self.generatedCodeLabelAnchor?.isActive = false
+                        self.generatedCodeLabelAnchor = self.generatedCodeLabel?.heightAnchor.constraint(equalToConstant: 100)
+                        self.generatedCodeLabelAnchor?.isActive = true
+                    })
+                    animation.startAnimation()
+                }
+               
+            } else {
+                alert("Une erreur lors de la connexion au serveur est survenue", message: "Moi je bug jamais alors ça doit être toi ...")
+            }
+            
+            self.generateCodeButton!.setTitleColor(UIColor(red: 0.26, green: 0.58, blue: 0.96, alpha: 1), for: .normal)
+            self.generateCodeButton!.isEnabled = true
+            self.generateCodeButton!.setTitle("Générer un nouveau code temporaire", for: .normal)
+            serveurReponse = "nil"
+        }
+        
+    }
+    
+    @objc private func infosSelected(sender: UIButton) {
+        sender.setTitleColor(UIColor.lightGray, for: .normal)
+        alert("Code confidentiel temporaire", message: "Ce code est généré aléatoirement et doit être transmis à l'admin concerné afin qu'il puisse créer un mot de passe ou le réinitiliser\n\n⚠︎⚠︎⚠︎ATTENTION⚠︎⚠︎⚠︎\nGénérer un code suffit à le rendre valide. En générer un nouveau désactive le précédent. Ce code restera valide jusqu'à son utilisation s'il n'est pas re-généré.\nUne fois que vous quitterez cette page vous ne pourrez plus voir le code. Il faudra donc en créer un nouveau. Même si vous n'avez plus accès à son contenu le code restera valide quand vous aurez quitté la page")
     }
 }

@@ -20,6 +20,7 @@ class ConnexionAdmin: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var connexionButton: UIButton!
     @IBOutlet weak var chargement: UIActivityIndicatorView!
     @IBOutlet weak var switchToAdherentPage: UIButton!
+    @IBOutlet weak var mdpLost: UIButton!
     
     var timer = Timer()
     
@@ -39,6 +40,10 @@ class ConnexionAdmin: UIViewController, UITextFieldDelegate {
         connexionButton.superview?.addSubview(connexionButton)
         chargement.superview?.addSubview(chargement)
         switchToAdherentPage.superview?.addSubview(switchToAdherentPage)
+        mdpLost.superview?.addSubview(mdpLost)
+        
+        mdpLost.titleLabel?.textAlignment = .center
+        mdpLost.titleLabel?.numberOfLines = 3
        
     }
     
@@ -162,11 +167,6 @@ class ConnexionAdmin: UIViewController, UITextFieldDelegate {
             }
             //On réinitialise l'erreur :
             
-            if serveurReponse != "success" { // On vide les champs
-                self.nomField.text = ""
-                self.prenomField.text = ""
-                self.mdpField.text = ""
-            }
             serveurReponse = "nil"
             self.chargement.stopAnimating()
             self.connexionButton.isHidden = false // On réactive tout

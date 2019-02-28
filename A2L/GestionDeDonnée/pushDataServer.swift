@@ -110,6 +110,7 @@ class PushDataServer {// APIConnexion reçoit les données du serveur, cette cla
         let request = NSMutableURLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         let postString:String = "Nom=\(nom)&Classe=\(classe)&ImageData=\(imageData)&DateNaissance=\(dateNaissance)&Statut=\(statut)&idAdmin=\(infosAdherent["id"]!)&MdpAdmin=\(infosAdherent["MdpHashed"]!)"
+        print("post = \(postString)")
         request.httpBody = postString.data(using: .utf8)
         
         URLSession.shared.dataTask(with: request as URLRequest, completionHandler : { (data, response, error) in
@@ -168,6 +169,43 @@ class PushDataServer {// APIConnexion reçoit les données du serveur, cette cla
                     reponseURLRequestImage = "Une erreur inconnue est survenue et empêche la connexion au serveur"
                 }
             }
+        }).resume()
+    }
+    
+    
+    /*----------------------------------------------------------------------------------------------
+                                    AJOUT D'UN CODE CONFIDENTIEL
+     ---------------------------------------------------------------------------------------------*/
+    
+    public func stockCodeTemporaire(id: String, codeTemporaire: String) {
+        let url = "http://\(adresseIPServeur):8888/stockCodeTemporaire.php"
+        let request = NSMutableURLRequest(url: URL(string: url)!)
+        request.httpMethod = "POST"
+        let postString:String = "idAdherent=\(id)&CodeTemporaire=\(codeTemporaire)&idAdmin=\(infosAdherent["id"]!)&MdpAdmin=\(infosAdherent["MdpHashed"]!)"
+        print("PostSTRING = \(postString)")
+        request.httpBody = postString.data(using: .utf8)
+        
+        URLSession.shared.dataTask(with: request as URLRequest, completionHandler : { (data, response, error) in
+            if error != nil {
+                print("error = \(String(describing: error))")
+                serveurReponse = (error?.localizedDescription)!
+            } else {
+                if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
+                    print("result = \(result! as String)")
+                    
+                    if result! as String == "Success" { //Si la connexion est refusée
+                        serveurReponse = "success"
+                    } else if  result! as String == "Accès au serveur refusé"{
+                        serveurReponse = "Accès au serveur refusé"
+                    }else {
+                        serveurReponse = "Une erreur inconnue est survenue"
+                    }
+                } else {
+                    serveurReponse = "Une erreur inconnue est survenue"
+                }
+                print("serveur = \(serveurReponse)")
+            }
+            
         }).resume()
     }
 }

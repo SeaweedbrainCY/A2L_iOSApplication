@@ -234,7 +234,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         infosButton.addTarget(self, action: #selector(infoSelected), for: .touchUpInside)
         
         
-        if id != "nil" || oldStatut == "Dévloppeur" || oldNom == infosAdherent["Nom"]{ // on ne supprime pas un adhérent pas encore créé ou un developpeur ou soi même
+        if id != "nil" && oldStatut != " Développeur  " && oldNom != infosAdherent["Nom"]{ // on ne supprime pas un adhérent pas encore créé ou un developpeur ou soi même
             let supprButton = UIButton()
             self.backgroundView.addSubview(supprButton)
             supprButton.translatesAutoresizingMaskIntoConstraints = false
@@ -277,10 +277,13 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
     }
     
     @objc private func newDateNaissance(sender: UIDatePicker) { // Est appelé lorsqu'on modifie la date
+        let dateFormatteur = DateFormatter()
+        dateFormatteur.dateFormat = "dd/MM/yyyy" //format de la date
         let jour = Calendar.current.component(.day, from: sender.date)
         let mois = Calendar.current.component(.month, from: sender.date)
         let year = Calendar.current.component(.year, from: sender.date)
-        self.dateNaissanceVariable?.setTitle("\(jour)/\(mois)/\(year)", for: .normal) // update de la date
+        let date = dateFormatteur.date(from: "\(jour)/\(mois)/\(year)")
+        self.dateNaissanceVariable?.setTitle(String(dateFormatteur.string(from: date ?? dateFormatteur.date(from: "14/11/2002")!)), for: .normal) // update de la date
     }
     
     @objc private func statutSelected(sender: UIButton) { // lorsqu'on clique sur le statut
@@ -351,7 +354,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
                 switch self.statutVariable!.currentTitle! {
                 case " Adhérent  " : statut = "Adhérent"
                 case " Membre du bureau  ": statut = "Membre du bureau"
-                case " Super-admin  ": statut = "Super-amdin"
+                case " Super-admin  ": statut = "Super-admin"
                 case " Développeur  ": statut = "Développeur"
                 default : statut = "Adhérent"
                 }
@@ -361,8 +364,8 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
                 let imageData = self.imageButton!.currentImage!.jpegData(compressionQuality: 0.2)
                 let imageStr = imageData!.base64EncodedString(options:.endLineWithCarriageReturn)
                 let stringData = convertion.convertionToHexaCode("\(imageStr)")
-                print("nbr charactere finale : \(stringData.count)")
-                pushData.addAdherent(nom: nomTextField!.text!, classe: classeTextField!.text!, imageData: stringData, dateNaissance: dateNaissanceVariable!.currentTitle!, statut: statut)
+                print("nbr caracteres finaux : \(stringData.count)")
+                pushData.addAdherent(nom: /*convertion.convertionToHexaCode*/(nomTextField!.text!), classe: /*convertion.convertionToHexaCode*/(classeTextField!.text!), imageData: stringData, dateNaissance: dateNaissanceVariable!.currentTitle!, statut: statut)
                     
                 waitForServeur = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
                 
@@ -372,7 +375,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
                 switch self.statutVariable!.currentTitle! {
                 case " Adhérent  " : statut = "Adhérent"
                 case " Membre du bureau  ": statut = "Membre du bureau"
-                case " Super-admin  ": statut = "Super-amdin"
+                case " Super-admin  ": statut = "Super-admin"
                 case " Développeur  ": statut = "Développeur"
                 default : statut = "Adhérent"
                 }

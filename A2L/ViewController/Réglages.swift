@@ -110,7 +110,7 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
             switch indexPath.row {
             case 0 : break
             case 1:
-                let alert = UIAlertController(title: "Contribuer au projet 'A2Lé", message: "Ces liens donnent un accès aux codes sources du projet (GitHub)", preferredStyle: .actionSheet)
+                let alert = UIAlertController(title: "Contribuer au projet A2L", message: "Ces liens donnent un accès aux codes sources du projet (GitHub)", preferredStyle: .actionSheet)
                 alert.addAction(UIAlertAction(title: "[GitHub] Code source application iOS", style: .default) { _ in
                     UIApplication.shared.open(URL(string: "https://github.com/DevNathan/A2L_iOSApplication")!, options: [:], completionHandler: nil)// on charge le lien dans le moteur de recherche par defaut de l'utilisateur
                 })

@@ -25,7 +25,7 @@ extension UIImageView {
         let url = URL(string: "http://\(adresseIPServeur):8888/loadImage.php")
         let request = NSMutableURLRequest(url: url!)
         request.httpMethod = "POST"
-        let postString:String = "idAdherent=\(id)&idAdmin=\(infosAdherent["id"]!)&MdpAdmin=\(infosAdherent["MdpHashed"]!)"
+        let postString:String = "idAdherent=\(id))"
         request.httpBody = postString.data(using: .utf8)
         
        

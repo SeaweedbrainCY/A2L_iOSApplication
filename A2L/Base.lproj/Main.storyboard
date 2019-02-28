@@ -12,6 +12,9 @@
         <array key="Comfortaa-Bold.ttf">
             <string>Comfortaa-Bold</string>
         </array>
+        <array key="Comfortaa-Light.ttf">
+            <string>Comfortaa-Light</string>
+        </array>
     </customFonts>
     <scenes>
         <!--Mon QR code-->
@@ -28,21 +31,20 @@
                                 <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JVA-mm-p4q">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chargementEnCours" translatesAutoresizingMaskIntoConstraints="NO" id="6tS-jM-sgd">
                                 <rect key="frame" x="37.5" y="183.5" width="300" height="300"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="300" id="568-eD-cKW"/>
-                                    <constraint firstAttribute="height" constant="300" id="d3h-lT-87U"/>
+                                    <constraint firstAttribute="width" constant="300" id="aFo-zj-FOn"/>
+                                    <constraint firstAttribute="height" constant="300" id="l81-jk-dEZ"/>
                                 </constraints>
-                                <state key="normal" image="chargementEnCours"/>
-                            </button>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="6tS-jM-sgd" firstAttribute="centerY" secondItem="0jc-aA-thB" secondAttribute="centerY" id="Bgf-IS-tdu"/>
                             <constraint firstItem="tem-wr-iEE" firstAttribute="top" secondItem="W7m-V4-43O" secondAttribute="top" constant="55" id="KXx-yu-sO4"/>
+                            <constraint firstItem="6tS-jM-sgd" firstAttribute="centerX" secondItem="0jc-aA-thB" secondAttribute="centerX" id="bxs-6R-RR2"/>
                             <constraint firstItem="tem-wr-iEE" firstAttribute="centerX" secondItem="0jc-aA-thB" secondAttribute="centerX" id="e6p-l6-3K6"/>
-                            <constraint firstItem="JVA-mm-p4q" firstAttribute="centerX" secondItem="0jc-aA-thB" secondAttribute="centerX" id="gVU-tb-W2w"/>
-                            <constraint firstItem="JVA-mm-p4q" firstAttribute="centerY" secondItem="0jc-aA-thB" secondAttribute="centerY" id="o6T-cs-84K"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="W7m-V4-43O"/>
                     </view>
@@ -54,7 +56,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="QRCodeImage" destination="JVA-mm-p4q" id="1Lw-Un-Fal"/>
+                        <outlet property="QRCodeImage" destination="6tS-jM-sgd" id="ceF-F3-v0d"/>
                         <outlet property="nomLabel" destination="tem-wr-iEE" id="Mkh-2G-gCk"/>
                         <outlet property="scanner" destination="sg4-41-2Fw" id="hrM-vG-tIc"/>
                     </connections>
@@ -130,7 +132,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oh1-Gy-if4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1484" y="-1039"/>
+            <point key="canvasLocation" x="-544.79999999999995" y="-1039.4302848575712"/>
         </scene>
         <!--Ma fiche-->
         <scene sceneID="fev-4X-0T8">
@@ -187,7 +189,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mvn-1z-31t" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-463.19999999999999" y="-1039.4302848575712"/>
+            <point key="canvasLocation" x="476" y="-1039.4302848575712"/>
         </scene>
         <!--Liste des adhérents-->
         <scene sceneID="udQ-Hn-nLZ">
@@ -228,7 +230,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nmR-F5-rsI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="485.60000000000002" y="-1039.4302848575712"/>
+            <point key="canvasLocation" x="1424.8" y="-1039.4302848575712"/>
         </scene>
         <!--Ajouter un adhérent-->
         <scene sceneID="fRW-z4-MtJ">
@@ -283,7 +285,125 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hhr-Lb-O31" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1409" y="-1443"/>
+            <point key="canvasLocation" x="2348" y="-1443.3283358320841"/>
+        </scene>
+        <!--Mot de passe-->
+        <scene sceneID="yWX-Rd-EQg">
+            <objects>
+                <viewController id="Uwb-PV-u0x" customClass="AddNewMdp" customModule="A2L" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="fCw-mC-yIC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Code confidentiel :" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tj0-Ne-hEj">
+                                <rect key="frame" x="31.5" y="77" width="312" height="36"/>
+                                <fontDescription key="fontDescription" name="Comfortaa-Bold" family="Comfortaa" pointSize="32"/>
+                                <color key="textColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="4 chiffres" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ceq-5Q-UPu">
+                                <rect key="frame" x="103.5" y="314" width="168" height="39"/>
+                                <color key="textColor" red="0.061467683469999999" green="0.74885081119999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="Comfortaa-Light" family="Comfortaa" pointSize="31"/>
+                                <textInputTraits key="textInputTraits" keyboardType="decimalPad" keyboardAppearance="alert" secureTextEntry="YES" textContentType="password"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Prénom" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="a3h-7b-a2V">
+                                <rect key="frame" x="31" y="223" width="133" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="133" id="NMo-Ns-W9k"/>
+                                </constraints>
+                                <color key="textColor" red="0.061467683469999999" green="0.74885081119999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="Comfortaa-Light" family="Comfortaa" pointSize="17"/>
+                                <textInputTraits key="textInputTraits" keyboardAppearance="alert" textContentType="honorifix-prefix"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PZc-PV-m7n">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="53"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.20954623287671234" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="375" id="27v-uy-MQJ"/>
+                                    <constraint firstAttribute="height" constant="53" id="JvD-Uf-5yW"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Comfortaa-Bold" family="Comfortaa" pointSize="18"/>
+                                <state key="normal" title="Annuler">
+                                    <color key="titleColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <segue destination="iWj-Wn-pdI" kind="presentation" id="mwE-7l-t6A"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vN2-4i-31U">
+                                <rect key="frame" x="279" y="317.5" width="32" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="hAJ-qh-LNn"/>
+                                    <constraint firstAttribute="width" constant="32" id="sKu-cP-grN"/>
+                                </constraints>
+                                <state key="normal" image="help"/>
+                                <connections>
+                                    <action selector="helpSelectedWithSedner:" destination="Uwb-PV-u0x" eventType="touchUpInside" id="g5c-p4-je3"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LBY-Iz-vd3">
+                                <rect key="frame" x="148.5" y="361" width="78" height="36"/>
+                                <fontDescription key="fontDescription" name="Comfortaa-Bold" family="Comfortaa" pointSize="21"/>
+                                <state key="normal" title="Valider">
+                                    <color key="titleColor" red="0.2278912837" green="0.97680455450000003" blue="0.31047557310000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="validerSelectedWithSender:" destination="Uwb-PV-u0x" eventType="touchUpInside" id="1Go-zP-VNn"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Nom" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="eyc-70-rRS">
+                                <rect key="frame" x="211" y="223" width="133" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="133" id="cIB-gh-HRd"/>
+                                </constraints>
+                                <color key="textColor" red="0.061467683469999999" green="0.74885081119999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="Comfortaa-Light" family="Comfortaa" pointSize="17"/>
+                                <textInputTraits key="textInputTraits" keyboardAppearance="alert" textContentType="family-name"/>
+                            </textField>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="RyF-XA-qqV">
+                                <rect key="frame" x="169" y="361" width="37" height="37"/>
+                                <color key="color" red="0.0" green="0.68388931480000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="RyF-XA-qqV" firstAttribute="centerX" secondItem="fCw-mC-yIC" secondAttribute="centerX" id="51F-Hb-OGN"/>
+                            <constraint firstItem="LBY-Iz-vd3" firstAttribute="top" secondItem="ceq-5Q-UPu" secondAttribute="bottom" constant="8" id="6XL-gO-7rU"/>
+                            <constraint firstItem="vN2-4i-31U" firstAttribute="centerY" secondItem="fCw-mC-yIC" secondAttribute="centerY" id="6vU-2e-Pau"/>
+                            <constraint firstItem="PZc-PV-m7n" firstAttribute="leading" secondItem="jJP-QP-YVJ" secondAttribute="leading" id="Amv-wH-czV"/>
+                            <constraint firstItem="vN2-4i-31U" firstAttribute="leading" secondItem="ceq-5Q-UPu" secondAttribute="trailing" constant="7.5" id="CXS-76-j3Y"/>
+                            <constraint firstItem="Tj0-Ne-hEj" firstAttribute="centerX" secondItem="fCw-mC-yIC" secondAttribute="centerX" id="FnB-WI-qRa"/>
+                            <constraint firstItem="a3h-7b-a2V" firstAttribute="leading" secondItem="jJP-QP-YVJ" secondAttribute="leading" constant="31" id="Iom-D1-bzj"/>
+                            <constraint firstItem="RyF-XA-qqV" firstAttribute="top" secondItem="ceq-5Q-UPu" secondAttribute="bottom" constant="8" id="KnP-5e-L5r"/>
+                            <constraint firstItem="a3h-7b-a2V" firstAttribute="top" secondItem="Tj0-Ne-hEj" secondAttribute="bottom" constant="110" id="P2s-K1-Tuc"/>
+                            <constraint firstItem="eyc-70-rRS" firstAttribute="top" secondItem="Tj0-Ne-hEj" secondAttribute="bottom" constant="110" id="SDm-zD-SVB"/>
+                            <constraint firstItem="LBY-Iz-vd3" firstAttribute="centerX" secondItem="fCw-mC-yIC" secondAttribute="centerX" id="TS2-k9-2RP"/>
+                            <constraint firstItem="ceq-5Q-UPu" firstAttribute="centerX" secondItem="fCw-mC-yIC" secondAttribute="centerX" id="VEo-sm-R83"/>
+                            <constraint firstItem="Tj0-Ne-hEj" firstAttribute="top" secondItem="jJP-QP-YVJ" secondAttribute="top" constant="57" id="cRN-53-deQ"/>
+                            <constraint firstItem="jJP-QP-YVJ" firstAttribute="trailing" secondItem="eyc-70-rRS" secondAttribute="trailing" constant="31" id="d7D-wZ-boa"/>
+                            <constraint firstItem="ceq-5Q-UPu" firstAttribute="centerY" secondItem="fCw-mC-yIC" secondAttribute="centerY" id="ovW-QD-h8Q"/>
+                            <constraint firstItem="PZc-PV-m7n" firstAttribute="top" secondItem="fCw-mC-yIC" secondAttribute="top" id="qEq-K3-jva"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="jJP-QP-YVJ"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Mot de passe" id="BO8-js-RYI">
+                        <barButtonItem key="leftBarButtonItem" title="Annuler" id="JB3-5R-NrE"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="annulerButton" destination="PZc-PV-m7n" id="qcf-PN-KIF"/>
+                        <outlet property="chargement" destination="RyF-XA-qqV" id="fch-Tl-zhe"/>
+                        <outlet property="codeField" destination="ceq-5Q-UPu" id="cQk-bO-8AZ"/>
+                        <outlet property="helpButton" destination="vN2-4i-31U" id="Ubr-w3-ae0"/>
+                        <outlet property="nomField" destination="eyc-70-rRS" id="3In-bb-fej"/>
+                        <outlet property="prenomField" destination="a3h-7b-a2V" id="Eif-II-d5P"/>
+                        <outlet property="titreLabel" destination="Tj0-Ne-hEj" id="TUv-LP-I1D"/>
+                        <outlet property="validerButton" destination="LBY-Iz-vd3" id="Mz5-re-A80"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="agB-TD-7tI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4839.1999999999998" y="-1071.8140929535234"/>
         </scene>
         <!--Connexion Admin-->
         <scene sceneID="3iM-XI-8GQ">
@@ -354,20 +474,39 @@
                                     <segue destination="SCS-jz-BOi" kind="presentation" modalTransitionStyle="flipHorizontal" id="v1Y-Q5-4sE"/>
                                 </connections>
                             </button>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="RMy-N7-5XA">
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="RMy-N7-5XA">
                                 <rect key="frame" x="169" y="403" width="37" height="37"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="color" red="0.061467683469999999" green="0.74885081119999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </activityIndicatorView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FiV-AA-FJ7">
+                                <rect key="frame" x="23.5" y="468" width="328" height="73"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="73" id="F5O-2d-KMb"/>
+                                    <constraint firstAttribute="width" constant="328" id="xtz-tF-5Lv"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Comfortaa-Bold" family="Comfortaa" pointSize="20"/>
+                                <size key="titleShadowOffset" width="2" height="2"/>
+                                <state key="normal" title="Ou partir à la recherche de mon mot de passe ...">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="connexionSelectedWithSender:" destination="iWj-Wn-pdI" eventType="touchUpInside" id="dqv-CB-0m2"/>
+                                    <segue destination="Uwb-PV-u0x" kind="presentation" id="3NV-Zu-4n8"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="RMy-N7-5XA" firstAttribute="top" secondItem="Kyc-uu-kpR" secondAttribute="bottom" constant="54.5" id="0wh-d9-iLJ"/>
                             <constraint firstItem="Kyc-uu-kpR" firstAttribute="centerX" secondItem="fFr-Ks-DeY" secondAttribute="centerX" id="0x3-VP-1XC"/>
                             <constraint firstItem="hnu-2C-b00" firstAttribute="top" secondItem="Kyc-uu-kpR" secondAttribute="bottom" constant="52.5" id="3iP-wk-n0N"/>
                             <constraint firstItem="jX2-rh-QmR" firstAttribute="top" secondItem="UUE-Sm-WO5" secondAttribute="top" constant="44" id="IAd-zt-Z6l"/>
                             <constraint firstItem="UUE-Sm-WO5" firstAttribute="trailing" secondItem="AYY-3C-uxc" secondAttribute="trailing" constant="50" id="IyT-hY-PNV"/>
                             <constraint firstItem="GEb-xc-pr8" firstAttribute="leading" secondItem="UUE-Sm-WO5" secondAttribute="leading" constant="50" id="KZS-aC-TP7"/>
                             <constraint firstItem="UUE-Sm-WO5" firstAttribute="bottom" secondItem="uSu-2X-AbW" secondAttribute="bottom" constant="9" id="ZKC-82-Wa9"/>
+                            <constraint firstItem="FiV-AA-FJ7" firstAttribute="top" secondItem="hnu-2C-b00" secondAttribute="bottom" constant="27" id="ajH-x3-poY"/>
+                            <constraint firstItem="FiV-AA-FJ7" firstAttribute="centerX" secondItem="fFr-Ks-DeY" secondAttribute="centerX" id="dry-g3-GL0"/>
+                            <constraint firstItem="RMy-N7-5XA" firstAttribute="centerX" secondItem="fFr-Ks-DeY" secondAttribute="centerX" id="gqT-4P-Zyl"/>
                             <constraint firstItem="Kyc-uu-kpR" firstAttribute="top" secondItem="GEb-xc-pr8" secondAttribute="bottom" constant="27" id="oMo-pX-Uf7"/>
                             <constraint firstItem="Kyc-uu-kpR" firstAttribute="centerY" secondItem="fFr-Ks-DeY" secondAttribute="centerY" id="szl-cQ-I0w"/>
                             <constraint firstItem="hnu-2C-b00" firstAttribute="centerX" secondItem="fFr-Ks-DeY" secondAttribute="centerX" id="tFg-vu-Fe1"/>
@@ -381,6 +520,7 @@
                         <outlet property="chargement" destination="RMy-N7-5XA" id="VeD-AU-GYm"/>
                         <outlet property="connexionButton" destination="hnu-2C-b00" id="PUG-ia-WC5"/>
                         <outlet property="mdpField" destination="Kyc-uu-kpR" id="5Tq-Da-U7W"/>
+                        <outlet property="mdpLost" destination="FiV-AA-FJ7" id="g5d-DD-A1C"/>
                         <outlet property="nomField" destination="AYY-3C-uxc" id="wFu-0Z-kAJ"/>
                         <outlet property="prenomField" destination="GEb-xc-pr8" id="9uT-qG-Awl"/>
                         <outlet property="switchToAdherentPage" destination="uSu-2X-AbW" id="Rjt-m5-1EH"/>
@@ -503,7 +643,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Yc-fR-fen" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1408.8" y="-627.4362818590705"/>
+            <point key="canvasLocation" x="2348" y="-627.4362818590705"/>
         </scene>
         <!--Connexion Adherent-->
         <scene sceneID="DNt-7P-glg">
@@ -660,13 +800,15 @@
     <resources>
         <image name="MaFiche" width="54" height="54"/>
         <image name="chargementEnCours" width="566" height="570"/>
+        <image name="help" width="54" height="54"/>
         <image name="qrCode" width="54" height="54"/>
         <image name="settings" width="36" height="36"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="v1Y-Q5-4sE"/>
+        <segue reference="A1V-CK-4wQ"/>
         <segue reference="eSj-Lz-PBB"/>
         <segue reference="3LD-GD-P30"/>
+        <segue reference="mwE-7l-t6A"/>
         <segue reference="Nk3-aN-PWC"/>
     </inferredMetricsTieBreakers>
 </document>

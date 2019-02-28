@@ -14,7 +14,7 @@ import UIKit
 class QRCode: UIViewController {
     
     @IBOutlet weak var scanner: UIBarButtonItem! // lié au ItemButton du controller
-    @IBOutlet weak var QRCodeImage: UIButton!
+    @IBOutlet weak var QRCodeImage: UIImageView!
     @IBOutlet weak var nomLabel: UILabel!
     
     var listeInfoAdherent = infosAdherent // liste de toutes les infos sur l'adherent
@@ -45,9 +45,9 @@ class QRCode: UIViewController {
         
         let qrCodeGenerator = generateQRcode()
         let stringForQRCode = qrCodeGenerator.generateStringQRCode(nom: nom, dateNaissance: listeInfoAdherent["DateNaissance"] ?? "Error")
-        QRCodeImage.setImage(qrCodeGenerator.generateQRCode(from: stringForQRCode), for: .normal)
-        QRCodeImage.widthAnchor.constraint(equalToConstant: 300).isActive = true
-        QRCodeImage.heightAnchor.constraint(equalToConstant: 300).isActive = true
+        
+        QRCodeImage.image = qrCodeGenerator.generateQRCode(from: stringForQRCode)
+        
         
     }
     
