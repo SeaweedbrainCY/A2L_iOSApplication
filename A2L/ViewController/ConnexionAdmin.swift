@@ -23,6 +23,9 @@ class ConnexionAdmin: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var mdpLost: UIButton!
     
     var timer = Timer()
+    var setAlertView = Timer()
+    
+    let gradient = CAGradientLayer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,7 +67,6 @@ class ConnexionAdmin: UIViewController, UITextFieldDelegate {
     }
     
     func setViewBackground(){ // Instaure les couleurs de fond comme bleues et noires
-        let gradient = CAGradientLayer()
         gradient.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height)
         gradient.colors = [UIColor.blue.cgColor, UIColor.black.cgColor]// rgb(173, 204, 255), rgb(113, 166, 252)
         self.view.layer.addSublayer(gradient)
@@ -87,6 +89,7 @@ class ConnexionAdmin: UIViewController, UITextFieldDelegate {
             //On désactive le changement de page :
             self.switchToAdherentPage.isHidden = true
             self.connexionButton.isHidden = true // On cache le bouton de connexion
+            self.mdpLost.isHidden = true
             self.chargement.startAnimating() // Pour afficher le chargement
             //On associe le nom et prénom :
             let database = APIConnexion()
@@ -156,11 +159,16 @@ class ConnexionAdmin: UIViewController, UITextFieldDelegate {
                 var nbrErreur = Int(nbrErreurString)!
                 if nbrErreur <= 5 {
                     self.alert("Mot de passe incorrect", message: "\(nomField.text!) note ton mot de passe voyons !")
+                    nbrErreur += 1
+                    let file = FileManager.default
+                    file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(nbrInvalidateMdpPath).path, contents: String(nbrErreur).data(using: String.Encoding.utf8), attributes: nil)
                 } else if nbrErreur > 5 {
-                    
+                    setAlertView = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(alertView), userInfo: nil, repeats: true)
                 }
             } else if serveurReponse == "success" {
                 //On a réussi, on transmet les données et on change de view
+                let file = FileManager.default
+                file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(nbrInvalidateMdpPath).path, contents: "0".data(using: String.Encoding.utf8), attributes: nil)
                 performSegue(withIdentifier: "connexionReussie", sender: self)
             } else { // pour les erreurs inconnues
                 self.alert("Impossible de se connecter au serveur", message: serveurReponse)
@@ -171,6 +179,20 @@ class ConnexionAdmin: UIViewController, UITextFieldDelegate {
             self.chargement.stopAnimating()
             self.connexionButton.isHidden = false // On réactive tout
             self.switchToAdherentPage.isHidden = false
+            self.mdpLost.isHidden = false
         }
+    }
+    
+    @objc func alertView(){
+        if self.view.backgroundColor == .blue {
+            gradient.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height)
+            gradient.colors = [UIColor.red.cgColor, UIColor.white.cgColor]// rgb(173, 204, 255), rgb(113, 166, 252)
+            self.view.backgroundColor = .red
+        } else {
+            gradient.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height)
+            gradient.colors = [UIColor.white.cgColor, UIColor.red.cgColor]// rgb(173, 204, 255), rgb(113, 166, 252)
+            self.view.backgroundColor = .blue
+        }
+        
     }
 }

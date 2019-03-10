@@ -51,16 +51,20 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
         
+        cell.textLabel?.font = UIFont(name: "Comfortaa-Bold", size: 17)
+        
         if indexPath.section == 0 {
             switch indexPath.row {
             case 0 :
                 cell.textLabel?.text = "     Aide"
                 cell.iconCell.image = UIImage(named: "helpLocation")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
-                cell.iconCell.tintColor = .gray
+                cell.iconCell.tintColor = .black
+                cell.imageAtEnd.image = UIImage(named: "next")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
+                cell.imageAtEnd.tintColor = .black
             case 1 :
                 cell.textLabel?.text = "     Contribuer au projet"
                 cell.iconCell.image = UIImage(named: "codeBalise")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
-                cell.iconCell.tintColor = .gray
+                cell.iconCell.tintColor = .black
             default : cell.textLabel?.text = "ERROR"
             }
         } else if indexPath.section == 1{
@@ -68,12 +72,12 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
             case 0:
                 cell.textLabel?.text = "     Signaler"
                 cell.iconCell.image = UIImage(named: "security")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
-                cell.iconCell.tintColor = .gray
+                cell.iconCell.tintColor = .black
             case 1 :
                 cell.textLabel?.text = "     Visiter le site du developpeur"
                 
                 cell.iconCell.image = UIImage(named: "codePhone")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
-                cell.iconCell.tintColor = .gray
+                cell.iconCell.tintColor = .black
             default : cell.textLabel?.text = "ERROR"
             }
         } else {
@@ -81,7 +85,7 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
             case 0 :
                 cell.textLabel?.text = "     Actualiser mes infos"
                 cell.iconCell.image = UIImage(named: "refresh")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
-                cell.iconCell.tintColor = .gray
+                cell.iconCell.tintColor = .black
             case 1 :
                 cell.textLabel?.text = "    Se déconnecter"
                 cell.iconCell.image = UIImage(named: "croix")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
@@ -108,7 +112,8 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) { // cellule selctionnée
         if indexPath.section == 0 {
             switch indexPath.row {
-            case 0 : break
+            case 0 :
+                performSegue(withIdentifier: "helpPage", sender: self)
             case 1:
                 let alert = UIAlertController(title: "Contribuer au projet A2L", message: "Ces liens donnent un accès aux codes sources du projet (GitHub)", preferredStyle: .actionSheet)
                 alert.addAction(UIAlertAction(title: "[GitHub] Code source application iOS", style: .default) { _ in

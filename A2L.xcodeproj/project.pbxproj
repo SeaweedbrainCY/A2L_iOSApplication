@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D82048D6222F1EBC0030DF9E /* Help.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82048D5222F1EBC0030DF9E /* Help.swift */; };
+		D82048D8223070DB0030DF9E /* ShowHelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82048D7223070DB0030DF9E /* ShowHelp.swift */; };
 		D83D1C9221F67476001F88CD /* HashProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83D1C9121F67476001F88CD /* HashProtocol.swift */; };
 		D83D1C9421F7B471001F88CD /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83D1C9321F7B471001F88CD /* CustomTextField.swift */; };
 		D89124E221E7A97500B77D0C /* GenerateQRcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89124E121E7A97500B77D0C /* GenerateQRcode.swift */; };
@@ -61,6 +63,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D82048D5222F1EBC0030DF9E /* Help.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Help.swift; sourceTree = "<group>"; };
+		D82048D7223070DB0030DF9E /* ShowHelp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHelp.swift; sourceTree = "<group>"; };
 		D83D1C9121F67476001F88CD /* HashProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashProtocol.swift; sourceTree = "<group>"; };
 		D83D1C9321F7B471001F88CD /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		D89124E121E7A97500B77D0C /* GenerateQRcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateQRcode.swift; sourceTree = "<group>"; };
@@ -195,6 +199,8 @@
 				D8FD1BF221FE582E0064790E /* ConnexionAdherent.swift */,
 				D8D7ECF02221D35200182240 /* AddNewMdp.swift */,
 				D8FD1C07220B8A8A0064790E /* AddNewAdherent.swift */,
+				D82048D5222F1EBC0030DF9E /* Help.swift */,
+				D82048D7223070DB0030DF9E /* ShowHelp.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -388,6 +394,7 @@
 				D8FD1BEE21FD383B0064790E /* Button.swift in Sources */,
 				D8E7DAD521E557E100A3E420 /* QRCode.swift in Sources */,
 				D8FD1BF321FE582E0064790E /* ConnexionAdherent.swift in Sources */,
+				D82048D8223070DB0030DF9E /* ShowHelp.swift in Sources */,
 				D8FD1C0C221223330064790E /* PushDataServer.swift in Sources */,
 				D8FD1C042204C18A0064790E /* LocalData.swift in Sources */,
 				D8FD1BFF2203A6C50064790E /* gifGenerator.swift in Sources */,
@@ -404,6 +411,7 @@
 				D8FD1BF52200DD080064790E /* NSAttributedString.swift in Sources */,
 				D8E7DAD921E6340700A3E420 /* Réglages.swift in Sources */,
 				D8E7DADE21E64C5400A3E420 /* CustomCellTableView.swift in Sources */,
+				D82048D6222F1EBC0030DF9E /* Help.swift in Sources */,
 				D8FD1C062204E70C0064790E /* NoClassVariable.swift in Sources */,
 				D83D1C9221F67476001F88CD /* HashProtocol.swift in Sources */,
 				D8E7DAE221E6726300A3E420 /* ScannerDeQRCode.swift in Sources */,

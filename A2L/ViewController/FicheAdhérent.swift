@@ -169,7 +169,7 @@ class FicheAdherent: UIViewController {
         //self.imageView = qrCode
         
         //Générer un code temporaire
-        if self.listeInfoAdherent["HadMdp"] == "false" && self.listeInfoAdherent["Statut"] != "Adhérent"{
+        if self.listeInfoAdherent["Statut"] != "Adhérent"{
             let generateCode = UIButton()
             backgroundView.addSubview(generateCode)
             generateCode.translatesAutoresizingMaskIntoConstraints = false

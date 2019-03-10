@@ -18,6 +18,7 @@ class CustomTableViewCell: UITableViewCell {
     let statut = UILabel()
     let info = UIButton()
     let iconCell = UIImageView()
+    let imageAtEnd = UIImageView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -31,6 +32,9 @@ class CustomTableViewCell: UITableViewCell {
         info.tintColor = .blue
         info.frame = CGRect(x: 340, y: 6, width: 30, height: 30)
         contentView.addSubview(info)
+        
+        imageAtEnd.frame = CGRect(x: self.frame.size.width + 15 , y: 6, width: 30, height: 30)
+        contentView.addSubview(imageAtEnd)
         
         iconCell.frame = CGRect(x: 5, y: 6, width : 30, height: 30)
         contentView.addSubview(iconCell)

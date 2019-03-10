@@ -312,4 +312,54 @@ class APIConnexion {
         }).resume()
     }
     
+/*###############################################################################################
+ Lorsque l'on bloque l'accès à un utilisateur, à cause du nombre de tentative abusée des mots de passes
+     on récupère l'heure de Paris par API afin de ne pas pouvoir tricher en changeant l'heure du téléphone ;)
+     la clé de connexion est gardée privée
+###############################################################################################*/
+    
+    public func returnLocalHours(nbrError : Int) {
+        var reponse = "error"
+        let urlString = "http://api.timezonedb.com/v2.1/get-time-zone?key=\(APIKeyDate)&format=json&by=zone&zone=Europe/Paris"
+        let url = URL(string: urlString)
+        
+        if url != nil {
+            URLSession.shared.dataTask(with: url!, completionHandler: {(data, response, error) in // On load le PHP
+                if error != nil {
+                    print("******ERROR FATAL. URL NON FONCTIONNEL. ECHEC : \(String(describing: error))")
+                    
+                    serveurReponse = error!.localizedDescription
+                    
+                } else { // Si aucune erreur n'est survenu
+                    if let JSONInfo = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSDictionary{ 
+                        print("JSON =\(JSONInfo)")
+                        if JSONInfo?.value(forKey: "status") as! String == "OK"{ //API fonctionnelle et résultat affiché
+                            let minutesAdded = (nbrError - 5) * 15 //Cb de minutes on rajoute : 7 erreur = 2*15 = 30 min d'attente
+                            
+                            let dateFormatteur = DateFormatter()
+                            dateFormatteur.dateFormat = "YYYY-MM-dd hh:mm:ss"
+                            let actualDate = dateFormatteur.date(from: JSONInfo?.value(forKey: "formatted") as! String)
+                            var date = actualDate?.addingTimeInterval(120)
+                            if minutesAdded > 120 { // Temps supéreieur à 2h = valeur maximale pour le blocage
+                                date = actualDate?.addingTimeInterval(120)
+                            } else {
+                                //date = actualDate! //+ dateFormatteur.date(from: "0000-00-00 \((minutesAdded - (minutesAdded % 20)) / 60):\(minutesAdded % 20):00")
+                            }
+                            print("Actual date = \(actualDate)")
+                            print("New date = \(date)")
+                        }
+                            
+                    }
+                }
+                OperationQueue.main.addOperation({ // Une fois l'action effectuée on envoie le resultat
+                    if reponse == "success" {// On stock les infos
+                    }
+                    serveurReponse = reponse
+                })
+            }).resume()
+        } else { //bug dans l'URL
+            reponse =  "Veuillez verifier les informations de connexions"
+        }
+    
+    }
 }
