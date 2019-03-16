@@ -60,7 +60,9 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
                 cell.iconCell.image = UIImage(named: "helpLocation")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
                 cell.iconCell.tintColor = .black
                 cell.imageAtEnd.image = UIImage(named: "next")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
-                cell.imageAtEnd.tintColor = .black
+                cell.imageAtEnd.tintColor = .gray
+                cell.imageAtEnd.frame.origin.x = self.view.frame.size.width - cell.imageAtEnd.frame.size.width - 3
+                //cell.imageAtEnd.center.y = cell.center.y
             case 1 :
                 cell.textLabel?.text = "     Contribuer au projet"
                 cell.iconCell.image = UIImage(named: "codeBalise")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)

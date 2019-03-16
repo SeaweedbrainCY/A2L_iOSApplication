@@ -14,9 +14,6 @@ class ShowHelp: UIViewController, UIScrollViewDelegate{
     @IBOutlet weak var backgroundView: UIView!
     @IBOutlet weak var scrollView: UIScrollView!
     
-    //View :
-    let helpTitle = UILabel()
-    let helpDesciption = UILabel()
     
     var titleTransmitted = "Error"
     var descriptionTransmitted = "Error"
@@ -25,27 +22,37 @@ class ShowHelp: UIViewController, UIScrollViewDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.scrollView.delegate = self
+        print("Title transmitted = \(titleTransmitted)")
         loadElement()
+        
     }
     
-    private func loadElement(){
-        self.backgroundView.addSubview(self.helpTitle)
+    func loadElement(){
+        let helpTitle = UILabel()
+        self.backgroundView.addSubview(helpTitle)
         helpTitle.translatesAutoresizingMaskIntoConstraints = false
         helpTitle.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 4).isActive = true
         helpTitle.topAnchor.constraint(equalToSystemSpacingBelow: self.scrollView.topAnchor, multiplier: 3).isActive = true
+        helpTitle.widthAnchor.constraint(equalToConstant: self.view.frame.size.width - 50).isActive = true
+        helpTitle.lineBreakMode = .byWordWrapping
+        helpTitle.numberOfLines = 3
         helpTitle.font = UIFont(name: "Comfortaa-Bold", size: 23)
         helpTitle.textColor = .blue
         helpTitle.text = titleTransmitted
+        helpTitle.shadowColor = .black
+        helpTitle.shadowOffset = CGSize(width: 1, height: 1)
         
-        self.backgroundView.addSubview(self.helpDesciption)
-        helpDesciption.translatesAutoresizingMaskIntoConstraints = false
-        helpDesciption.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 4).isActive = true
-        helpDesciption.topAnchor.constraint(equalToSystemSpacingBelow: helpTitle.bottomAnchor, multiplier: 4).isActive = true
-        helpDesciption.widthAnchor.constraint(equalToConstant: self.scrollView.frame.size.width - 20).isActive = true
-        helpDesciption.numberOfLines = 50
-        helpDesciption.lineBreakMode = .byWordWrapping
-        helpDesciption.font = UIFont(name: "Comfortaa-Light", size: 16)
+        let helpDescription = UILabel()
+        self.backgroundView.addSubview(helpDescription)
+        helpDescription.translatesAutoresizingMaskIntoConstraints = false
+        helpDescription.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 4).isActive = true
+        helpDescription.topAnchor.constraint(equalToSystemSpacingBelow: helpTitle.bottomAnchor, multiplier: 4).isActive = true
+        helpDescription.widthAnchor.constraint(equalToConstant: self.scrollView.frame.size.width - 50).isActive = true
+        helpDescription.numberOfLines = 50
+        helpDescription.lineBreakMode = .byWordWrapping
+        helpDescription.font = UIFont(name: "Comfortaa-Bold", size: 18)
+        helpDescription.text = self.descriptionTransmitted
+        
         
     }
 }

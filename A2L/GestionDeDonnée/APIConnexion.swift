@@ -91,6 +91,7 @@ class APIConnexion {
         var reponse = "error"
         let urlString = "http://\(adresseIPServeur):8888/infoAdherent.php?Nom=\(nom)&DateNaissance=\(dateNaissance)"
         let url = URL(string: urlString)
+        print("url = \(urlString)")
         if url != nil {
             URLSession.shared.dataTask(with: url!, completionHandler: {(data, response, error) in // On load le PHP
                 if error != nil {
