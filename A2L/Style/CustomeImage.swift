@@ -37,7 +37,7 @@ extension UIImageView {
                 
                 
             } else { // Si aucune erreur n'est survenu
-                if let dataString = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString{ // On enregsitre la data  en JSON
+                if let dataString = ((try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString) as NSString??){ // On enregsitre la data  en JSON
                     if dataString == "Accès au serveur refusé" { // erreur
                         reponseURLRequestImage = "Une erreur s'est produite lors de la connexion au serveur"
                     } else if dataString == "Aucune données"{ // erreur

@@ -27,7 +27,7 @@ class PushDataServer {// APIConnexion reçoit les données du serveur, cette cla
                 print("error = \(String(describing: error))")
                 serveurReponse = (error?.localizedDescription)!
             } else {
-                if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {                    if result! as String == "Accès au serveur refusé" { //Si la connexion est refusée
+                if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {                    if result as String == "Accès au serveur refusé" { //Si la connexion est refusée
                         serveurReponse = "Accès au serveur refusé"
                     } else {
                         serveurReponse = "success"
@@ -57,7 +57,7 @@ class PushDataServer {// APIConnexion reçoit les données du serveur, cette cla
                 serveurReponse = (error?.localizedDescription)!
             } else {
                 if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
-                    if result! as String == "Accès au serveur refusé" { //Si la connexion est refusée
+                    if result as String == "Accès au serveur refusé" { //Si la connexion est refusée
                         serveurReponse = "Accès au serveur refusé"
                     } else {
                         serveurReponse = "success"
@@ -88,7 +88,7 @@ class PushDataServer {// APIConnexion reçoit les données du serveur, cette cla
                 serveurReponse = (error?.localizedDescription)!
             } else {
                 if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
-                    if result! as String == "Accès au serveur refusé" { //Si la connexion est refusée
+                    if result as String == "Accès au serveur refusé" { //Si la connexion est refusée
                         reponseURLRequestImage = "Accès au serveur refusé"
                     } else {
                         reponseURLRequestImage = "success"
@@ -119,14 +119,14 @@ class PushDataServer {// APIConnexion reçoit les données du serveur, cette cla
                 serveurReponse = (error?.localizedDescription)!
             } else {
                 if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
-                    if result! as String == "Accès au serveur refusé" { //Si la connexion est refusée
+                    if result as String == "Accès au serveur refusé" { //Si la connexion est refusée
                         serveurReponse = "Accès au serveur refusé"
                         reponseURLRequestImage = "Accès au serveur refusé"
-                    } else if result! as String == "success"{
+                    } else if result as String == "success"{
                         serveurReponse = "success"
                         reponseURLRequestImage = "success"
                     } else {
-                        serveurReponse = "Une erreur inconnue est survenue lors de la connexion au serveur. \(result!)"
+                        serveurReponse = "Une erreur inconnue est survenue lors de la connexion au serveur. \(result)"
                         reponseURLRequestImage = "Une erreur inconnue est survenue lors de la connexion au serveur"
                     }
                 } else {
@@ -154,14 +154,14 @@ class PushDataServer {// APIConnexion reçoit les données du serveur, cette cla
                 serveurReponse = (error?.localizedDescription)!
             } else {
                 if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
-                    if result! as String == "Accès au serveur refusé" { //Si la connexion est refusée
+                    if result as String == "Accès au serveur refusé" { //Si la connexion est refusée
                         serveurReponse = "Accès au serveur refusé"
                         reponseURLRequestImage = "Accès au serveur refusé"
-                    } else if result! as String == "success"{
+                    } else if result as String == "success"{
                         serveurReponse = "success"
                         reponseURLRequestImage = "success"
                     } else {
-                        serveurReponse = "Une erreur inconnue est survenue lors de la connexion au serveur. \(result!)"
+                        serveurReponse = "Une erreur inconnue est survenue lors de la connexion au serveur. \(result)"
                         reponseURLRequestImage = "Une erreur inconnue est survenue lors de la connexion au serveur"
                     }
                 } else {
@@ -191,11 +191,11 @@ class PushDataServer {// APIConnexion reçoit les données du serveur, cette cla
                 serveurReponse = (error?.localizedDescription)!
             } else {
                 if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
-                    print("result = \(result! as String)")
+                    print("result = \(result as String)")
                     
-                    if result! as String == "Success" { //Si la connexion est refusée
+                    if result as String == "Success" { //Si la connexion est refusée
                         serveurReponse = "success"
-                    } else if  result! as String == "Accès au serveur refusé"{
+                    } else if  result as String == "Accès au serveur refusé"{
                         serveurReponse = "Accès au serveur refusé"
                     }else {
                         serveurReponse = "Une erreur inconnue est survenue"
@@ -227,11 +227,11 @@ class PushDataServer {// APIConnexion reçoit les données du serveur, cette cla
                 serveurReponse = (error?.localizedDescription)!
             } else {
                 if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
-                    print("result = \(result! as String)")
+                    print("result = \(result as String)")
                     
-                    if result! as String == "Success" { //Si la connexion est refusée
+                    if result as String == "Success" { //Si la connexion est refusée
                         serveurReponse = "success"
-                    } else if  result! as String == "Accès au serveur refusé"{
+                    } else if  result as String == "Accès au serveur refusé"{
                         serveurReponse = "Accès au serveur refusé"
                     }else {
                         serveurReponse = "Une erreur inconnue est survenue"

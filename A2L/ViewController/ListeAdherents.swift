@@ -82,7 +82,7 @@ class ListeAdherent: UIViewController, UITableViewDataSource, UITableViewDelegat
             let api = APIConnexion()
             api.otherAdherentData(nom: api.convertionToHexaCode(String(infos[0])), dateNaissance: String(infos[1]))
             //On lance un timer pour verifier toutes les secondes si on a une réponse
-            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(listeSelectedVerificationReponse), userInfo: nil, repeats: true)
+            timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(listeSelectedVerificationReponse), userInfo: nil, repeats: true)
             chargement.startAnimating()
             loadAdherent = "nil" //on réinitialise 
         }
@@ -139,7 +139,7 @@ class ListeAdherent: UIViewController, UITableViewDataSource, UITableViewDelegat
                 let api = APIConnexion()
                 api.otherAdherentData(nom: api.convertionToHexaCode(listeAdherentsNom[i]), dateNaissance: listeDateNaissance[i])
                 //On lance un timer pour verifier toutes les secondes si on a une réponse
-                timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(listeSelectedVerificationReponse), userInfo: nil, repeats: true)
+                timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(listeSelectedVerificationReponse), userInfo: nil, repeats: true)
                 chargement.startAnimating()
             }
         }

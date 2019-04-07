@@ -34,9 +34,7 @@ class APIConnexion {
                     
                 } else { // Si aucune erreur n'est survenu
                     if let JSONObject = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSArray{ // On enregsitre le tableau total en JSON
-                        
-                        if JSONObject != nil {
-                            for informations in JSONObject! {
+                            for informations in JSONObject {
                                 if let information = informations as? NSDictionary { // On transforme le tableau total en dictionnaires
                                     //Pour une raison qui m'est obscure, les informations ne seront pas classés dans cet ordre ...
                                     var temporaryDictionnary: [String:String] = [:] // tableau temporaire qui sert à convertir les données avant de les enregsitrer
@@ -51,19 +49,15 @@ class APIConnexion {
                                 }
                             }
                             
-                        } else if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
-                            print("string")
-                            //let pageConnexion = ConnexionAdmin()
-                            
-                            if result! as String == "Autorisation refusée" { //Si la connexion est refusée
-                                reponse = "permission refusée"
-                                //print("permission refusée")
-                                //pageConnexion.errorWhileConnectingToDatabase(erreur: "Autorisation refusée")
-                            } else if result! as String == "Mdp incorrect" {
-                                reponse = "Mdp incorrect"
-                                //print("mdp incorrect")
-                                //pageConnexion.errorWhileConnectingToDatabase(erreur: "Mdp incorrect")
-                            }
+                        
+                    } else if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
+                        print("string")
+                        //let pageConnexion = ConnexionAdmin()
+                        
+                        if result as String == "Autorisation refusée" { //Si la connexion est refusée
+                            reponse = "permission refusée"
+                        } else if result as String == "Mdp incorrect" {
+                            reponse = "Mdp incorrect"
                         }
                     }
                     OperationQueue.main.addOperation({ // Une fois l'action effectuée on envoie le resultat
@@ -103,8 +97,7 @@ class APIConnexion {
                 } else { // Si aucune erreur n'est survenu
                     
                     if let allDataUser = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSArray{ // On enregsitre le tableau total en JSON
-                        if allDataUser != nil {
-                            let dataUser: NSDictionary = allDataUser![0] as! NSDictionary // On a qu'une seule valeur -> voir API
+                            let dataUser: NSDictionary = allDataUser[0] as! NSDictionary // On a qu'une seule valeur -> voir API
                             //Pour une raison qui m'est obscure, les informations ne seront pas classés dans cet ordre ...
                             var temporaryDictionnary: [String:String] = [:] // tableau temporaire qui sert à convertir les données avant de les enregsitrer
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "id") as! String, forKey: "id")
@@ -116,17 +109,15 @@ class APIConnexion {
                             self.allInfo = [temporaryDictionnary] // et on ajoute notre nouveau dico au tableau général
                             print("all info = \(self.allInfo)")
                             reponse = "success"
+                        
                         } else if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
                             
-                            if result! as String == "Élève introuvable" { //Si la connexion est refusée
+                            if result as String == "Élève introuvable" { //Si la connexion est refusée
                                 reponse = "Élève introuvable"
-                            } else if result! as String == "Date de naissance incorrect" {
+                            } else if result as String == "Date de naissance incorrect" {
                                 reponse = "Date de naissance incorrect"
                             }
                         }
-                    } else {
-                        print("erreur ligne 29 APIConnexion.swift")
-                    }
                     OperationQueue.main.addOperation({ // Une fois l'action effectuée on envoie le resultat
                         infosAdherent = self.allInfo[0] //On stock dans le tableau temporaire
                         
@@ -164,9 +155,8 @@ class APIConnexion {
                     
                 } else { // Si aucune erreur n'est survenu
                     
-                    if let allDataUser = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSArray{ // On enregsitre le tableau total en JSON
-                        if allDataUser != nil {
-                            let dataUser: NSDictionary = allDataUser![0] as! NSDictionary // On a qu'une seule valeur -> voir API
+                    if let allDataUser = try? (JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSArray){ // On enregsitre le tableau total en JSON
+                            let dataUser: NSDictionary = allDataUser[0] as! NSDictionary // On a qu'une seule valeur -> voir API
                             //Pour une raison qui m'est obscure, les informations ne seront pas classés dans cet ordre ...
                             var temporaryDictionnary: [String:String] = [:] // tableau temporaire qui sert à convertir les données avant de les enregsitrer
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "id") as! String, forKey: "id")
@@ -180,15 +170,13 @@ class APIConnexion {
                             self.allInfo = [temporaryDictionnary] // et on ajoute notre nouveau dico au tableau général
                             print("all info = \(self.allInfo)")
                             reponse = "success"
+                        
                         } else if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
-                            if result! as String == "Autorisation refusée" { //Si la connexion est refusée
-                                reponse = "permission refusée"
-                            } else if result! as String == "Mdp incorrect" {
-                                reponse = "Mdp incorrect"
-                            }
+                        if result as String == "Autorisation refusée" { //Si la connexion est refusée
+                            reponse = "permission refusée"
+                        } else if result as String == "Mdp incorrect" {
+                            reponse = "Mdp incorrect"
                         }
-                    } else {
-                        print("erreur ligne 193 APIConnexion.swift")
                     }
                     OperationQueue.main.addOperation({ // Une fois l'action effectuée on envoie le resultat
                         infosAdherent = self.allInfo[0] //On stock dans le tableau temporaire
@@ -239,8 +227,7 @@ class APIConnexion {
                 } else { // Si aucune erreur n'est survenu
                     
                     if let allDataUser = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSArray{ // On enregsitre le tableau total en JSON
-                        if allDataUser != nil {
-                            let dataUser: NSDictionary = allDataUser![0] as! NSDictionary // On a qu'une seule valeur -> voir API
+                            let dataUser: NSDictionary = allDataUser[0] as! NSDictionary // On a qu'une seule valeur -> voir API
                             //Pour une raison qui m'est obscure, les informations ne seront pas classés dans cet ordre ...
                             var temporaryDictionnary: [String:String] = [:] // tableau temporaire qui sert à convertir les données avant de les enregsitrer
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "id") as! String, forKey: "id")
@@ -255,15 +242,12 @@ class APIConnexion {
                             reponse = "success"
                         } else if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
                             
-                            if result! as String == "Élève introuvable" { //Si la connexion est refusée
+                            if result as String == "Élève introuvable" { //Si la connexion est refusée
                                 reponse = "Élève introuvable"
-                            } else if result! as String == "Date de naissance incorrect" {
+                            } else if result as String == "Date de naissance incorrect" {
                                 reponse = "Date de naissance incorrect"
                             }
                         }
-                    } else {
-                        print("bug")
-                    }
                     OperationQueue.main.addOperation({ // Une fois l'action effectuée on envoie le resultat
                         print("result message = \(reponse)")
                         infosOtherAdherent = self.allInfo[0] //On stock dans le tableau temporaire
@@ -294,13 +278,13 @@ class APIConnexion {
                 serveurReponse = (error?.localizedDescription)!
             } else {
                 if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
-                    if result! as String == "Accès au serveur refusé" { //Si la connexion est refusée
+                    if result as String == "Accès au serveur refusé" { //Si la connexion est refusée
                         serveurReponse = "Accès au serveur refusé"
-                    } else if result! as String == "Success"{
+                    } else if result as String == "Success"{
                         serveurReponse = "success"
-                    }else if result! as String == "Aucun code temporaire"{
+                    }else if result as String == "Aucun code temporaire"{
                         serveurReponse = "Aucun code temporaire"
-                    } else if result! as String == "Code temporaire faux"{
+                    } else if result as String == "Code temporaire faux"{
                         serveurReponse = "Code temporaire faux"
                     } else {
                         serveurReponse = "Une erreur inconnue est survenue lors de la connexion au serveur."
@@ -319,7 +303,7 @@ class APIConnexion {
      la clé de connexion est gardée privée
 ###############################################################################################*/
     
-    public func returnLocalHours(nbrError : Int) {
+    public func returnLocalHours(returnDate: Bool, nbrError : Int) {
         var reponse = "error"
         let urlString = "http://api.timezonedb.com/v2.1/get-time-zone?key=\(APIKeyDate)&format=json&by=zone&zone=Europe/Paris"
         let url = URL(string: urlString)
@@ -334,29 +318,40 @@ class APIConnexion {
                 } else { // Si aucune erreur n'est survenu
                     if let JSONInfo = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSDictionary{ 
                         print("JSON =\(JSONInfo)")
-                        if JSONInfo?.value(forKey: "status") as! String == "OK"{ //API fonctionnelle et résultat affiché
-                            let minutesAdded = (nbrError - 5) * 15 //Cb de minutes on rajoute : 7 erreur = 2*15 = 30 min d'attente
-                            
-                            let dateFormatteur = DateFormatter()
-                            dateFormatteur.dateFormat = "YYYY-MM-dd hh:mm:ss"
-                            let actualDate = dateFormatteur.date(from: JSONInfo?.value(forKey: "formatted") as! String)
-                            var date = actualDate?.addingTimeInterval(120)
-                            if minutesAdded > 120 { // Temps supéreieur à 2h = valeur maximale pour le blocage
-                                date = actualDate?.addingTimeInterval(120)
-                            } else {
-                                //date = actualDate! //+ dateFormatteur.date(from: "0000-00-00 \((minutesAdded - (minutesAdded % 20)) / 60):\(minutesAdded % 20):00")
+                        if JSONInfo.value(forKey: "status") as! String == "OK"{ //API fonctionnelle et résultat affiché
+                            if !returnDate {
+                                let minutesAdded = (nbrError / 5) * 5 //Cb de minutes on rajoute : 7 erreur = 2*15 = 30 min d'attente
+                                print("minute added = \(nbrError / 5)")
+                                
+                                let dateFormatteur = DateFormatter()
+                                dateFormatteur.dateFormat = "YYYY-MM-dd HH:mm:ss"
+                                let actualDate = dateFormatteur.date(from: JSONInfo.value(forKey: "formatted") as! String)
+                                
+                                
+                                var date = actualDate?.addingTimeInterval(7200)
+                                if minutesAdded > 7200 { // Temps supéreieur à 2h = valeur maximale pour le blocage
+                                    date = actualDate?.addingTimeInterval(7200)
+                                } else {
+                                    print("minutes added = \(minutesAdded * 60)")
+                                    date = actualDate?.addingTimeInterval(TimeInterval(minutesAdded * 60))
+                                }
+                                print("\n\nActual date = \(String(describing: actualDate))")
+                                print("New date = \(String(describing: date))")
+                                let file = FileManager.default
+                                file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(nextDateConnexionAllowed).path, contents: String(dateFormatteur.string(from: date!)).data(using: String.Encoding.utf8), attributes: nil)
+                                serveurReponse = "success"
+                            } else { // on demande juste d'enregistré la date actuel
+                                currentDate = JSONInfo.value(forKey: "formatted") as! String
+                                serveurReponse = "success"
                             }
-                            print("Actual date = \(actualDate)")
-                            print("New date = \(date)")
-                        }
                             
+                        } else {
+                            serveurReponse = "Serveur HS"
+                        }
+                    } else {
+                        serveurReponse = "Erreur inconnu"
                     }
                 }
-                OperationQueue.main.addOperation({ // Une fois l'action effectuée on envoie le resultat
-                    if reponse == "success" {// On stock les infos
-                    }
-                    serveurReponse = reponse
-                })
             }).resume()
         } else { //bug dans l'URL
             reponse =  "Veuillez verifier les informations de connexions"

@@ -133,7 +133,7 @@ class ConnexionAdherent: UIViewController, UITextFieldDelegate {
     }
     
     func startCompteur(){ // On lance un compteur qui permet de verfier toutes les secondes si on a une réponse du serveur
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
     }
     
     @objc private func verificationReponse(){ // est appelé par le compteur pour verifier si on a une réponse

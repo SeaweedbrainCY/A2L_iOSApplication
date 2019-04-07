@@ -32,6 +32,7 @@ class FicheAdherent: UIViewController {
     var timerImage = Timer() //comme partout on a l'habitude mtn
     var timerPointFidelité = Timer()
     var timerCode = Timer()
+    var timerAllName = Timer()
     
     override func viewDidLoad() { // lancée quand la vue load
         super.viewDidLoad()
@@ -40,6 +41,9 @@ class FicheAdherent: UIViewController {
         print("=> \(listeInfoAdherent)")
         if listeInfoAdherent != ["nil":"nil"]{ // Si on a les infos
             loadAllView()
+        }
+        if listeAllNom == [] {// n'est pas transmis par la liste adhérent car on vient du scann
+            recupAllAdherentName()
         }
     }
     
@@ -258,7 +262,10 @@ class FicheAdherent: UIViewController {
             }
             if infosAdherent["Statut"] == "Développeur" || infosAdherent["Statut"] == "Super-admin" {
                 modifierButton.title = "Modifier"
-                modifierButton.isEnabled = true
+                if self.listeAllNom != []{
+                    modifierButton.isEnabled = true
+                }
+                
             }
             
         }
@@ -281,6 +288,7 @@ class FicheAdherent: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) { //Avant d'envoyer de segue
         //On enlève le nom de l'adhérent
+        
         var listeNomWithoutAdherentName = self.listeAllNom
         listeNomWithoutAdherentName.remove(at: self.listeAllNom.firstIndex(of: self.listeInfoAdherent["Nom"]!)!)
         
@@ -370,5 +378,38 @@ class FicheAdherent: UIViewController {
     @objc private func infosSelected(sender: UIButton) {
         sender.setTitleColor(UIColor.lightGray, for: .normal)
         alert("Code confidentiel temporaire", message: "Ce code est généré aléatoirement et doit être transmis à l'admin concerné afin qu'il puisse créer un mot de passe ou le réinitiliser\n\n⚠︎⚠︎⚠︎ATTENTION⚠︎⚠︎⚠︎\nGénérer un code suffit à le rendre valide. En générer un nouveau désactive le précédent. Ce code restera valide jusqu'à son utilisation s'il n'est pas re-généré.\nUne fois que vous quitterez cette page vous ne pourrez plus voir le code. Il faudra donc en créer un nouveau. Même si vous n'avez plus accès à son contenu le code restera valide quand vous aurez quitté la page")
+    }
+    
+    func recupAllAdherentName(){
+        let api = APIConnexion()
+        api.exctractAllData(nom: api.convertionToHexaCode(infosAdherent["Nom"] ?? "Error"), mdpHashed: infosAdherent["MdpHashed"] ?? "Error")
+        //On lance un timer pour verifier toutes les secondes si on a une réponse
+        timerAllName = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(recupAllNameVerification), userInfo: nil, repeats: true)
+    }
+    
+    
+    @objc private func recupAllNameVerification(){
+        
+        if serveurReponse != "nil" { // on detecte une réponse
+            timerAllName.invalidate() // on desactive le compteur il ne sert plus à rien
+            if serveurReponse == "success" {
+                //On a réussi, active le bouton
+                for infos in infosAllAdherent {
+                    if infos != [:] {
+                        let nom = "\(infos["Nom"]!)"
+                        
+                        if listeAllNom == [] {
+                            listeAllNom = [infos["Nom"]!]
+                        } else {
+                            listeAllNom.append(nom)
+                        }
+                    }
+                }
+                self.modifierButton.isEnabled = true
+            } else { // Une erreur est survenue
+                self.alert("Erreur lors de la connexion au serveur", message: serveurReponse)
+            }
+            serveurReponse = "nil"
+        }
     }
 }

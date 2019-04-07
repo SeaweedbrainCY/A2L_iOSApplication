@@ -38,12 +38,11 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         listeInfoAdherent = infosAdherent
         print("=> \(listeInfoAdherent)")
         if listeInfoAdherent != ["nil":"nil"]{ // Si on a les infos
-            let api = APIConnexion()
             
             loadAllView()
         }
         //On lance un timer pour verifier toutes les secondes si on a une réponse
-        waitReponseImage = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(verificationReponseImage), userInfo: nil, repeats: true)
+        waitReponseImage = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(verificationReponseImage), userInfo: nil, repeats: true)
         
         if let _ = listeInfoAdherent["MdpHashed"] {
             listeButtonItem.image = UIImage(named: "liste")
@@ -74,7 +73,6 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
     }
 
     private func loadAllView(){ // est appelé pour agencé les différents élements de la page
-        let api = APIConnexion()
         let nomAdherent = UILabel()
         self.backgroundView.addSubview(nomAdherent)
         nomAdherent.translatesAutoresizingMaskIntoConstraints = false
@@ -211,7 +209,7 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         let api = APIConnexion()
         api.exctractAllData(nom: api.convertionToHexaCode(infosAdherent["Nom"] ?? "Error"), mdpHashed: infosAdherent["MdpHashed"] ?? "Error")
         //On lance un timer pour verifier toutes les secondes si on a une réponse
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(listeSelectedVerificationReponse), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(listeSelectedVerificationReponse), userInfo: nil, repeats: true)
         if waitReponseImage.isValid{
             reponseURLRequestImage = "Le chargement a été interrompu;( Pas cool .."
         }
@@ -245,7 +243,7 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         }
         
         
-        waitReponse = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(reponseServeurDataAdherent), userInfo: nil, repeats: true)
+        waitReponse = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(reponseServeurDataAdherent), userInfo: nil, repeats: true)
     }
     
     @objc private func reponseServeurDataAdherent() { // attend la réponse du serveur dans la recherche de données de l'utulisateur

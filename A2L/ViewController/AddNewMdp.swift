@@ -166,7 +166,7 @@ class AddNewMdp: UIViewController, UITextFieldDelegate {
                         }
                     }
                 }
-                self.waitForServer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
+                self.waitForServer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
                 nom = database.convertionToHexaCode(nom)
                 prenom = database.convertionToHexaCode(prenom) // On convertit pour qu'ils soient confromes à l'URL
                 let nomPrenom = "\(nom) \(prenom)"

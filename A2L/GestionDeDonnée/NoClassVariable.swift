@@ -19,3 +19,4 @@ var reponseURLRequestImage = "nil" // Reponse du serveur lorsqu'on load l'image
 var infosOtherAdherent = ["nil":"nil"] // toutes les infos d'un autre adhérent à afficher
 var infosAllAdherent = [["nil":"nil"]]
 var imageId: UIImage?
+var currentDate = "nil" // date actuelle

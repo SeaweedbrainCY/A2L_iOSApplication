@@ -367,7 +367,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
                 print("nbr caracteres finaux : \(stringData.count)")
                 pushData.addAdherent(nom: /*convertion.convertionToHexaCode*/(nomTextField!.text!), classe: /*convertion.convertionToHexaCode*/(classeTextField!.text!), imageData: stringData, dateNaissance: dateNaissanceVariable!.currentTitle!, statut: statut)
                     
-                waitForServeur = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
+                waitForServeur = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
                 
             } else { // si on a un id alors l'adhérent existe déjà, on l'utilise donc:
                 //On enlève les espaces :

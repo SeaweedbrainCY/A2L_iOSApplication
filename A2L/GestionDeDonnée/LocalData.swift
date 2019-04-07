@@ -21,8 +21,7 @@ class LocalData {
             
             if data != "nil" && data != ""{
                 if let allDataUser = try? JSONSerialization.jsonObject(with: data.data(using: .utf8)!, options: .allowFragments) as? NSArray{ // On enregsitre le tableau total en JSON
-                    if allDataUser != nil {
-                        let dataUser: NSDictionary = allDataUser![0] as! NSDictionary // On a qu'une seule valeur -> voir API
+                        let dataUser: NSDictionary = allDataUser[0] as! NSDictionary // On a qu'une seule valeur -> voir API
                         //Pour une raison qui m'est obscure, les informations ne seront pas classés dans cet ordre ...
                         var temporaryDictionnary: [String:String] = [:] // tableau temporaire qui sert à convertir les données avant de les enregsitrer
                         var isOkay = true
@@ -47,7 +46,6 @@ class LocalData {
                         
                         print("all info local = \(self.allInfo)")
                         infosAdherent = allInfo[0]
-                    }
                     
                 } else {
                     print("erreur line 54 LocalData.swift")

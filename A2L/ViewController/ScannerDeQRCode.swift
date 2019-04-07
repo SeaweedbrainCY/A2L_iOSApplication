@@ -127,7 +127,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                     let api = APIConnexion()
                     api.otherAdherentData(nom: nom, dateNaissance: dateNaissance) // Tous est déjà en hexa pour le QR code donc pas besoin de reconvertir
                     
-                    timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
+                    timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
                 } else { // elle ne l'est pas
                     alert("QR Code falsifié", message: "Si c'est volontaire il faut savoir qu'on ne me trompe pas comme ça .... ;)")
                 }

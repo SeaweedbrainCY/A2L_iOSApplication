@@ -140,10 +140,10 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
             case 0 : // Signaler
                 let alert = UIAlertController(title: "Signaler", message: "Signaler un bug ou erreur permet au developpeur d'améliorer l'app. Merci beaucoup", preferredStyle: .actionSheet)
                 alert.addAction(UIAlertAction(title: "Signaler un bug", style: .default) { _ in
-                    self.mailReport(objet: "J'ai trouvé un bug !", body: "")
+                    self.mailReport(objet: "J'ai trouvé un bug dans l'application iOS de l'A2L!", body: "")
                 })
                 alert.addAction(UIAlertAction(title: "Contacter le developpeur", style: .default) { _ in
-                    self.mailReport(objet: "J'ai un message pour toi !", body: "")
+                    self.mailReport(objet: "J'ai un message pour toi !", body: "Envoyé depuis l'application iOS de l'A2L\n")
                 })
                 alert.addAction(UIAlertAction(title: "Annuler", style: UIAlertAction.Style.cancel, handler: nil)) // Retour
                 present(alert, animated: true)
@@ -228,7 +228,7 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
         } else { // sinon non
             api.adherentConnexion(nom: nom, dateNaissance: infosAdherent["DateNaissance"]!)
         }
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(verificationReponse), userInfo: nil, repeats: true)
     }
     
     
