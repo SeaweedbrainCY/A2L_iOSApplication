@@ -24,7 +24,7 @@ class ShowHelp: UIViewController, UIScrollViewDelegate{
         super.viewDidLoad()
         print("Title transmitted = \(titleTransmitted)")
         loadElement()
-        
+        self.backgroundView.layer.cornerRadius = 50
     }
     
     func loadElement(){

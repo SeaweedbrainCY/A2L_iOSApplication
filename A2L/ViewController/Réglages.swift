@@ -17,12 +17,31 @@ import MessageUI
 class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MFMailComposeViewControllerDelegate {
     
     @IBOutlet weak var tableView: UITableView!
+    var darkModeSwitch = UISwitch()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.darkModeSwitch.addTarget(self, action: #selector(darkModeChanged), for: .valueChanged)
         self.tableView.delegate = self
         self.tableView.dataSource = self
         tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: "cell") //on associe la tableView au custom de Style/customeCelleTableView.swift
+        
+        var isDarkMode = "false"
+        do {
+            isDarkMode = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(isDarkModeActivated), encoding: .utf8)
+        } catch {
+            print("Fichier introuvable. ERREUR GRAVE")
+        }
+        
+        if isDarkMode == "true" {
+            darkModeSwitch.isOn = true
+            self.tableView.backgroundColor = UIColor.init(red: 0.12, green: 0.12, blue: 0.12, alpha: 1)
+            self.tabBarController?.tabBar.barStyle = .black
+            self.navigationController?.navigationBar.barStyle = .black
+            self.view.backgroundColor = .black
+        }
+        
+        
     }
     
     func alert(_ title: String, message: String) { // pop up simple, avec un seul bouton de sortie
@@ -39,7 +58,7 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { // Cellules par section
         switch section {
-        case 0 : return 2
+        case 0 : return 3
         case 1 : return 2
         case 2 : return 2
         default : return 0
@@ -52,46 +71,59 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
         
         cell.textLabel?.font = UIFont(name: "Comfortaa-Bold", size: 17)
+        var isDarkMode = "false"
+        do {
+            isDarkMode = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(isDarkModeActivated), encoding: .utf8)
+        } catch {
+            print("Fichier introuvable. ERREUR GRAVE")
+        }
+        
+        if isDarkMode == "true" {
+            cell.backgroundColor = .black
+            cell.textLabel?.textColor = .white
+        } else {
+            cell.backgroundColor = .white
+            cell.textLabel?.textColor = .black
+        }
         
         if indexPath.section == 0 {
             switch indexPath.row {
             case 0 :
+                cell.textLabel?.text = "     Activer le dark mode"
+                cell.iconCell.image = UIImage(named: "Dark mode")
+                cell.selectionStyle = .none
+                cell.accessoryView = self.darkModeSwitch
+            case 1 :
                 cell.textLabel?.text = "     Aide"
-                cell.iconCell.image = UIImage(named: "helpLocation")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
-                cell.iconCell.tintColor = .black
+                cell.iconCell.image = UIImage(named: "Help setting")
                 cell.imageAtEnd.image = UIImage(named: "next")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
                 cell.imageAtEnd.tintColor = .gray
                 cell.imageAtEnd.frame.origin.x = self.view.frame.size.width - cell.imageAtEnd.frame.size.width - 3
                 //cell.imageAtEnd.center.y = cell.center.y
-            case 1 :
+            case 2 :
                 cell.textLabel?.text = "     Contribuer au projet"
-                cell.iconCell.image = UIImage(named: "codeBalise")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
-                cell.iconCell.tintColor = .black
+                cell.iconCell.image = UIImage(named: "Modifier")
             default : cell.textLabel?.text = "ERROR"
             }
         } else if indexPath.section == 1{
             switch indexPath.row {
             case 0:
                 cell.textLabel?.text = "     Signaler"
-                cell.iconCell.image = UIImage(named: "security")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
-                cell.iconCell.tintColor = .black
+                cell.iconCell.image = UIImage(named: "Alerter")
             case 1 :
                 cell.textLabel?.text = "     Visiter le site du developpeur"
                 
-                cell.iconCell.image = UIImage(named: "codePhone")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
-                cell.iconCell.tintColor = .black
+                cell.iconCell.image = UIImage(named: "Site")
             default : cell.textLabel?.text = "ERROR"
             }
         } else {
             switch indexPath.row {
             case 0 :
                 cell.textLabel?.text = "     Actualiser mes infos"
-                cell.iconCell.image = UIImage(named: "refresh")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
-                cell.iconCell.tintColor = .black
+                cell.iconCell.image = UIImage(named: "Rafraichir")
             case 1 :
-                cell.textLabel?.text = "    Se déconnecter"
-                cell.iconCell.image = UIImage(named: "croix")!.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
-                cell.iconCell.tintColor = .red
+                cell.textLabel?.text = "     Se déconnecter"
+                cell.iconCell.image = UIImage(named: "Annuler")
                 cell.textLabel?.textColor = .red
             default : cell.textLabel?.text = "ERROR"
             }
@@ -104,7 +136,7 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 0 : return "L'application A2L"
-        case 1 : return "Developpeur"
+        case 1 : return "Développeur"
         case 2: return "Mon compte"
         default : return "ERROR"
         }
@@ -114,9 +146,9 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) { // cellule selctionnée
         if indexPath.section == 0 {
             switch indexPath.row {
-            case 0 :
+            case 1 :
                 performSegue(withIdentifier: "helpPage", sender: self)
-            case 1:
+            case 2:
                 let alert = UIAlertController(title: "Contribuer au projet A2L", message: "Ces liens donnent un accès aux codes sources du projet (GitHub)", preferredStyle: .actionSheet)
                 alert.addAction(UIAlertAction(title: "[GitHub] Code source application iOS", style: .default) { _ in
                     UIApplication.shared.open(URL(string: "https://github.com/DevNathan/A2L_iOSApplication")!, options: [:], completionHandler: nil)// on charge le lien dans le moteur de recherche par defaut de l'utilisateur
@@ -250,6 +282,28 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
         //On réinitialise l'erreur :
         serveurReponse = "nil"
         
+    }
+    
+    @objc private func darkModeChanged(sender:UISwitch){
+        if sender.isOn {
+            let file = FileManager.default
+            file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(isDarkModeActivated).path, contents: "true".data(using: String.Encoding.utf8), attributes: nil)
+            self.tableView.backgroundColor = UIColor.init(red: 0.12, green: 0.12, blue: 0.12, alpha: 1)
+            self.tableView.delegate = self
+            self.tableView.reloadData()
+            self.tabBarController?.tabBar.barStyle = .black
+            self.navigationController?.navigationBar.barStyle = .black
+            self.view.backgroundColor = .black
+        } else {
+            let file = FileManager.default
+            file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(isDarkModeActivated).path, contents: "false".data(using: String.Encoding.utf8), attributes: nil)
+            self.tableView.backgroundColor = .groupTableViewBackground
+            self.tableView.delegate = self
+            self.tableView.reloadData()
+            self.tabBarController?.tabBar.barStyle = .default
+            self.navigationController?.navigationBar.barStyle = .default
+            self.view.backgroundColor = .white
+        }
     }
 }
 

@@ -24,10 +24,15 @@ class FicheAdherent: UIViewController {
     var dateNaissanceLabel: UILabel?
     var pointFideliteLabel: UILabel?
     var generateCodeButton: UIButton?
+    var deleteCodeButton:UIButton?
     var stepper: UIStepper?
     var lastValidateNbrPoint = 0 // contient le nombre de point de fidélité validé par le serveur
     var listeAllNom:[String] = [] // contient le nom de tous les adhérents. Il sera passé a 'addNewAdhérent'
     var nombreAléatoire = "0000" // nombre aléatoire généré lors du clic
+    
+    var currentTextColor = UIColor.blue
+    var currentTitleColor = UIColor.black
+    
     
     var timerImage = Timer() //comme partout on a l'habitude mtn
     var timerPointFidelité = Timer()
@@ -36,7 +41,7 @@ class FicheAdherent: UIViewController {
     
     override func viewDidLoad() { // lancée quand la vue load
         super.viewDidLoad()
-        
+        darkMode()
         listeInfoAdherent = infosOtherAdherent
         print("=> \(listeInfoAdherent)")
         if listeInfoAdherent != ["nil":"nil"]{ // Si on a les infos
@@ -49,10 +54,10 @@ class FicheAdherent: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
     }
     
     func alert(_ title: String, message: String) {
+        
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let ok = UIAlertAction(title: "Ok", style: UIAlertAction.Style.cancel, handler: nil)
         alert.addAction(ok)
@@ -66,7 +71,7 @@ class FicheAdherent: UIViewController {
         nomAdherent.translatesAutoresizingMaskIntoConstraints = false
         nomAdherent.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
         nomAdherent.topAnchor.constraint(equalToSystemSpacingBelow: self.scrollView.topAnchor, multiplier: 4).isActive = true
-        nomAdherent.textColor = .blue
+        nomAdherent.textColor = currentTitleColor
         nomAdherent.font = UIFont(name: "Comfortaa-Bold", size: 30)
         nomAdherent.text = listeInfoAdherent["Nom"] ?? "Error"
         
@@ -91,12 +96,12 @@ class FicheAdherent: UIViewController {
         dateNaissance.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 2).isActive = true
         dateNaissanceLabelAnchor = dateNaissance.topAnchor.constraint(equalToSystemSpacingBelow: photoId.bottomAnchor, multiplier: 4)
         dateNaissanceLabelAnchor?.isActive = true
-        dateNaissance.textColor = .blue
+        dateNaissance.textColor = currentTextColor
         dateNaissance.font = UIFont(name: "Comfortaa-Regular", size: 18)
         dateNaissance.text = "Date de naissance : \(listeInfoAdherent["DateNaissance"] ?? "Error")"
         //On change la couleur que d'une seule partie du texte :
         var coloration = NSMutableAttributedString(string: dateNaissance.text!)
-        coloration.setColorForText(textForAttribute: "Date de naissance :", withColor: .black)
+        coloration.setColorForText(textForAttribute: "Date de naissance :", withColor: currentTitleColor)
         coloration.setFontForText(textForAttribute: "Date de naissance :", withFont: UIFont(name: "Comfortaa-Bold", size: 18)!)
         dateNaissance.attributedText = coloration
         self.dateNaissanceLabel = dateNaissance
@@ -107,12 +112,12 @@ class FicheAdherent: UIViewController {
         classe.translatesAutoresizingMaskIntoConstraints = false
         classe.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 2).isActive = true
         classe.topAnchor.constraint(equalToSystemSpacingBelow: dateNaissance.bottomAnchor, multiplier: 3).isActive = true
-        classe.textColor = .blue
+        classe.textColor = currentTextColor
         classe.font = UIFont(name: "Comfortaa-Regular", size: 18)
         classe.text = "Classe : \(listeInfoAdherent["Classe"] ?? "Error")"
         //On change la couleur que d'une seule partie du texte :
         coloration = NSMutableAttributedString(string: classe.text!)
-        coloration.setColorForText(textForAttribute: "Classe :", withColor: .black)
+        coloration.setColorForText(textForAttribute: "Classe :", withColor: currentTitleColor)
         coloration.setFontForText(textForAttribute: "Classe :", withFont: UIFont(name: "Comfortaa-Bold", size: 18)!)
         classe.attributedText = coloration
         
@@ -124,12 +129,12 @@ class FicheAdherent: UIViewController {
         statut.topAnchor.constraint(equalToSystemSpacingBelow: classe.bottomAnchor, multiplier: 3).isActive = true
         statut.lineBreakMode = .byClipping
         statut.numberOfLines = 2
-        statut.textColor = .blue
+        statut.textColor = currentTextColor
         statut.font = UIFont(name: "Comfortaa-Regular", size: 18)
         statut.text = "Statut : \(listeInfoAdherent["Statut"] ?? "Error")"
         //On change la couleur que d'une seule partie du texte :
         coloration = NSMutableAttributedString(string: statut.text!)
-        coloration.setColorForText(textForAttribute: "Statut :", withColor: .black)
+        coloration.setColorForText(textForAttribute: "Statut :", withColor: currentTitleColor)
         coloration.setFontForText(textForAttribute: "Statut :", withFont: UIFont(name: "Comfortaa-Bold", size: 18)!)
         statut.attributedText = coloration
         
@@ -138,12 +143,12 @@ class FicheAdherent: UIViewController {
         pointFidelite.translatesAutoresizingMaskIntoConstraints = false
         pointFidelite.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 2).isActive = true
         pointFidelite.topAnchor.constraint(equalToSystemSpacingBelow: statut.bottomAnchor, multiplier: 3).isActive = true
-        pointFidelite.textColor = .blue
+        pointFidelite.textColor = currentTextColor
         pointFidelite.font = UIFont(name: "Comfortaa-Regular", size: 18)
         pointFidelite.text = "Points de fidélité : \(listeInfoAdherent["PointFidelite"] ?? "Error")"
         //On change la couleur que d'une seule partie du texte :
         coloration = NSMutableAttributedString(string: pointFidelite.text!)
-        coloration.setColorForText(textForAttribute: "Points de fidélité :", withColor: .black)
+        coloration.setColorForText(textForAttribute: "Points de fidélité :", withColor: currentTitleColor)
         coloration.setFontForText(textForAttribute: "Points de fidélité :", withFont: UIFont(name: "Comfortaa-Bold", size: 18)!)
         pointFidelite.attributedText = coloration
         pointFideliteLabel = pointFidelite
@@ -173,17 +178,42 @@ class FicheAdherent: UIViewController {
         //self.imageView = qrCode
         
         //Générer un code temporaire
-        if self.listeInfoAdherent["Statut"] != "Adhérent"{
+        if self.listeInfoAdherent["Statut"] != "Adhérent" && (infosAdherent["Statut"] == "Super-admin" || infosAdherent["Statut"] == "Développeur"){
+            
+            if listeInfoAdherent["HaveCodeTemporaire?"] == "true"{
+                let deleteCode = UIButton()
+                backgroundView.addSubview(deleteCode)
+                deleteCode.translatesAutoresizingMaskIntoConstraints = false
+                deleteCode.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 2).isActive = true
+                deleteCode.topAnchor.constraint(equalToSystemSpacingBelow: qrCode.bottomAnchor, multiplier: 4).isActive = true
+                deleteCode.setTitleColor(UIColor(red: 0.9, green: 0, blue: 0, alpha: 1), for: .normal)
+                deleteCode.tintColor = currentTextColor
+                deleteCode.titleLabel!.font = UIFont(name: "Comfortaa-Bold", size: 16)
+                deleteCode.addTarget(self, action: #selector(deleteCodeSelected) , for: .touchUpInside)
+                deleteCode.setTitle("Supprimer le code temporaire déjà actif", for: .normal)
+                
+                self.deleteCodeButton = deleteCode
+            }
+            
             let generateCode = UIButton()
             backgroundView.addSubview(generateCode)
             generateCode.translatesAutoresizingMaskIntoConstraints = false
             generateCode.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 2).isActive = true
-            generateCode.topAnchor.constraint(equalToSystemSpacingBelow: qrCode.bottomAnchor, multiplier: 5).isActive = true
+            generateCode.widthAnchor.constraint(equalToConstant: self.scrollView.frame.size.width - 20).isActive = true
             generateCode.setTitleColor(UIColor(red: 0.26, green: 0.58, blue: 0.96, alpha: 1), for: .normal)
-            generateCode.tintColor = .blue
+            generateCode.tintColor = currentTextColor
             generateCode.titleLabel!.font = UIFont(name: "Comfortaa-Bold", size: 16)
             generateCode.addTarget(self, action: #selector(generateCodeSelected) , for: .touchUpInside)
-            generateCode.setTitle("Générer un code confidentiel temporaire", for: .normal)
+            if listeInfoAdherent["HaveCodeTemporaire?"] == "false"{
+                generateCode.setTitle("Générer un code confidentiel temporaire", for: .normal)
+                generateCode.topAnchor.constraint(equalToSystemSpacingBelow: qrCode.bottomAnchor, multiplier: 5).isActive = true
+            } else {
+                generateCode.setTitle("Supprimer et générer un nouveau code temporaire", for: .normal)
+                generateCode.titleLabel?.numberOfLines = 2
+                generateCode.titleLabel?.lineBreakMode = .byWordWrapping
+                generateCode.topAnchor.constraint(equalToSystemSpacingBelow: deleteCodeButton!.bottomAnchor, multiplier: 3).isActive = true
+                
+            }
             self.generateCodeButton = generateCode
             
             let generatedCode = UILabel()
@@ -278,6 +308,8 @@ class FicheAdherent: UIViewController {
     }
     
     @objc private func stepperSelected(sender: UIStepper) { // Lorsque le stepper (-|+) est selctionnée
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.impactOccurred()
             let pushData = PushDataServer()
             pushData.updatePointFidelite(id: listeInfoAdherent["id"]!, pointFidelite: String(Int(stepper!.value))) //On update cette version sur le serveur
             timerPointFidelité = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(verificationReponsePointFidelite), userInfo: nil, repeats: true)
@@ -308,12 +340,12 @@ class FicheAdherent: UIViewController {
         if serveurReponse != "nil" {
             timerPointFidelité.invalidate()
             self.stepper!.isEnabled = true // on le réactive
-            self.stepper?.tintColor = .blue
+            self.stepper?.tintColor = currentTextColor
             if serveurReponse == "success" { // si on a une bonne réponse du serveur on met à jour les points de fidelité :
                 listeInfoAdherent.updateValue("\(Int(self.stepper!.value))", forKey: "PointFidelite") //On dans la variable local le nombre
                 pointFideliteLabel!.text = "Points de fidélité : \(listeInfoAdherent["PointFidelite"]!)" //on update le text label
                 let coloration = NSMutableAttributedString(string: pointFideliteLabel!.text!)
-                coloration.setColorForText(textForAttribute: "Points de fidélité :", withColor: .black)
+                coloration.setColorForText(textForAttribute: "Points de fidélité :", withColor: currentTitleColor)
                 coloration.setFontForText(textForAttribute: "Points de fidélité :", withFont: UIFont(name: "Comfortaa-Bold", size: 18)!) //Pour la couleur et la police spéciale des titres
                 pointFideliteLabel!.attributedText = coloration
                 lastValidateNbrPoint = Int(self.stepper!.value) // on met a jour la dernière value priseen compte par le serveur
@@ -328,6 +360,12 @@ class FicheAdherent: UIViewController {
     @objc private func generateCodeSelected(sender: UIButton) {
         sender.setTitleColor(.gray, for: .normal)
         sender.isEnabled = false
+        sender.isSelected = true
+        
+        if (self.deleteCodeButton != nil) {
+            self.deleteCodeButton!.isEnabled = false
+            self.deleteCodeButton!.setTitleColor(.gray, for: .normal)
+        }
         
         let formatter = NumberFormatter()
         formatter.minimumIntegerDigits = 4
@@ -335,41 +373,67 @@ class FicheAdherent: UIViewController {
         let pushData = PushDataServer()
         pushData.stockCodeTemporaire(id: "\(self.listeInfoAdherent["id"]!)", codeTemporaire: "\(self.nombreAléatoire)")
         timerCode = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(verificationReponseCode), userInfo: nil, repeats: true)
-       
-        
-        
+    }
+    
+    @objc private func deleteCodeSelected(sender:UIButton) {
+        sender.setTitleColor(.gray, for: .normal)
+        sender.isEnabled = false
+        self.generateCodeButton?.setTitleColor(.gray, for: .normal)
+        self.generateCodeButton?.isEnabled = false
+        self.generateCodeButton?.isSelected = false
+        let pushData = PushDataServer()
+        pushData.stockCodeTemporaire(id: "\(self.listeInfoAdherent["id"]!)", codeTemporaire: "nil")
+        timerCode = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(verificationReponseCode), userInfo: nil, repeats: true)
     }
     
     @objc private func verificationReponseCode(){
         if serveurReponse != "nil" {
             timerCode.invalidate()
-            if serveurReponse == "success" {
-                self.generatedCodeLabel!.text = "\(self.nombreAléatoire)"
-                let coloration = NSMutableAttributedString(string: generatedCodeLabel!.text!)
-                let listeCouleur: [UIColor] = [.black, .blue, .red, .green, .magenta, .gray, .purple, .brown, .cyan, .orange]
-                for i in 0 ..< listeCouleur.count {
-                    coloration.setColorForText(textForAttribute: "\(i)", withColor: listeCouleur[i])
-                }
-                self.generatedCodeLabel!.attributedText = coloration
+            if self.generateCodeButton!.isSelected {
+                if serveurReponse == "success" {
                 
-                
-                if self.generatedCodeLabel!.isHidden {
-                    self.generatedCodeLabel!.isHidden = false
-                    let animation = UIViewPropertyAnimator(duration: 12, dampingRatio: 0.7, animations: {
-                        self.generatedCodeLabelAnchor?.isActive = false
-                        self.generatedCodeLabelAnchor = self.generatedCodeLabel?.heightAnchor.constraint(equalToConstant: 100)
-                        self.generatedCodeLabelAnchor?.isActive = true
-                    })
-                    animation.startAnimation()
+                    self.generatedCodeLabel!.text = "\(self.nombreAléatoire)"
+                    let coloration = NSMutableAttributedString(string: generatedCodeLabel!.text!)
+                    let listeCouleur: [UIColor] = [.black, .blue, .red, .green, .magenta, .gray, .purple, .brown, .cyan, .orange]
+                    for i in 0 ..< listeCouleur.count {
+                        coloration.setColorForText(textForAttribute: "\(i)", withColor: listeCouleur[i])
+                    }
+                    self.generatedCodeLabel!.attributedText = coloration
+                    
+                    
+                    if self.generatedCodeLabel!.isHidden {
+                        self.generatedCodeLabel!.isHidden = false
+                        let animation = UIViewPropertyAnimator(duration: 7, dampingRatio: 1, animations: {
+                            self.generatedCodeLabelAnchor?.isActive = false
+                            self.generatedCodeLabelAnchor = self.generatedCodeLabel?.heightAnchor.constraint(equalToConstant: 100)
+                            self.generatedCodeLabelAnchor?.isActive = true
+                        })
+                        animation.startAnimation()
+                    }
+                } else {
+                    alert("Une erreur lors de la connexion au serveur est survenue", message: "Moi je bug jamais alors ça doit être toi ...")
                 }
+                
                
-            } else {
+            } else {// on vient de supprimer un code temporaire
+                 if serveurReponse == "success" {
+                    self.deleteCodeButton?.setTitleColor(.red, for: .normal)
+                    let animation = UIViewPropertyAnimator(duration: 4, curve: .linear, animations: {
+                        self.deleteCodeButton?.setTitle("", for: .normal)
+                        })
+                    animation.startAnimation(afterDelay: 1000)
+                    self.generateCodeButton?.setTitle("Générer un code confidentiel temporaire", for: .normal)
+                 } else {
                 alert("Une erreur lors de la connexion au serveur est survenue", message: "Moi je bug jamais alors ça doit être toi ...")
+                }
+                self.deleteCodeButton!.setTitleColor(UIColor(red: 0.9, green: 0, blue: 0, alpha: 1), for: .normal)
+                self.deleteCodeButton!.isEnabled = true
+                
             }
-            
             self.generateCodeButton!.setTitleColor(UIColor(red: 0.26, green: 0.58, blue: 0.96, alpha: 1), for: .normal)
             self.generateCodeButton!.isEnabled = true
             self.generateCodeButton!.setTitle("Générer un nouveau code temporaire", for: .normal)
+            self.generateCodeButton?.isSelected = false
             serveurReponse = "nil"
         }
         
@@ -410,6 +474,31 @@ class FicheAdherent: UIViewController {
                 self.alert("Erreur lors de la connexion au serveur", message: serveurReponse)
             }
             serveurReponse = "nil"
+        }
+    }
+    
+    private func darkMode(){
+        var isDarkMode = "false"
+        do {
+            isDarkMode = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(isDarkModeActivated), encoding: .utf8)
+        } catch {
+            print("Fichier introuvable. ERREUR GRAVE")
+        }
+        
+        if isDarkMode == "true" {
+            self.backgroundView.backgroundColor = .black
+            self.tabBarController?.tabBar.barStyle = .black
+            self.navigationController?.navigationBar.barStyle = .black
+            self.currentTextColor = UIColor.init(red: 0.102, green: 0.483, blue: 1, alpha: 1)
+            self.currentTitleColor = .white
+            self.view.backgroundColor = .black
+        } else {
+            self.backgroundView.backgroundColor = .white
+            self.tabBarController?.tabBar.barStyle = .default
+            self.navigationController?.navigationBar.barStyle = .default
+            self.currentTextColor = .blue
+            self.currentTitleColor = .black
+            self.view.backgroundColor = .white
         }
     }
 }

@@ -71,7 +71,19 @@ class ListeAdherent: UIViewController, UITableViewDataSource, UITableViewDelegat
                 self.addButton.isEnabled = true
             }
         }
+        var isDarkMode = "false"
+        do {
+            isDarkMode = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(isDarkModeActivated), encoding: .utf8)
+        } catch {
+            print("Fichier introuvable. ERREUR GRAVE")
+        }
         
+        if isDarkMode == "true" {
+            self.tableView.backgroundColor = UIColor.init(red: 0.12, green: 0.12, blue: 0.12, alpha: 1)
+            self.tabBarController?.tabBar.barStyle = .black
+            self.navigationController?.navigationBar.barStyle = .black
+            self.view.backgroundColor = .black
+        }
         
     }
     
@@ -110,12 +122,28 @@ class ListeAdherent: UIViewController, UITableViewDataSource, UITableViewDelegat
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell { // nom des cellules
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
+        var isDarkMode = "false"
+        do {
+            isDarkMode = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(isDarkModeActivated), encoding: .utf8)
+        } catch {
+            print("Fichier introuvable. ERREUR GRAVE")
+        }
+        
+        if isDarkMode == "true" {
+            cell.backgroundColor = .black
+            cell.textLabel?.textColor = .white
+        } else {
+            cell.backgroundColor = .white
+            cell.textLabel?.textColor = .black
+        }
+        
         var isFound = false // si on ne trouve pas de correspondance
         for i in 0 ..< self.listeAdherentsNom.count { // on parcours le nom de tous les adhérents
             if indexPath.row == i { // on associe la cellule au nom correspondant
                 cell.textLabel?.text = self.listeAdherentsNom[i] // noms
                 cell.statut.text = "(\(self.listeStatuts[i]))" // on affiche le statut au milieu a droite
                 isFound = true // on indique qu'on a trouvé
+                cell.addSubview(cell.statut)
             }
         }
         if !isFound { // bug on a pas trouvé

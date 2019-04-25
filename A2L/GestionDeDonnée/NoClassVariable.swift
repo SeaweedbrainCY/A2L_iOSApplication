@@ -20,3 +20,4 @@ var infosOtherAdherent = ["nil":"nil"] // toutes les infos d'un autre adhérent 
 var infosAllAdherent = [["nil":"nil"]]
 var imageId: UIImage?
 var currentDate = "nil" // date actuelle
+var isDarkModeActivated = "isDarkModeActivated.text"

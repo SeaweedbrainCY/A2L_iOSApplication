@@ -155,7 +155,7 @@
 		D8E7DAA221E54DD200A3E420 /* A2L */ = {
 			isa = PBXGroup;
 			children = (
-				D8FCBA5421EBA3180027949C /* GestionDeDonnée */,
+				D8FCBA5421EBA3180027949C /* GestionDeDonnée */,
 				D8E7DADC21E64C4100A3E420 /* Style */,
 				D8E7DAD121E54E8E00A3E420 /* ViewController */,
 				D8E7DAA321E54DD200A3E420 /* AppDelegate.swift */,
@@ -219,7 +219,7 @@
 			path = Style;
 			sourceTree = "<group>";
 		};
-		D8FCBA5421EBA3180027949C /* GestionDeDonnée */ = {
+		D8FCBA5421EBA3180027949C /* GestionDeDonnée */ = {
 			isa = PBXGroup;
 			children = (
 				D8FCBA5721EFAC810027949C /* APIConnexion.swift */,

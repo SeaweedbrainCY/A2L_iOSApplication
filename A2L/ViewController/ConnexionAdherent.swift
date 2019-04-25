@@ -27,6 +27,8 @@ class ConnexionAdherent: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("segue reçu")
+        
         setViewBackground() // On met le background en 2 couleurs différentes -> On doit dire à tous les éléments d'aller au dessus :
         self.titreLabel.superview?.addSubview(titreLabel)
         self.prenomField.superview?.addSubview(prenomField)

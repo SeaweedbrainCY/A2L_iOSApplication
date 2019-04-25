@@ -214,10 +214,14 @@ class APIConnexion {
         //L'API se charge juste de verifier et transmettre les données. Tout bug est donc de la responsbilité de l'application
         
         var reponse = "error"
-        let urlString = "http://\(adresseIPServeur):8888/infoAdherent.php?Nom=\(nom)&DateNaissance=\(dateNaissance)"
-        let url = URL(string: urlString)
-        if url != nil {
-            URLSession.shared.dataTask(with: url!, completionHandler: {(data, response, error) in // On load le PHP
+        let urlString = "http://\(adresseIPServeur):8888/infoAdherent.php"
+        let request = NSMutableURLRequest(url: URL(string: urlString)!)
+        request.httpMethod = "POST"
+        let postString:String = "Nom=\(nom)&DateNaissance=\(dateNaissance)"
+        request.httpBody = postString.data(using: .utf8)
+        
+        if URL(string: urlString) != nil {
+        URLSession.shared.dataTask(with: request as URLRequest, completionHandler: {(data, response, error) in // On load le PHP
                 if error != nil {
                     print("******ERROR FATAL. URL NON FONCTIONNEL. ECHEC : \(String(describing: error))")
                     
@@ -236,7 +240,8 @@ class APIConnexion {
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "DateNaissance") as! String, forKey: "DateNaissance")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "Classe") as! String, forKey: "Classe")
                             temporaryDictionnary.updateValue(dataUser.value(forKey: "PointFidelite") as! String, forKey: "PointFidelite")
-                             temporaryDictionnary.updateValue(dataUser.value(forKey: "HadMdp") as! String, forKey: "HadMdp")
+                        temporaryDictionnary.updateValue(dataUser.value(forKey: "HaveCodeTemporaire?") as! String, forKey: "HaveCodeTemporaire?")
+                            
                             self.allInfo = [temporaryDictionnary] // et on ajoute notre nouveau dico au tableau général
                             print("all info = \(self.allInfo)")
                             reponse = "success"

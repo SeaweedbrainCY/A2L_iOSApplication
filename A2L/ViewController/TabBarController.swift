@@ -13,13 +13,16 @@ import UIKit
 
 class TabBarController : UITabBarController, UITabBarControllerDelegate {
     
-    let tabBarCnt = UITabBarController()
+    //let tabBarCnt = UITabBarController()
     override func viewDidLoad() {
         super.viewDidLoad()
-        delegate = self
+        self.tabBarController?.delegate = self
+        self.tabBar.delegate = self
+        self.tabBar.backgroundColor = .darkGray
+        
     }
     
-    override func viewWillAppear(_ animated: Bool) { // inutile pour l'instant
+    /*override func viewWillAppear(_ animated: Bool) { // inutile pour l'instant
         super.viewWillAppear(animated)
         let maFiche = MaFiche()
         maFiche.title = "Ma fiche"
@@ -45,8 +48,16 @@ class TabBarController : UITabBarController, UITabBarControllerDelegate {
             QRcode.loadView()
         }
         return true;
+    }*/
+    
+    public func changeTabBarColorInBlack(_ bool: Bool){
+        if bool {
+            self.tabBar.barStyle = .black
+        } else {
+            self.tabBar.barStyle = .default
+        }
+        
     }
-
     
     
 }

@@ -27,6 +27,7 @@ class AddNewMdp: UIViewController, UITextFieldDelegate {
     let mdpConfirmedLabel = UILabel()
     let mdpConfirmedField = UITextField()
     
+    
     var waitForServer = Timer()
     var nomPrenom = "nil"
     
@@ -107,7 +108,7 @@ class AddNewMdp: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func helpSelected(sedner: UIButton){
-        alert("Code confidentiel", message: "Pour garantir la sécurité seule les membres du bureau peuvent vous fournir le code confidentiel à 4 chiffres.")
+        alert("Code confidentiel", message: "Pour garantir la sécurité seule super-admin peuvent vous fournir le code confidentiel à 4 chiffres.")
     }
     
     @IBAction func annulerSelected(_ sender: Any) {
@@ -247,9 +248,26 @@ class AddNewMdp: UIViewController, UITextFieldDelegate {
                     self.codeField.isHidden = true
                     self.helpButton.isHidden = true
                     } else if serveurReponse == "Code temporaire faux"{
-                        alert("Code faux", message: "Un membre du bureau doit accéder à l'application, liste adhérent -> votre fiche -> Générer un code confidentiel temporaire")
+                        var numberOfErrorString = "0"
+                        do {
+                            numberOfErrorString = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(nbrInvalidateMdpPath), encoding: .utf8)
+                        } catch {
+                            print("Fichier introuvable. ERREUR GRAVE")
+                        }
+                        var number = Int(numberOfErrorString)!
+                        number += 1
+                        print("number = \(number)")
+                        let file = FileManager.default
+                        file.createFile(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(nbrInvalidateMdpPath).path, contents: String(number).data(using: String.Encoding.utf8), attributes: nil)
+                        let api = APIConnexion()
+                        api.returnLocalHours(returnDate: false, nbrError: number)
+                        if number > 5 {
+                            performSegue(withIdentifier: "returnToPageConnexion", sender: self)
+                        } else {
+                            alert("Code faux", message: "Un super-admin doit accéder à l'application, liste adhérent -> votre fiche -> Générer un code confidentiel temporaire")
+                        }
                     }else if serveurReponse == "Aucun code temporaire"{
-                        alert("Aucun code temporaire vous est associé", message: "Un membre du bureau doit accéder à l'application, liste adhérent -> votre fiche -> Générer un code confidentiel temporaire")
+                        alert("Aucun code temporaire vous est associé", message: "Un super-admin doit accéder à l'application, liste adhérent -> votre fiche -> Générer un code confidentiel temporaire")
                     } else if serveurReponse == "Accès au serveur refusé" {
                         alert("Accès au serveur refusé", message: "T'es sûr(e) et certain(e) que tu as le droit d'avoir un mot de passe ? Vérifie tes informations ;)")
                     } else {

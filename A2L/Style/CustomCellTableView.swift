@@ -23,8 +23,18 @@ class CustomTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        var isDarkMode = "false"
+        do {
+            isDarkMode = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(isDarkModeActivated), encoding: .utf8)
+        } catch {
+            print("Fichier introuvable. ERREUR GRAVE")
+        }
         
-        statut.textColor = .gray
+        if isDarkMode == "true" {
+            statut.textColor = .lightGray
+        } else {
+            statut.textColor = .gray
+        }
         statut.textAlignment = .right
         statut.frame = CGRect(x: 170, y: 9, width: 200, height: 30)
         contentView.addSubview(statut)

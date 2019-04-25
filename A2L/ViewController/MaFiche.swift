@@ -20,19 +20,26 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
     
     var listeInfoAdherent = infosAdherent //listeDeToutes les infos
     var chargementView: UIActivityIndicatorView?
-    var imageView:UIImageView?
-    var dateNaissanceLabelAnchor:NSLayoutConstraint? // doit pouvoir être désactivée si besoin
-    var dateNaissanceLabel: UILabel?
+    var dateNaissanceAnchor:NSLayoutConstraint? // doit pouvoir être désactivée si besoin
     
+    //Label du text
+    let statut = UILabel()
+    let nomAdherent = UILabel()
+    let photoId = UIImageView()
+    let dateNaissance = UILabel()
+    let classe = UILabel()
+    let pointFidelite = UILabel()
     
     
     var waitReponseImage = Timer()
-    
     var timer = Timer()
+    
+    var currentTextColor = UIColor.black
+    var currentTitleColor = UIColor.blue
     
     override func viewDidLoad() { // lancée quand la vue load
         super.viewDidLoad()
-        
+        darkMode()
         let localData = LocalData()
         localData.returnDataFrom(stockInfosAdherent) // On enregistre la data de l'user dans la base local
         listeInfoAdherent = infosAdherent
@@ -54,14 +61,16 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        darkMode()
         if loadAnOtherAdherent != "nil" {
             self.afficheAllAdherentButtonSelected(sender: self.listeButtonItem)
         } else {
             if listeInfoAdherent == ["nil":"nil"]{ // On ne detecte aucune informations en local, on ne sait pas qui est l'adhérent donc on load la page de connexion
-                reponseURLRequestImage = "Le chargement a été interrompu;( Pas cool .."
+                reponseURLRequestImage = "no data"
                 performSegue(withIdentifier: "connexionAdherent", sender: self)
             }
         }
+        
         
     }
     
@@ -73,16 +82,16 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
     }
 
     private func loadAllView(){ // est appelé pour agencé les différents élements de la page
-        let nomAdherent = UILabel()
+        print("load ....")
         self.backgroundView.addSubview(nomAdherent)
         nomAdherent.translatesAutoresizingMaskIntoConstraints = false
         nomAdherent.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
         nomAdherent.topAnchor.constraint(equalToSystemSpacingBelow: self.scrollView.topAnchor, multiplier: 4).isActive = true
-        nomAdherent.textColor = .blue
+        nomAdherent.textColor = currentTitleColor
         nomAdherent.font = UIFont(name: "Comfortaa-Bold", size: 30)
         nomAdherent.text = listeInfoAdherent["Nom"] ?? "Error"
         
-        let photoId = UIImageView()
+        
         self.backgroundView.addSubview(photoId)
         photoId.translatesAutoresizingMaskIntoConstraints = false
         photoId.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
@@ -91,44 +100,42 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         photoId.imageFromDatabase(idAdherent: listeInfoAdherent["id"]!)
         photoId.widthAnchor.constraint(equalToConstant: 300).isActive = true
         photoId.heightAnchor.constraint(equalToConstant: 300).isActive = true
-        self.imageView = photoId
         photoId.layer.cornerRadius = 20
         photoId.clipsToBounds = true
         
         
         
-        let dateNaissance = UILabel()
+        
         self.backgroundView.addSubview(dateNaissance)
         dateNaissance.translatesAutoresizingMaskIntoConstraints = false
         dateNaissance.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 2).isActive = true
-        dateNaissanceLabelAnchor = dateNaissance.topAnchor.constraint(equalToSystemSpacingBelow: photoId.bottomAnchor, multiplier: 4)
-        dateNaissanceLabelAnchor?.isActive = true
-        dateNaissance.textColor = .blue
+        dateNaissanceAnchor = dateNaissance.topAnchor.constraint(equalToSystemSpacingBelow: photoId.bottomAnchor, multiplier: 4)
+        dateNaissanceAnchor?.isActive = true
+        dateNaissance.textColor = currentTitleColor
         dateNaissance.font = UIFont(name: "Comfortaa-Regular", size: 18)
         dateNaissance.text = "Date de naissance : \(listeInfoAdherent["DateNaissance"] ?? "Error")"
         //On change la couleur que d'une seule partie du texte :
         var coloration = NSMutableAttributedString(string: dateNaissance.text!)
-        coloration.setColorForText(textForAttribute: "Date de naissance :", withColor: .black)
+        coloration.setColorForText(textForAttribute: "Date de naissance :", withColor: currentTextColor)
         coloration.setFontForText(textForAttribute: "Date de naissance :", withFont: UIFont(name: "Comfortaa-Bold", size: 18)!)
         dateNaissance.attributedText = coloration
-        self.dateNaissanceLabel = dateNaissance
         
-        let classe = UILabel()
+        
         self.backgroundView.addSubview(classe)
         classe.translatesAutoresizingMaskIntoConstraints = false
         classe.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 2).isActive = true
         classe.topAnchor.constraint(equalToSystemSpacingBelow: dateNaissance.bottomAnchor, multiplier: 3).isActive = true
-        classe.textColor = .blue
+        classe.textColor = currentTitleColor
         classe.font = UIFont(name: "Comfortaa-Regular", size: 18)
         classe.text = "Classe : \(listeInfoAdherent["Classe"] ?? "Error")"
         //On change la couleur que d'une seule partie du texte :
         coloration = NSMutableAttributedString(string: classe.text!)
-        coloration.setColorForText(textForAttribute: "Classe :", withColor: .black)
+        coloration.setColorForText(textForAttribute: "Classe :", withColor: currentTextColor)
         coloration.setFontForText(textForAttribute: "Classe :", withFont: UIFont(name: "Comfortaa-Bold", size: 18)!)
         classe.attributedText = coloration
         
         
-        let statut = UILabel()
+        
         self.backgroundView.addSubview(statut)
         statut.translatesAutoresizingMaskIntoConstraints = false
         statut.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 2).isActive = true
@@ -137,7 +144,7 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         statut.heightAnchor.constraint(equalToConstant: 50).isActive = true
         statut.lineBreakMode = .byClipping
         statut.numberOfLines = 2
-        statut.textColor = .blue
+        statut.textColor = currentTitleColor
         statut.font = UIFont(name: "Comfortaa-Regular", size: 18)
         var statutText = "Statut : \(listeInfoAdherent["Statut"] ?? "Error")"
         if let _ = listeInfoAdherent["MdpHashed"]{ // On indique comment il est connecté
@@ -148,53 +155,58 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         statut.text = statutText
         //On change la couleur que d'une seule partie du texte :
         coloration = NSMutableAttributedString(string: statut.text!)
-        coloration.setColorForText(textForAttribute: "Statut :", withColor: .black)
+        coloration.setColorForText(textForAttribute: "Statut :", withColor: currentTextColor)
         coloration.setFontForText(textForAttribute: "Statut :", withFont: UIFont(name: "Comfortaa-Bold", size: 18)!)
         statut.attributedText = coloration
         
-        let pointFidelite = UILabel()
+        
         self.backgroundView.addSubview(pointFidelite)
         pointFidelite.translatesAutoresizingMaskIntoConstraints = false
         pointFidelite.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 2).isActive = true
         pointFidelite.topAnchor.constraint(equalToSystemSpacingBelow: statut.bottomAnchor, multiplier: 3).isActive = true
-        pointFidelite.textColor = .blue
+        pointFidelite.textColor = currentTitleColor
         pointFidelite.font = UIFont(name: "Comfortaa-Regular", size: 18)
         pointFidelite.text = "Points de fidélité : \(listeInfoAdherent["PointFidelite"] ?? "Error")"
         //On change la couleur que d'une seule partie du texte :
         coloration = NSMutableAttributedString(string: pointFidelite.text!)
-        coloration.setColorForText(textForAttribute: "Points de fidélité :", withColor: .black)
+        coloration.setColorForText(textForAttribute: "Points de fidélité :", withColor: currentTextColor)
         coloration.setFontForText(textForAttribute: "Points de fidélité :", withFont: UIFont(name: "Comfortaa-Bold", size: 18)!)
         pointFidelite.attributedText = coloration
         
+        putTextColor() // on affiche les couleurs
         
     }
     
     @objc func verificationReponseImage() { // Est appelé pour verifier si on a une réponse ou non du serveur
         print("verifcation image MaFiche = \(reponseURLRequestImage)")
         if reponseURLRequestImage != "nil" {
-            if reponseURLRequestImage != "success" && imageView != nil{
-                self.imageView?.image = UIImage(named: "binaireWorld") //image de bug
-                self.imageView?.widthAnchor.constraint(equalToConstant: 150).isActive = true
-                self.imageView?.heightAnchor.constraint(equalToConstant: 150).isActive = true
-                
-                let errorLabel = UILabel()
-                self.backgroundView.addSubview(errorLabel)
-                errorLabel.translatesAutoresizingMaskIntoConstraints = false
-                errorLabel.widthAnchor.constraint(equalToConstant: 390).isActive = true
-                errorLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
-                errorLabel.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
-                errorLabel.topAnchor.constraint(equalToSystemSpacingBelow: (self.imageView?.bottomAnchor)!, multiplier: -0.5).isActive = true
-                errorLabel.numberOfLines = 3
-                errorLabel.textColor = .red
-                errorLabel.font = UIFont(name: "Comfortaa-Light", size: 12)
-                errorLabel.text = "\(reponseURLRequestImage)"
-                errorLabel.textAlignment = .center
-                
-                
-                dateNaissanceLabelAnchor?.isActive = false // On la désactive pour en instancier une nouvelle
-                dateNaissanceLabel?.topAnchor.constraint(equalToSystemSpacingBelow: errorLabel.bottomAnchor, multiplier: 2).isActive = true
-            } else {
-                self.imageView?.image = imageId!
+            if reponseURLRequestImage != "success" {
+                if reponseURLRequestImage != "no data" { // sinon le bottom anchor n'est pas instancié et l'appli plante
+                    print("error line 184")
+                    self.photoId.image = UIImage(named: "binaireWorld") //image de bug
+                    self.photoId.widthAnchor.constraint(equalToConstant: 150).isActive = true
+                    self.photoId.heightAnchor.constraint(equalToConstant: 150).isActive = true
+                    
+                    let errorLabel = UILabel()
+                    self.backgroundView.addSubview(errorLabel)
+                    errorLabel.translatesAutoresizingMaskIntoConstraints = false
+                    errorLabel.widthAnchor.constraint(equalToConstant: 390).isActive = true
+                    errorLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
+                    errorLabel.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
+                    errorLabel.topAnchor.constraint(equalToSystemSpacingBelow: (self.photoId.bottomAnchor), multiplier: -0.5).isActive = true
+                    errorLabel.numberOfLines = 3
+                    errorLabel.textColor = .red
+                    errorLabel.font = UIFont(name: "Comfortaa-Light", size: 12)
+                    errorLabel.text = "\(reponseURLRequestImage)"
+                    errorLabel.textAlignment = .center
+                    
+                    
+                    dateNaissanceAnchor?.isActive = false // On la désactive pour en instancier une nouvelle
+                    dateNaissance.topAnchor.constraint(equalToSystemSpacingBelow: errorLabel.bottomAnchor, multiplier: 2).isActive = true
+
+                    }
+                } else {
+                self.photoId.image = imageId!
             }
             reponseURLRequestImage = "nil"
             waitReponseImage.invalidate()
@@ -269,5 +281,74 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
             loadAnOtherAdherent = "nil" // on réinitilise
         }
     }
+    
+    private func darkMode(){
+        var isDarkMode = "false"
+        do {
+            isDarkMode = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(isDarkModeActivated), encoding: .utf8)
+        } catch {
+            print("Fichier introuvable. ERREUR GRAVE")
+        }
+        
+        if isDarkMode == "true" {
+            self.backgroundView.backgroundColor = .black
+            self.tabBarController?.tabBar.barStyle = .black
+            self.navigationController?.navigationBar.barStyle = .black
+            self.currentTextColor = .white
+            self.currentTitleColor = UIColor.init(red: 0.102, green: 0.483, blue: 1, alpha: 1)
+            self.view.backgroundColor = .black
+            if photoId.image != nil { // signifie que les view sont loaded
+                putTextColor()
+            }
+            
+        } else {
+            self.backgroundView.backgroundColor = .white
+            self.tabBarController?.tabBar.barStyle = .default
+            self.navigationController?.navigationBar.barStyle = .default
+            self.currentTextColor = .black
+            self.currentTitleColor = .blue
+            self.view.backgroundColor = .white
+            if photoId.image != nil { // signifie que les view sont loaded
+                putTextColor()
+            }
+        }
+    }
+    
+    private func putTextColor(){ // instnacie/change la couleur
+        
+        nomAdherent.textColor = currentTitleColor
+        
+        
+        dateNaissance.textColor = currentTitleColor
+        var coloration = NSMutableAttributedString(string: dateNaissance.text!)
+        coloration.setColorForText(textForAttribute: "Date de naissance :", withColor: currentTextColor)
+        coloration.setFontForText(textForAttribute: "Date de naissance :", withFont: UIFont(name: "Comfortaa-Bold", size: 18)!)
+        dateNaissance.attributedText = coloration
+        
+        
+        classe.textColor = currentTitleColor
+        //On change la couleur que d'une seule partie du texte :
+        coloration = NSMutableAttributedString(string: classe.text!)
+        coloration.setColorForText(textForAttribute: "Classe :", withColor: currentTextColor)
+        coloration.setFontForText(textForAttribute: "Classe :", withFont: UIFont(name: "Comfortaa-Bold", size: 18)!)
+        classe.attributedText = coloration
+        
+        
+        statut.textColor = currentTitleColor
+        //On change la couleur que d'une seule partie du texte :
+        coloration = NSMutableAttributedString(string: statut.text!)
+        coloration.setColorForText(textForAttribute: "Statut :", withColor: currentTextColor)
+        coloration.setFontForText(textForAttribute: "Statut :", withFont: UIFont(name: "Comfortaa-Bold", size: 18)!)
+        statut.attributedText = coloration
+        
+        
+        pointFidelite.textColor = currentTitleColor
+        //On change la couleur que d'une seule partie du texte :
+        coloration = NSMutableAttributedString(string: pointFidelite.text!)
+        coloration.setColorForText(textForAttribute: "Points de fidélité :", withColor: currentTextColor)
+        coloration.setFontForText(textForAttribute: "Points de fidélité :", withFont: UIFont(name: "Comfortaa-Bold", size: 18)!)
+        pointFidelite.attributedText = coloration
+    }
+    
 }
 

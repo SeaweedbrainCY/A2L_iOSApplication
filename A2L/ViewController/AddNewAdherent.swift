@@ -43,8 +43,31 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
     var waitForServeur = Timer()
     var imageExtension = "unknown"
     
+    var currentTitleColor = UIColor.black
+    var currentTextFieldStyle:UIColor = .white
+    var currentBackgroundPicker:UIColor = .white
+    var currentTextColor:UIColor = .blue
+    var currentKeyboardStyle:UIKeyboardAppearance = .light
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        var isDarkMode = "false"
+        do {
+            isDarkMode = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(isDarkModeActivated), encoding: .utf8)
+        } catch {
+            print("Fichier introuvable. ERREUR GRAVE")
+        }
+        
+        if isDarkMode == "true" {
+            self.view.backgroundColor = .black
+            self.backgroundView.backgroundColor = .black
+            currentTitleColor = .white
+            currentTextFieldStyle = UIColor.init(red: 0.1, green: 0.1, blue: 0.1, alpha: 1)
+            currentTextColor = UIColor.init(red: 0.102, green: 0.483, blue: 1, alpha: 1)
+            currentKeyboardStyle = .dark
+            currentBackgroundPicker = .black
+        }
         scrollView.delegate = self
         self.tabBarTitle.title = titleView
         loadAllView() // on load toutes les View
@@ -94,6 +117,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         nomTitre.topAnchor.constraint(equalToSystemSpacingBelow: self.scrollView.topAnchor, multiplier: 4).isActive = true
         nomTitre.text = "Nom Prénom : "
         nomTitre.font = UIFont(name: "Comfortaa-Bold", size: 18)
+        nomTitre.textColor = currentTitleColor
         
         let nomField = UITextField()
         nomField.delegate = self
@@ -104,12 +128,17 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         nomField.topAnchor.constraint(equalToSystemSpacingBelow: nomTitre.bottomAnchor, multiplier: 1.5).isActive = true
         nomField.placeholder = "Nom Prénom"
         nomField.borderStyle = .roundedRect
-        nomField.autocapitalizationType = .words
-        nomField.textColor = .blue
+        nomField.textColor = currentTextColor
         nomField.textContentType = .name
         nomField.font = UIFont(name: "Arial Rounded MT Bold", size: 18)
         nomField.text = self.oldNom // si on a déjà le nom de l'adhérent lors de la modification
+        nomField.keyboardAppearance = currentKeyboardStyle
+        //nomField.backgroundColor = currentTextFieldStyle
+        nomField.attributedPlaceholder = NSAttributedString(string: "Nom Prénom",
+                                                          attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
         self.nomTextField = nomField
+        
+        
         
         let classeTitre = UILabel()
         backgroundView.addSubview(classeTitre)
@@ -118,6 +147,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         classeTitre.topAnchor.constraint(equalToSystemSpacingBelow: nomField.bottomAnchor, multiplier: 4).isActive = true
         classeTitre.text = "Classe : "
         classeTitre.font = UIFont(name: "Comfortaa-Bold", size: 18)
+        classeTitre.textColor = currentTitleColor
         
         
         let classe = UITextField()
@@ -130,9 +160,13 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         classe.placeholder = "Classe"
         classe.borderStyle = .roundedRect
         classe.autocapitalizationType = .words
-        classe.textColor = .blue
+        classe.textColor = currentTextColor
         classe.font = UIFont(name: "Arial Rounded MT Bold", size: 18)
         classe.text = oldClasse
+        classe.backgroundColor = currentTextFieldStyle
+        classe.attributedPlaceholder = NSAttributedString(string: "Classe",
+                                                               attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+        classe.keyboardAppearance = currentKeyboardStyle
         self.classeTextField = classe
         
         let imageButton = UIButton()
@@ -151,8 +185,6 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
             imageButton.setImage(UIImage(named:"addImage"), for: .normal)
         }
         
-        
-        
         let dateNaissanceTitre = UILabel()
         backgroundView.addSubview(dateNaissanceTitre)
         dateNaissanceTitre.translatesAutoresizingMaskIntoConstraints = false
@@ -160,6 +192,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         dateNaissanceTitre.topAnchor.constraint(equalToSystemSpacingBelow: imageButton.bottomAnchor, multiplier: 5).isActive = true
         dateNaissanceTitre.text = "Date de naissance : "
         dateNaissanceTitre.font = UIFont(name: "Comfortaa-Bold", size: 18)
+        dateNaissanceTitre.textColor = currentTitleColor
         
         let dateNaissanceButton = UIButton()
         backgroundView.addSubview(dateNaissanceButton)
@@ -167,8 +200,8 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         dateNaissanceButton.leftAnchor.constraint(equalToSystemSpacingAfter: dateNaissanceTitre.rightAnchor, multiplier: 1).isActive = true
         dateNaissanceButton.centerYAnchor.constraint(equalToSystemSpacingBelow: dateNaissanceTitre.centerYAnchor, multiplier: 5).isActive = true
         dateNaissanceButton.widthAnchor.constraint(equalToConstant: 120).isActive = true
-        dateNaissanceButton.setTitleColor(.blue, for: .normal)
-        dateNaissanceButton.tintColor = .blue
+        dateNaissanceButton.setTitleColor(currentTextColor, for: .normal)
+        dateNaissanceButton.tintColor = currentTextColor
         self.dateNaissanceVariable = dateNaissanceButton
         dateNaissanceButton.titleLabel?.font = UIFont(name: "Comfortaa-Regular", size: 18)
         dateNaissanceButton.setBorderCorner()
@@ -187,6 +220,8 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         datePicker.addTarget(self, action: #selector(newDateNaissance), for: .valueChanged)
         let localisation = Locale(identifier: "fr")
         datePicker.locale = localisation
+        datePicker.backgroundColor = currentBackgroundPicker
+        datePicker.setValue(currentTitleColor, forKey: "textColor")
         self.datePickerView = datePicker
 
         
@@ -197,14 +232,15 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         statutTitre.topAnchor.constraint(equalToSystemSpacingBelow: datePicker.bottomAnchor, multiplier: 3).isActive = true
         statutTitre.text = "Statut : "
         statutTitre.font = UIFont(name: "Comfortaa-Bold", size: 18)
+        statutTitre.textColor = currentTitleColor
         
         let statutButton = UIButton()
         backgroundView.addSubview(statutButton)
         statutButton.translatesAutoresizingMaskIntoConstraints = false
         statutButton.leftAnchor.constraint(equalToSystemSpacingAfter: statutTitre.rightAnchor, multiplier: 1).isActive = true
         statutButton.centerYAnchor.constraint(equalToSystemSpacingBelow: statutTitre.centerYAnchor, multiplier: 5).isActive = true
-        statutButton.setTitleColor(.blue, for: .normal)
-        statutButton.tintColor = .blue
+        statutButton.setTitleColor(currentTextColor, for: .normal)
+        statutButton.tintColor = currentTextColor
         self.statutVariable = statutButton
         statutButton.setBorderCorner()
         statutButton.titleLabel?.font = UIFont(name: "Comfortaa-Regular", size: 18)
@@ -221,6 +257,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         self.pickerStatutHeight?.isActive = true
         pickerView.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
         pickerView.topAnchor.constraint(equalToSystemSpacingBelow: statutTitre.bottomAnchor, multiplier: 1.5).isActive = true
+        pickerView.backgroundColor = currentBackgroundPicker
         self.pickerViewStatut = pickerView
         
         let infosButton = UIButton()
@@ -409,9 +446,13 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         
     }
     
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    
+    
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        
         let liste = ["Adhérent", "Membre du bureau", "Super-admin"]
-        return liste[row]
+        let string = liste[row]
+        return NSAttributedString(string: string, attributes: [NSAttributedString.Key.foregroundColor: currentTitleColor])
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -547,6 +588,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         return string.rangeOfCharacter(from: CharacterSet(charactersIn: "\"\\/.;,%:()»«¿¡[]{}|~<>•")) == nil
     }
+    
     
     
     
