@@ -12,7 +12,7 @@ import UIKit
 
 
 
-class MaFiche: UIViewController, UITabBarControllerDelegate {
+class MaFiche: UIViewController, UITabBarControllerDelegate, UIImagePickerControllerDelegate,  UINavigationControllerDelegate {
     
     @IBOutlet weak var backgroundView: UIView!
     @IBOutlet weak var scrollView: UIScrollView!
@@ -25,10 +25,11 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
     //Label du text
     let statut = UILabel()
     let nomAdherent = UILabel()
-    let photoId = UIImageView()
+    let photoId = UIButton()
     let dateNaissance = UILabel()
     let classe = UILabel()
     let pointFidelite = UILabel()
+    let chargement = UIActivityIndicatorView()
     
     
     var waitReponseImage = Timer()
@@ -36,6 +37,7 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
     
     var currentTextColor = UIColor.black
     var currentTitleColor = UIColor.blue
+    var oldImage = UIImage()
     
     override func viewDidLoad() { // lancée quand la vue load
         super.viewDidLoad()
@@ -56,6 +58,14 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
             listeButtonItem.isEnabled = true
         }
         
+        self.photoId.isEnabled = true
+        
+        self.chargement.hidesWhenStopped = true
+        self.chargement.color = .blue
+        self.chargement.style = .whiteLarge
+        self.chargement.stopAnimating()
+        
+        
         
     }
     
@@ -70,6 +80,9 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
                 performSegue(withIdentifier: "connexionAdherent", sender: self)
             }
         }
+        
+        //self.chargement.centerXAnchor.constraint(equalToSystemSpacingAfter: self.photoId.centerXAnchor, multiplier: 1).isActive = true
+        //self.chargement.centerYAnchor.constraint(equalToSystemSpacingBelow: self.photoId.centerYAnchor, multiplier: 1).isActive = true
         
         
     }
@@ -96,12 +109,13 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         photoId.translatesAutoresizingMaskIntoConstraints = false
         photoId.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
         photoId.topAnchor.constraint(equalToSystemSpacingBelow: nomAdherent.bottomAnchor, multiplier: 2).isActive = true
-        photoId.image = UIImage(named: "chargementEnCours")
-        photoId.imageFromDatabase(idAdherent: listeInfoAdherent["id"]!)
+        photoId.setImage(UIImage(named: "Chargement en cours"), for: .normal)
+        UIImageView().imageFromDatabase(idAdherent: listeInfoAdherent["id"]!)
         photoId.widthAnchor.constraint(equalToConstant: 300).isActive = true
         photoId.heightAnchor.constraint(equalToConstant: 300).isActive = true
         photoId.layer.cornerRadius = 20
         photoId.clipsToBounds = true
+        photoId.addTarget(self, action: #selector(photoIdSelected), for: .touchUpInside)
         
         
         
@@ -183,7 +197,8 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
             if reponseURLRequestImage != "success" {
                 if reponseURLRequestImage != "no data" { // sinon le bottom anchor n'est pas instancié et l'appli plante
                     print("error line 184")
-                    self.photoId.image = UIImage(named: "binaireWorld") //image de bug
+                    self.photoId.setImage(UIImage(named: "binaireWorld"), for: .normal)  //image de bug
+                    self.photoId.isEnabled = true
                     self.photoId.widthAnchor.constraint(equalToConstant: 150).isActive = true
                     self.photoId.heightAnchor.constraint(equalToConstant: 150).isActive = true
                     
@@ -197,16 +212,17 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
                     errorLabel.numberOfLines = 3
                     errorLabel.textColor = .red
                     errorLabel.font = UIFont(name: "Comfortaa-Light", size: 12)
-                    errorLabel.text = "\(reponseURLRequestImage)"
+                    errorLabel.text = "Ajoute une photo en cliquant sur l'image !"
                     errorLabel.textAlignment = .center
                     
                     
                     dateNaissanceAnchor?.isActive = false // On la désactive pour en instancier une nouvelle
                     dateNaissance.topAnchor.constraint(equalToSystemSpacingBelow: errorLabel.bottomAnchor, multiplier: 2).isActive = true
 
-                    }
+                }
                 } else {
-                self.photoId.image = imageId!
+                self.photoId.setImage(imageId!, for: .normal)
+                self.photoId.isEnabled = true
             }
             reponseURLRequestImage = "nil"
             waitReponseImage.invalidate()
@@ -297,7 +313,7 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
             self.currentTextColor = .white
             self.currentTitleColor = UIColor.init(red: 0.102, green: 0.483, blue: 1, alpha: 1)
             self.view.backgroundColor = .black
-            if photoId.image != nil { // signifie que les view sont loaded
+            if photoId.currentImage != nil { // signifie que les view sont loaded
                 putTextColor()
             }
             
@@ -308,7 +324,7 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
             self.currentTextColor = .black
             self.currentTitleColor = .blue
             self.view.backgroundColor = .white
-            if photoId.image != nil { // signifie que les view sont loaded
+            if photoId.currentImage != nil { // signifie que les view sont loaded
                 putTextColor()
             }
         }
@@ -350,5 +366,83 @@ class MaFiche: UIViewController, UITabBarControllerDelegate {
         pointFidelite.attributedText = coloration
     }
     
+    @objc private func photoIdSelected(sender: UIButton){
+        //On lui demande d'où elle veut prendre l'image : ici pas le choix : l'album photo
+        let alert = UIAlertController(title: "Photo de profil adhérent", message: "Les photos sont stockées uniquement sur les serveurs de l'A2L et sont strictement privées à l'association.", preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Photo Library", style: .default) { _ in
+            let image = UIImagePickerController()
+            image.delegate = self
+            
+            image.sourceType = UIImagePickerController.SourceType.photoLibrary
+            self.present(image, animated: true)
+            {
+                //une fois effectué (?)
+            }
+        })
+        alert.addAction(UIAlertAction(title: "Annuler", style: UIAlertAction.Style.cancel, handler: nil)) // Retour
+        present(alert, animated: true)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) { //load l'image selectionnée
+        self.oldImage = self.photoId.currentImage!
+        self.chargement.startAnimating()
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
+            if info[UIImagePickerController.InfoKey.imageURL] != nil {
+                //self.imageExtension = URL(fileURLWithPath: "\(info[UIImagePickerController.InfoKey.imageURL]!)").pathExtension
+                //print("\(String(describing: info[UIImagePickerController.InfoKey.originalImage]))")
+                
+                let defintiveImage = rogneImage(image: image)
+                
+                self.photoId.setImage(defintiveImage, for: .normal)
+                let imageData = self.photoId.currentImage!.jpegData(compressionQuality: 0.2)
+                let imageStr = imageData!.base64EncodedString(options:.endLineWithCarriageReturn)
+                let convertion = APIConnexion()
+                let pushData = PushDataServer()
+                let stringData = convertion.convertionToHexaCode("\(imageStr)")
+                pushData.uploadImage(imageDataString: stringData, id: infosAdherent["id"]!)
+            }
+            
+        } else {
+            self.photoId.setImage(oldImage, for: .normal)
+            alert("Une erreur s'est produite", message: "Vous en trouverez peut-être une plus belle ?")
+        }
+        
+        
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func rogneImage(image: UIImage) -> UIImage { // rogne les images en carrés parfaits 300/300
+        
+        let cgimage = image.cgImage!
+        let contextImage: UIImage = UIImage(cgImage: cgimage)
+        let contextSize: CGSize = contextImage.size
+        var posX: CGFloat = 0.0
+        var posY: CGFloat = 0.0
+        var cgwidth: CGFloat = CGFloat(300)
+        var cgheight: CGFloat = CGFloat(300)
+        
+        // See what size is longer and create the center off of that
+        if contextSize.width > contextSize.height {
+            posX = ((contextSize.width - contextSize.height) / 2)
+            posY = 0
+            cgwidth = contextSize.height
+            cgheight = contextSize.height
+        } else {
+            posX = 0
+            posY = ((contextSize.height - contextSize.width) / 2)
+            cgwidth = contextSize.width
+            cgheight = contextSize.width
+        }
+        
+        let rect: CGRect = CGRect(x: posX, y: posY, width: cgwidth, height: cgheight)
+        
+        // Create bitmap image from context using the rect
+        let imageRef: CGImage = cgimage.cropping(to: rect)!
+        
+        // Create a new image based on the imageRef and rotate back to the original orientation
+        let image: UIImage = UIImage(cgImage: imageRef, scale: image.scale, orientation: image.imageOrientation)
+        
+        return image
+    }
 }
 

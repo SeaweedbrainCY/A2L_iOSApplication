@@ -133,7 +133,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         nomField.font = UIFont(name: "Arial Rounded MT Bold", size: 18)
         nomField.text = self.oldNom // si on a déjà le nom de l'adhérent lors de la modification
         nomField.keyboardAppearance = currentKeyboardStyle
-        //nomField.backgroundColor = currentTextFieldStyle
+        nomField.backgroundColor = currentTextFieldStyle
         nomField.attributedPlaceholder = NSAttributedString(string: "Nom Prénom",
                                                           attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
         self.nomTextField = nomField
@@ -197,9 +197,17 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         let dateNaissanceButton = UIButton()
         backgroundView.addSubview(dateNaissanceButton)
         dateNaissanceButton.translatesAutoresizingMaskIntoConstraints = false
-        dateNaissanceButton.leftAnchor.constraint(equalToSystemSpacingAfter: dateNaissanceTitre.rightAnchor, multiplier: 1).isActive = true
-        dateNaissanceButton.centerYAnchor.constraint(equalToSystemSpacingBelow: dateNaissanceTitre.centerYAnchor, multiplier: 5).isActive = true
         dateNaissanceButton.widthAnchor.constraint(equalToConstant: 120).isActive = true
+        
+        
+        if  self.view.frame.size.width < 350{
+            dateNaissanceButton.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
+            dateNaissanceButton.topAnchor.constraint(equalToSystemSpacingBelow: dateNaissanceTitre.bottomAnchor, multiplier: 2).isActive = true
+        } else {
+            dateNaissanceButton.leftAnchor.constraint(equalToSystemSpacingAfter: dateNaissanceTitre.rightAnchor, multiplier: 1).isActive = true
+            dateNaissanceButton.centerYAnchor.constraint(equalToSystemSpacingBelow: dateNaissanceTitre.centerYAnchor, multiplier: 5).isActive = true
+        }
+        
         dateNaissanceButton.setTitleColor(currentTextColor, for: .normal)
         dateNaissanceButton.tintColor = currentTextColor
         self.dateNaissanceVariable = dateNaissanceButton
@@ -374,11 +382,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
             isCorrect = false
             classeTextField!.shake()
         }
-        if imageButton!.image(for: .normal) == UIImage(named: "addImage") { // la pdp n'a pas été modifiée A GARDER ??? A VOIR
-            isCorrect = false
-            imageButton!.shake()
-            alert("Aucune photo de profil renseignée", message: "Ajouter une photo de profil en cliquant sur le cadre bleu")
-        }
+        
         
         
         if isCorrect { // on envoie les infos au serveur si tout est correct
@@ -420,7 +424,7 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
                 
                 let pushData = PushDataServer()
                 let convertion = APIConnexion()
-                if imageButton!.currentImage! != oldImage { // l'image a changé : on l'upload
+                if imageButton!.currentImage! != oldImage && imageButton!.currentImage! != UIImage(named:"addImage") && imageButton!.currentImage! != UIImage(named:"binaireWorld"){ // l'image a changé : on l'upload
                     let imageData = self.imageButton!.currentImage!.jpegData(compressionQuality: 0.2)
                     let imageStr = imageData!.base64EncodedString(options:.endLineWithCarriageReturn)
                     let stringData = convertion.convertionToHexaCode("\(imageStr)")
@@ -540,6 +544,9 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
                 let imageData = self.imageButton!.currentImage!.jpegData(compressionQuality: 0.2)
                 let imageStr = imageData!.base64EncodedString(options:.endLineWithCarriageReturn)
                 print("nbr charactere finale : \(imageStr.count)")
+                
+                
+                
             }
             
         } else {

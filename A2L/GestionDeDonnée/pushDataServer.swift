@@ -16,7 +16,7 @@ class PushDataServer {// APIConnexion reçoit les données du serveur, cette cla
     
     
     public func updatePointFidelite(id: String, pointFidelite: String) {
-        let url = "http://\(adresseIPServeur):8888/stockNewPointFidelite.php"
+        let url = "http://\(adresseIPServeur)/api/stockNewPointFidelite.php"
         let request = NSMutableURLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         let postString:String = "id=\(id)&PointFidelite=\(pointFidelite)&idAdmin=\(infosAdherent["id"]!)&mdpAdmin=\(infosAdherent["MdpHashed"]!)"
@@ -44,7 +44,7 @@ class PushDataServer {// APIConnexion reçoit les données du serveur, cette cla
 
     
     public func updateAllInfo(id: String, nom: String, classe: String, dateNaissance: String, statut: String){
-        let url = "http://\(adresseIPServeur):8888/updateAllInfo.php"
+        let url = "http://\(adresseIPServeur)/api/updateAllInfo.php"
         let request = NSMutableURLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         let postString:String = "id=\(id)&Nom=\(nom)&Classe=\(classe)&DateNaissance=\(dateNaissance)&Statut=\(statut)&idAdmin=\(infosAdherent["id"]!)&MdpAdmin=\(infosAdherent["MdpHashed"]!)"
@@ -76,7 +76,7 @@ class PushDataServer {// APIConnexion reçoit les données du serveur, cette cla
     
     public func uploadImage(imageDataString: String, id: String){
         
-        let url = "http://\(adresseIPServeur):8888/uploadImage.php"
+        let url = "http://\(adresseIPServeur)/api/uploadImage.php"
         let request = NSMutableURLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         let postString:String = "data=\(imageDataString)&id=\(id)&idAdmin=\(infosAdherent["id"]!)&mdpAdmin=\(infosAdherent["MdpHashed"]!)"
@@ -106,7 +106,7 @@ class PushDataServer {// APIConnexion reçoit les données du serveur, cette cla
      ---------------------------------------------------------------------------------------------*/
     
     public func addAdherent(nom: String, classe: String, imageData: String, dateNaissance: String, statut: String){
-        let url = "http://\(adresseIPServeur):8888/addAdherent.php"
+        let url = "http://\(adresseIPServeur)/api/addAdherent.php"
         let request = NSMutableURLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         let postString:String = "Nom=\(nom)&Classe=\(classe)&ImageData=\(imageData)&DateNaissance=\(dateNaissance)&Statut=\(statut)&idAdmin=\(infosAdherent["id"]!)&MdpAdmin=\(infosAdherent["MdpHashed"]!)"
@@ -142,7 +142,7 @@ class PushDataServer {// APIConnexion reçoit les données du serveur, cette cla
      ---------------------------------------------------------------------------------------------*/
     
     public func removeAdherent(nom: String, id:String){ // 2 paramètres pour s'assurer qu'on supprime le bonne adéhrent
-        let url = "http://\(adresseIPServeur):8888/removeAdherent.php"
+        let url = "http://\(adresseIPServeur)/api/removeAdherent.php"
         let request = NSMutableURLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         let postString:String = "Nom=\(nom)&id=\(id)&idAdmin=\(infosAdherent["id"]!)&MdpAdmin=\(infosAdherent["MdpHashed"]!)"
@@ -178,7 +178,7 @@ class PushDataServer {// APIConnexion reçoit les données du serveur, cette cla
      ---------------------------------------------------------------------------------------------*/
     
     public func stockCodeTemporaire(id: String, codeTemporaire: String) {
-        let url = "http://\(adresseIPServeur):8888/stockCodeTemporaire.php"
+        let url = "http://\(adresseIPServeur)/api/stockCodeTemporaire.php"
         let request = NSMutableURLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         let postString:String = "idAdherent=\(id)&CodeTemporaire=\(codeTemporaire)&idAdmin=\(infosAdherent["id"]!)&MdpAdmin=\(infosAdherent["MdpHashed"]!)"
@@ -210,11 +210,11 @@ class PushDataServer {// APIConnexion reçoit les données du serveur, cette cla
     }
     
     /*----------------------------------------------------------------------------------------------
-     
+                            NOUVEAU MDP
      ---------------------------------------------------------------------------------------------*/
     
     public func stockNewMdp(nom: String, mdp: String, codeTemporaire: String) {
-        let url = "http://\(adresseIPServeur):8888/stockNewMdp.php"
+        let url = "http://\(adresseIPServeur)/api/stockNewMdp.php"
         let request = NSMutableURLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         let postString:String = "Nom=\(nom)&CodeTemporaire=\(codeTemporaire)&Mdp=\(mdp)"

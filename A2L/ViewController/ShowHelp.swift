@@ -45,9 +45,9 @@ class ShowHelp: UIViewController, UIScrollViewDelegate{
         let helpDescription = UILabel()
         self.backgroundView.addSubview(helpDescription)
         helpDescription.translatesAutoresizingMaskIntoConstraints = false
-        helpDescription.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 4).isActive = true
-        helpDescription.topAnchor.constraint(equalToSystemSpacingBelow: helpTitle.bottomAnchor, multiplier: 4).isActive = true
         helpDescription.widthAnchor.constraint(equalToConstant: self.scrollView.frame.size.width - 50).isActive = true
+        helpDescription.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
+        helpDescription.topAnchor.constraint(equalToSystemSpacingBelow: helpTitle.bottomAnchor, multiplier: 4).isActive = true
         helpDescription.numberOfLines = 50
         helpDescription.lineBreakMode = .byWordWrapping
         helpDescription.font = UIFont(name: "Comfortaa-Bold", size: 18)

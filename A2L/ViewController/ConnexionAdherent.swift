@@ -46,6 +46,15 @@ class ConnexionAdherent: UIViewController, UITextFieldDelegate {
         jourField.delegate = self
         moisField.delegate = self
         anneeField.delegate = self
+        
+        switchToAdminPage.titleLabel?.lineBreakMode = .byWordWrapping
+        print("width = \(self.view.frame.size.width)")
+        print("width views = \(prenomField.frame.size.width + nomField.frame.size.width)")
+        
+        if self.view.frame.size.width < prenomField.frame.size.width + nomField.frame.size.width + 70 {
+            
+            
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) { // Enlève le clavier au toucher

@@ -50,6 +50,13 @@ class FicheAdherent: UIViewController {
         if listeAllNom == [] {// n'est pas transmis par la liste adhérent car on vient du scann
             recupAllAdherentName()
         }
+        if infosAdherent["Statut"] == "Développeur" || infosAdherent["Statut"] == "Super-admin" {
+            modifierButton.title = "Modifier"
+            if self.listeAllNom != []{
+                modifierButton.isEnabled = true
+            }
+            
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -199,8 +206,9 @@ class FicheAdherent: UIViewController {
             backgroundView.addSubview(generateCode)
             generateCode.translatesAutoresizingMaskIntoConstraints = false
             generateCode.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 2).isActive = true
-            generateCode.widthAnchor.constraint(equalToConstant: self.scrollView.frame.size.width - 20).isActive = true
+            generateCode.widthAnchor.constraint(equalToConstant: self.scrollView.frame.size.width - 80).isActive = true
             generateCode.setTitleColor(UIColor(red: 0.26, green: 0.58, blue: 0.96, alpha: 1), for: .normal)
+            generateCode.titleLabel?.lineBreakMode = .byWordWrapping
             generateCode.tintColor = currentTextColor
             generateCode.titleLabel!.font = UIFont(name: "Comfortaa-Bold", size: 16)
             generateCode.addTarget(self, action: #selector(generateCodeSelected) , for: .touchUpInside)
@@ -221,7 +229,7 @@ class FicheAdherent: UIViewController {
             generatedCode.translatesAutoresizingMaskIntoConstraints = false
             generatedCode.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
             generatedCode.topAnchor.constraint(equalToSystemSpacingBelow: generateCode.bottomAnchor, multiplier: 3).isActive = true
-            generatedCode.widthAnchor.constraint(equalToConstant: 300).isActive = true
+            generatedCode.widthAnchor.constraint(equalToConstant: self.scrollView.frame.size.width - 50).isActive = true
             self.generatedCodeLabelAnchor = generatedCode.heightAnchor.constraint(equalToConstant:0)
             self.generatedCodeLabelAnchor!.isActive = true
             generatedCode.isHidden = true
@@ -261,6 +269,7 @@ class FicheAdherent: UIViewController {
         if reponseURLRequestImage != "nil" {
             print("reponseUrl != nil")
             if reponseURLRequestImage != "success" && imageView != nil{
+                if reponseURLRequestImage != "none"{
                 print("image bug detected")
                 self.imageView?.image = UIImage(named: "binaireWorld") //image de bug
                 self.imageView?.widthAnchor.constraint(equalToConstant: 150).isActive = true
@@ -284,6 +293,12 @@ class FicheAdherent: UIViewController {
                 
                 reponseURLRequestImage = "nil"
                 timerImage.invalidate()
+                    
+                } else {
+                    self.imageView!.image = UIImage(named: "Image-1")
+                    reponseURLRequestImage = "nil"
+                    timerImage.invalidate()
+                }
             } else {
                 print("reponse = success")
                 self.imageView?.image = imageId!
@@ -331,7 +346,7 @@ class FicheAdherent: UIViewController {
         modification.oldClasse = listeInfoAdherent["Classe"]!
         modification.oldStatut = " \(listeInfoAdherent["Statut"]!)  "
         modification.oldDateNaissance = listeInfoAdherent["DateNaissance"]!
-        modification.oldImage = imageView!.image!
+        modification.oldImage = imageView?.image ?? UIImage(named: "binaireWorld")
         modification.id = listeInfoAdherent["id"]!
         modification.listeAllNom = listeNomWithoutAdherentName
     }

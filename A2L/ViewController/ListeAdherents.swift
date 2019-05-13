@@ -11,15 +11,17 @@ import UIKit
 
 //Ce controller est associé à controller sur la liste de tous les adhérents.
 
-class ListeAdherent: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ListeAdherent: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var addButton: UIBarButtonItem!
+    @IBOutlet weak var searchBar: UISearchBar!
     
     //Sert a la bêta
     var listeAdherentsNom:[String] = []
     var listeStatuts:[String] = []
     var listeDateNaissance:[String] = [] // sert à la connexion au serveur pour afficher les infos
+    var listeClasse:[String] = []
     var chargement = UIActivityIndicatorView()
     
     var loadAdherent = "nil"
@@ -35,6 +37,7 @@ class ListeAdherent: UIViewController, UITableViewDataSource, UITableViewDelegat
                 let nom = "\(infos["Nom"]!)"
                 let statut = "\(infos["Statut"]!)"
                 let dateNaissance = "\(infos["dateNaissance"]!)"
+                let classe = "\(infos["Classe"]!)"
                 if listeAdherentsNom == [] {
                     listeAdherentsNom = [infos["Nom"]!]
                 } else {
@@ -50,11 +53,16 @@ class ListeAdherent: UIViewController, UITableViewDataSource, UITableViewDelegat
                 } else {
                     listeDateNaissance.append(dateNaissance)
                 }
-                
+                if listeClasse == [] {
+                    listeClasse = [infos["Classe"]!]
+                } else {
+                    listeClasse.append(classe)
+                }
             }
-            print("listeNom =\(listeAdherentsNom)")
             tableView.delegate = self
             tableView.dataSource = self
+            searchBar.delegate = self
+            searchBar.superview?.addSubview(searchBar)
             
             tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: "cell") //on associe la tableView au custom de Style/customeCelleTableView.swift
             
@@ -141,7 +149,7 @@ class ListeAdherent: UIViewController, UITableViewDataSource, UITableViewDelegat
         for i in 0 ..< self.listeAdherentsNom.count { // on parcours le nom de tous les adhérents
             if indexPath.row == i { // on associe la cellule au nom correspondant
                 cell.textLabel?.text = self.listeAdherentsNom[i] // noms
-                cell.statut.text = "(\(self.listeStatuts[i]))" // on affiche le statut au milieu a droite
+                cell.statut.text = "\(self.listeClasse[i])  (\(self.listeStatuts[i]))" // on affiche le statut au milieu a droite
                 isFound = true // on indique qu'on a trouvé
                 cell.addSubview(cell.statut)
             }
@@ -197,4 +205,79 @@ class ListeAdherent: UIViewController, UITableViewDataSource, UITableViewDelegat
             destination.listeAllNom = self.listeAdherentsNom
         }
     }
+    
+    
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        listeAdherentsNom = []
+        listeDateNaissance = []
+        listeStatuts = []
+        listeClasse = []
+        
+        if searchText == ""{
+            for infos in infosAllAdherent {
+                if infos != [:]{
+                    let nom = "\(infos["Nom"]!)"
+                    let statut = "\(infos["Statut"]!)"
+                    let dateNaissance = "\(infos["dateNaissance"]!)"
+                    let classe = "\(infos["Classe"]!)"
+                    
+                    
+                    
+                    if listeAdherentsNom == [] {
+                        listeAdherentsNom = [infos["Nom"]!]
+                    } else {
+                        listeAdherentsNom.append(nom)
+                    }
+                    if listeStatuts == [] {
+                        listeStatuts = [infos["Statut"]!]
+                    } else {
+                        listeStatuts.append(statut)
+                    }
+                    if listeDateNaissance == [] {
+                        listeDateNaissance = [infos["dateNaissance"]!]
+                    } else {
+                        listeDateNaissance.append(dateNaissance)
+                    }
+                    if listeClasse == [] {
+                        listeClasse = [infos["Classe"]!]
+                    } else {
+                        listeClasse.append(classe)
+                    }
+                }
+            }
+        } else {
+            for infos in infosAllAdherent {
+                if infos != [:] && ((infos["Nom"]?.contains(searchText))! || (infos["Classe"]?.contains(searchText))! || (infos["Statut"]?.contains(searchText))!){
+                    let nom = "\(infos["Nom"]!)"
+                    let statut = "\(infos["Statut"]!)"
+                    let dateNaissance = "\(infos["dateNaissance"]!)"
+                    let classe = "\(infos["Classe"]!)"
+                    
+                    if listeAdherentsNom == [] {
+                        listeAdherentsNom = [infos["Nom"]!]
+                    } else {
+                        listeAdherentsNom.append(nom)
+                    }
+                    if listeStatuts == [] {
+                        listeStatuts = [infos["Statut"]!]
+                    } else {
+                        listeStatuts.append(statut)
+                    }
+                    if listeDateNaissance == [] {
+                        listeDateNaissance = [infos["dateNaissance"]!]
+                    } else {
+                        listeDateNaissance.append(dateNaissance)
+                    }
+                    if listeClasse == [] {
+                        listeClasse = [infos["Classe"]!]
+                    } else {
+                        listeClasse.append(classe)
+                    }
+                }
+            }
+        }
+            tableView.reloadData()
+    }
+    
 }

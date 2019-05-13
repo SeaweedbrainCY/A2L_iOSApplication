@@ -20,59 +20,56 @@ class APIConnexion {
         //Les caractères spéciaux devront être remplacés
         //L'API se charge juste de verifier et transmettre les données. Tout bug est donc de la responsbilité de l'application
         var reponse = "error"
-        let urlString = "http://\(adresseIPServeur):8888/returnAllData.php?Nom=\(nom)&Mdp=\(mdpHashed)"
+        let urlString = "http://\(adresseIPServeur)/api/returnAllData.php"
+        let request = NSMutableURLRequest(url: URL(string: urlString)!)
+        request.httpMethod = "POST"
+        let postString = "Nom=\(nom)&Mdp=\(mdpHashed)"
         let url = URL(string: urlString)
-        
+        request.httpBody = postString.data(using: .utf8)
         print("url \(String(describing: url))")
-        if url != nil {
-            URLSession.shared.dataTask(with: url!, completionHandler: {(data, response, error) in // On load le PHP
-                if error != nil {
-                    print("******ERROR FATAL. URL NON FONCTIONNEL. ECHEC : \(String(describing: error))")
-                    
-                    serveurReponse = error!.localizedDescription
-                    
-                    
-                } else { // Si aucune erreur n'est survenu
-                    if let JSONObject = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSArray{ // On enregsitre le tableau total en JSON
-                            for informations in JSONObject {
-                                if let information = informations as? NSDictionary { // On transforme le tableau total en dictionnaires
-                                    //Pour une raison qui m'est obscure, les informations ne seront pas classés dans cet ordre ...
-                                    var temporaryDictionnary: [String:String] = [:] // tableau temporaire qui sert à convertir les données avant de les enregsitrer
-                                    temporaryDictionnary.updateValue(information.value(forKey: "id") as! String, forKey: "id")
-                                    temporaryDictionnary.updateValue(information.value(forKey: "Nom") as! String, forKey: "Nom")
-                                    temporaryDictionnary.updateValue(information.value(forKey: "Statut") as! String, forKey: "Statut")
-                                    temporaryDictionnary.updateValue(information.value(forKey: "DateNaissance") as! String, forKey: "dateNaissance")
-                                    temporaryDictionnary.updateValue(information.value(forKey: "Classe") as! String, forKey: "Classe")
-                                    temporaryDictionnary.updateValue(information.value(forKey: "PointFidelite") as! String, forKey: "PointFidelite")
-                                    self.allInfo.append(temporaryDictionnary) // et on ajoute notre nouveau dico au tableau général
-                                    reponse = "success"
-                                }
+        URLSession.shared.dataTask(with: request as URLRequest, completionHandler: {(data, response, error) in // On load le PHP
+            if error != nil {
+                print("******ERROR FATAL. URL NON FONCTIONNEL. ECHEC : \(String(describing: error))")
+                
+                serveurReponse = error!.localizedDescription
+                
+                
+            } else { // Si aucune erreur n'est survenu
+                if let JSONObject = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSArray{ // On enregsitre le tableau total en JSON
+                        for informations in JSONObject {
+                            if let information = informations as? NSDictionary { // On transforme le tableau total en dictionnaires
+                                //Pour une raison qui m'est obscure, les informations ne seront pas classés dans cet ordre ...
+                                var temporaryDictionnary: [String:String] = [:] // tableau temporaire qui sert à convertir les données avant de les enregsitrer
+                                temporaryDictionnary.updateValue(information.value(forKey: "id") as! String, forKey: "id")
+                                temporaryDictionnary.updateValue(information.value(forKey: "Nom") as! String, forKey: "Nom")
+                                temporaryDictionnary.updateValue(information.value(forKey: "Statut") as! String, forKey: "Statut")
+                                temporaryDictionnary.updateValue(information.value(forKey: "DateNaissance") as! String, forKey: "dateNaissance")
+                                temporaryDictionnary.updateValue(information.value(forKey: "Classe") as! String, forKey: "Classe")
+                                temporaryDictionnary.updateValue(information.value(forKey: "PointFidelite") as! String, forKey: "PointFidelite")
+                                self.allInfo.append(temporaryDictionnary) // et on ajoute notre nouveau dico au tableau général
+                                reponse = "success"
                             }
-                            
-                        
-                    } else if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
-                        print("string")
-                        //let pageConnexion = ConnexionAdmin()
-                        
-                        if result as String == "Autorisation refusée" { //Si la connexion est refusée
-                            reponse = "permission refusée"
-                        } else if result as String == "Mdp incorrect" {
-                            reponse = "Mdp incorrect"
                         }
+                    
+                    
+                } else if let result = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSString {
+                    print("string")
+                    //let pageConnexion = ConnexionAdmin()
+                    
+                    if result as String == "Autorisation refusée" { //Si la connexion est refusée
+                        reponse = "permission refusée"
+                    } else if result as String == "Mdp incorrect" {
+                        reponse = "Mdp incorrect"
                     }
-                    OperationQueue.main.addOperation({ // Une fois l'action effectuée on envoie le resultat
-                        if reponse == "success" {// On stock les infos
-                            infosAllAdherent = self.allInfo
-                        }
-                        serveurReponse = reponse
-                    })
                 }
-            }).resume()
-        } else { //bug dans l'URL
-            reponse =  "url nil"
-           // let pageConnexion = ConnexionAdmin()
-            //pageConnexion.errorWhileConnectingToDatabase(erreur : "url nil")
-        }
+                OperationQueue.main.addOperation({ // Une fois l'action effectuée on envoie le resultat
+                    if reponse == "success" {// On stock les infos
+                        infosAllAdherent = self.allInfo
+                    }
+                    serveurReponse = reponse
+                })
+            }
+        }).resume()
         
     }
     
@@ -83,11 +80,12 @@ class APIConnexion {
         //L'API se charge juste de verifier et transmettre les données. Tout bug est donc de la responsbilité de l'application
         
         var reponse = "error"
-        let urlString = "http://\(adresseIPServeur):8888/infoAdherent.php?Nom=\(nom)&DateNaissance=\(dateNaissance)"
-        let url = URL(string: urlString)
-        print("url = \(urlString)")
-        if url != nil {
-            URLSession.shared.dataTask(with: url!, completionHandler: {(data, response, error) in // On load le PHP
+        let urlString = "http://\(adresseIPServeur)/api/infoAdherent.php"
+        let request = NSMutableURLRequest(url: URL(string: urlString)!)
+        request.httpMethod = "POST"
+        let postString = "Nom=\(nom)&DateNaissance=\(dateNaissance)"
+        request.httpBody = postString.data(using: .utf8)
+            URLSession.shared.dataTask(with: request as URLRequest, completionHandler: {(data, response, error) in // On load le PHP
                 if error != nil {
                     print("******ERROR FATAL. URL NON FONCTIONNEL. ECHEC : \(String(describing: error))")
                     
@@ -130,9 +128,6 @@ class APIConnexion {
                     
                 }
             }).resume()
-        } else { //bug dans l'URL
-            serveurReponse = "Les informations saisies semblent comporter des caractères inconnus"
-        }
     }
     
     
@@ -143,10 +138,12 @@ class APIConnexion {
         //L'API se charge juste de verifier et transmettre les données. Tout bug est donc de la responsbilité de l'application
         
         var reponse = "error"
-        let urlString = "http://\(adresseIPServeur):8888/infoAdmin.php?Nom=\(nom)&Mdp=\(mdpHashed)"
-        let url = URL(string: urlString)
-        if url != nil {
-            URLSession.shared.dataTask(with: url!, completionHandler: {(data, response, error) in // On load le PHP
+        let urlString = "http://\(adresseIPServeur)/api/infoAdmin.php"
+        let request = NSMutableURLRequest(url: URL(string:urlString)!)
+        request.httpMethod = "POST"
+        let postString:String = "Nom=\(nom)&Mdp=\(mdpHashed)"
+        request.httpBody = postString.data(using: .utf8)
+            URLSession.shared.dataTask(with: request as URLRequest, completionHandler: {(data, response, error) in // On load le PHP
                 if error != nil {
                     print("******ERROR FATAL. URL NON FONCTIONNEL. ECHEC : \(String(describing: error))")
                     
@@ -189,9 +186,6 @@ class APIConnexion {
                     
                 }
             }).resume()
-        } else { //bug dans l'URL
-            serveurReponse = "Les informations saisies semblent comporter des caractères inconnus"
-        }
     }
     
     //Sert à convertir un text UTF8 en admissible par une URL
@@ -214,7 +208,7 @@ class APIConnexion {
         //L'API se charge juste de verifier et transmettre les données. Tout bug est donc de la responsbilité de l'application
         
         var reponse = "error"
-        let urlString = "http://\(adresseIPServeur):8888/infoAdherent.php"
+        let urlString = "http://\(adresseIPServeur)/api/infoAdherent.php"
         let request = NSMutableURLRequest(url: URL(string: urlString)!)
         request.httpMethod = "POST"
         let postString:String = "Nom=\(nom)&DateNaissance=\(dateNaissance)"
@@ -271,7 +265,7 @@ class APIConnexion {
                                    Code temporaire confidentiel
      ---------------------------------------------------------------------------------------------*/
     public func checkCodeTemporaire(nom: String, codeTemporaire: String){
-        let url = "http://\(adresseIPServeur):8888/checkCodeTemporaire.php"
+        let url = "http://\(adresseIPServeur)/api/checkCodeTemporaire.php"
         let request = NSMutableURLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         let postString:String = "Nom=\(nom)&CodeTemporaire=\(codeTemporaire)"

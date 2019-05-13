@@ -136,7 +136,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
             }
             
         } else {
-            alert("Impossible de lire le QR code", message:"Je peux pas tout faire hein ... ")
+            alert("Aller parce que je suis gentil :", message:"message : \"\(code)\"")
             
         }
     }

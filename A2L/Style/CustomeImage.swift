@@ -22,7 +22,7 @@ extension UIImageView {
     }
     
     public func imageFromDatabase(idAdherent id: String){
-        let url = URL(string: "http://\(adresseIPServeur):8888/loadImage.php")
+        let url = URL(string: "http://\(adresseIPServeur)/api/loadImage.php")
         let request = NSMutableURLRequest(url: url!)
         request.httpMethod = "POST"
         let postString:String = "idAdherent=\(id))"
@@ -42,8 +42,11 @@ extension UIImageView {
                         reponseURLRequestImage = "Une erreur s'est produite lors de la connexion au serveur"
                     } else if dataString == "Aucune données"{ // erreur
                         reponseURLRequestImage = "Impossible de trouver la photo associée"
+                    } else if dataString == "none"{
+                        reponseURLRequestImage = "none"
+                        print("none")
                     } else { // pas d'erreur
-                        let string = String(dataString! as String)
+                        let string = String(dataString ?? "")
                         print("nombre de caractère = \(string.count)")
                         if UIImage(data:Data(base64Encoded: string)!) != nil  {
                             let image: UIImage = UIImage(data:Data(base64Encoded: string)!)!
