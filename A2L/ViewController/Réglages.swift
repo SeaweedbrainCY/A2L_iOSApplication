@@ -154,8 +154,8 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
                     UIApplication.shared.open(URL(string: "https://github.com/DevNathan/A2L_iOSApplication")!, options: [:], completionHandler: nil)// on charge le lien dans le moteur de recherche par defaut de l'utilisateur
                 })
                 
-                alert.addAction(UIAlertAction(title: "[GitHub] Code source application Android", style: .default) { _ in
-                    self.alert("Ce repository n'a pas encore été créé", message: "Vous pourrez consulter le code source quand il sera publié")
+                alert.addAction(UIAlertAction(title: "[GitHub] Code source du site web", style: .default) { _ in
+                      UIApplication.shared.open(URL(string: "https://github.com/DevNathan/A2L_siteWeb")!, options: [:], completionHandler: nil)// on charge le lien dans le moteur de recherche par defaut de l'utilisateur
                 })
                 
                 alert.addAction(UIAlertAction(title: "[GitHub] Code source backend (serveur)", style: .default) { _ in

@@ -166,10 +166,10 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wTn-3o-GGo">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="1100"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="1300"/>
                                         <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="0.91957405821917804" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="1100" id="EgF-gO-TDz"/>
+                                            <constraint firstAttribute="height" constant="1300" id="EgF-gO-TDz"/>
                                         </constraints>
                                     </view>
                                 </subviews>

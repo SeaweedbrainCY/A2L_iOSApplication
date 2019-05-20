@@ -192,7 +192,7 @@ class APIConnexion {
     //Charactères spéciaux autorisés : *$€£%ù+=?!@#&àç-
     public func convertionToHexaCode(_ letText: String) -> String{
         var text = letText
-        let listeCharactereSpeciaux: [Character: String] = ["$": "%24", "€": "%80", "£": "%a3", "ù":"%C3%B9", "+":"%2b", "=":"%3d", "?":"%3f", "!":"%21", "@":"%40", "#":"%23", "&":"%26", "à":"%C3%A0", "ç":"%e7", "-":"%2d", " ":"%20", "*": "%2A", "é":"%C3%A9","è":"%C3%A8", "ê":"%C3%AA", "ë":"%CA%AB", "ü":"%C3%BC", "û":"%C3%BB", "É":"%C3%89",  "È":"%C3%88", "Ê":"%C3%8A", "Ë":"%C3%8B", "Û":"%C3%9B", "Ü":"%C39C"]
+        let listeCharactereSpeciaux: [Character: String] = ["$": "%24", "€": "%80", "£": "%a3", "ù":"%C3%B9", "+":"%2b", "=":"%3d", "?":"%3f", "!":"%21", "@":"%40", "#":"%23", "&":"%26", "à":"%C3%A0", "ç":"%e7", "-":"%2d", " ":"%20", "*": "%2A", "é":"%C3%A9","è":"%C3%A8", "ê":"%C3%AA", "ë":"%EB", "ü":"%C3%BC", "û":"%C3%BB", "É":"%C3%89",  "È":"%C3%88", "Ê":"%C3%8A", "Ë":"%C3%8B", "Û":"%C3%9B", "Ü":"%C39C", "ä":"%E4"]
         for (charactere, code) in listeCharactereSpeciaux {
             if text.contains(charactere) { // Si on a un charactère spécial
                 text = text.replacingOccurrences(of: String(charactere), with: code) // On le remplace par son code hexa
@@ -207,7 +207,7 @@ class APIConnexion {
         //Les caractères spéciaux devront être remplacés
         //L'API se charge juste de verifier et transmettre les données. Tout bug est donc de la responsbilité de l'application
         
-        var reponse = "error"
+        var reponse = "Une erreur est survenue"
         let urlString = "http://\(adresseIPServeur)/api/infoAdherent.php"
         let request = NSMutableURLRequest(url: URL(string: urlString)!)
         request.httpMethod = "POST"

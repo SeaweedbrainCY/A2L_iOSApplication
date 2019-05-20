@@ -33,7 +33,12 @@ class ShowHelp: UIViewController, UIScrollViewDelegate{
         helpTitle.translatesAutoresizingMaskIntoConstraints = false
         helpTitle.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 4).isActive = true
         helpTitle.topAnchor.constraint(equalToSystemSpacingBelow: self.scrollView.topAnchor, multiplier: 3).isActive = true
-        helpTitle.widthAnchor.constraint(equalToConstant: self.view.frame.size.width - 50).isActive = true
+        if self.view.frame.size.width < 350 {
+            helpTitle.widthAnchor.constraint(equalToConstant: self.view.frame.size.width - 70).isActive = true
+        } else {
+            helpTitle.widthAnchor.constraint(equalToConstant: self.view.frame.size.width - 50).isActive = true
+        }
+        
         helpTitle.lineBreakMode = .byWordWrapping
         helpTitle.numberOfLines = 3
         helpTitle.font = UIFont(name: "Comfortaa-Bold", size: 23)
@@ -45,7 +50,12 @@ class ShowHelp: UIViewController, UIScrollViewDelegate{
         let helpDescription = UILabel()
         self.backgroundView.addSubview(helpDescription)
         helpDescription.translatesAutoresizingMaskIntoConstraints = false
-        helpDescription.widthAnchor.constraint(equalToConstant: self.scrollView.frame.size.width - 50).isActive = true
+        if self.view.frame.size.width < 350 {
+            helpDescription.widthAnchor.constraint(equalToConstant: self.scrollView.frame.size.width - 80).isActive = true
+        } else {
+            helpDescription.widthAnchor.constraint(equalToConstant: self.scrollView.frame.size.width - 50).isActive = true
+        }
+        
         helpDescription.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
         helpDescription.topAnchor.constraint(equalToSystemSpacingBelow: helpTitle.bottomAnchor, multiplier: 4).isActive = true
         helpDescription.numberOfLines = 50

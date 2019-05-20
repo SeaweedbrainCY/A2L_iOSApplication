@@ -30,6 +30,8 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
     let chargement = UIActivityIndicatorView()
     let chargementView = UIView()
     
+    let imageSwitch = UISwitch()
+    
     //Si on modifie la fiche d'un adhérent, on reporte ses infomrations dans les champs requis :
     var titleView = "Ajouter un adhérent"
     var id = "nil"
@@ -184,12 +186,35 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         } else {
             imageButton.setImage(UIImage(named:"addImage"), for: .normal)
         }
+        self.imageButton?.isEnabled = false
+        
+        let imageSwitchTitre = UILabel()
+        self.backgroundView.addSubview(imageSwitchTitre)
+        imageSwitchTitre.translatesAutoresizingMaskIntoConstraints = false
+        imageSwitchTitre.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 3).isActive = true
+        imageSwitchTitre.topAnchor.constraint(equalToSystemSpacingBelow: imageButton.bottomAnchor, multiplier: 5).isActive = true
+        imageSwitchTitre.text = "Ajouter une photo d'identité "
+        imageSwitchTitre.font = UIFont(name: "Comfortaa-Bold", size: 18)
+        imageSwitchTitre.textColor = currentTitleColor
+        
+        
+        self.backgroundView.addSubview(imageSwitch)
+        imageSwitch.translatesAutoresizingMaskIntoConstraints = false
+        if  self.view.frame.size.width < 350{
+            imageSwitch.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
+            imageSwitch.topAnchor.constraint(equalToSystemSpacingBelow: imageSwitchTitre.bottomAnchor, multiplier: 2).isActive = true
+        } else {
+            imageSwitch.leftAnchor.constraint(equalToSystemSpacingAfter: imageSwitchTitre.rightAnchor, multiplier: 2).isActive = true
+            imageSwitch.centerYAnchor.constraint(equalToSystemSpacingBelow: imageSwitchTitre.centerYAnchor, multiplier: 1).isActive = true
+        }
+        imageSwitch.isOn = false
+        imageSwitch.addTarget(self, action: #selector(activateImageButton), for: .valueChanged)
         
         let dateNaissanceTitre = UILabel()
         backgroundView.addSubview(dateNaissanceTitre)
         dateNaissanceTitre.translatesAutoresizingMaskIntoConstraints = false
         dateNaissanceTitre.leftAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.leftAnchor, multiplier: 3).isActive = true
-        dateNaissanceTitre.topAnchor.constraint(equalToSystemSpacingBelow: imageButton.bottomAnchor, multiplier: 5).isActive = true
+        dateNaissanceTitre.topAnchor.constraint(equalToSystemSpacingBelow: imageSwitch.bottomAnchor, multiplier: 5).isActive = true
         dateNaissanceTitre.text = "Date de naissance : "
         dateNaissanceTitre.font = UIFont(name: "Comfortaa-Bold", size: 18)
         dateNaissanceTitre.textColor = currentTitleColor
@@ -198,8 +223,6 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
         backgroundView.addSubview(dateNaissanceButton)
         dateNaissanceButton.translatesAutoresizingMaskIntoConstraints = false
         dateNaissanceButton.widthAnchor.constraint(equalToConstant: 120).isActive = true
-        
-        
         if  self.view.frame.size.width < 350{
             dateNaissanceButton.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
             dateNaissanceButton.topAnchor.constraint(equalToSystemSpacingBelow: dateNaissanceTitre.bottomAnchor, multiplier: 2).isActive = true
@@ -383,6 +406,12 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
             classeTextField!.shake()
         }
         
+        if(imageButton?.currentImage == UIImage(named: "addImage") || imageButton?.currentImage == UIImage(named: "binaireWorld")) && imageSwitch.isOn {
+            isCorrect = false
+            classeTextField!.shake()
+            alert("Aucune image renseignée", message: "Les adhérents pourront stocker eux même leur photo d'identité. Pour cela, décochez 'Ajouter une photo d'identité ;)")
+        }
+        
         
         
         if isCorrect { // on envoie les infos au serveur si tout est correct
@@ -402,9 +431,13 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
                 
                 let pushData = PushDataServer()
                 let convertion = APIConnexion()
-                let imageData = self.imageButton!.currentImage!.jpegData(compressionQuality: 0.2)
-                let imageStr = imageData!.base64EncodedString(options:.endLineWithCarriageReturn)
-                let stringData = convertion.convertionToHexaCode("\(imageStr)")
+                var stringData = "none"
+                if imageSwitch.isOn {
+                    let imageData = self.imageButton!.currentImage!.jpegData(compressionQuality: 0.2)
+                    let imageStr = imageData!.base64EncodedString(options:.endLineWithCarriageReturn)
+                    stringData = convertion.convertionToHexaCode("\(imageStr)")
+                }
+                
                 print("nbr caracteres finaux : \(stringData.count)")
                 pushData.addAdherent(nom: /*convertion.convertionToHexaCode*/(nomTextField!.text!), classe: /*convertion.convertionToHexaCode*/(classeTextField!.text!), imageData: stringData, dateNaissance: dateNaissanceVariable!.currentTitle!, statut: statut)
                     
@@ -529,6 +562,14 @@ class AddNewAdherent: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
             }
             serveurReponse = "nil"
             reponseURLRequestImage = "nil"
+        }
+    }
+    
+    @objc private func activateImageButton(sender: UISwitch){
+        if sender.isOn{
+            self.imageButton?.isEnabled = true
+        } else {
+            self.imageButton?.isEnabled = false
         }
     }
     

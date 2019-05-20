@@ -51,8 +51,28 @@ class ConnexionAdherent: UIViewController, UITextFieldDelegate {
         print("width = \(self.view.frame.size.width)")
         print("width views = \(prenomField.frame.size.width + nomField.frame.size.width)")
         
-        if self.view.frame.size.width < prenomField.frame.size.width + nomField.frame.size.width + 70 {
+        if  self.view.frame.size.width < 350{ // iPhone 5
+            prenomField.translatesAutoresizingMaskIntoConstraints = true
+            nomField.translatesAutoresizingMaskIntoConstraints = true
+            jourField.translatesAutoresizingMaskIntoConstraints = true
+            moisField.translatesAutoresizingMaskIntoConstraints = true
+            anneeField.translatesAutoresizingMaskIntoConstraints = true
             
+            
+            prenomField.frame.size.width = 250
+            prenomField.center = CGPoint(x: 20 + prenomField.frame.size.width / 2, y: self.titreLabel.frame.origin.y + self.titreLabel.frame.size.height + 50)
+            
+            nomField.frame.size.width = 250
+            nomField.center = CGPoint(x: 20 + nomField.frame.size.width / 2, y: self.prenomField.frame.origin.y + self.prenomField.frame.size.height + 30)
+            
+            jourField.frame.size.width = 80
+            jourField.center = CGPoint(x: 20 + jourField.frame.size.width / 2, y: self.nomField.frame.origin.y + self.nomField.frame.size.height + 30)
+            
+            moisField.frame.size.width = 80
+            moisField.center = CGPoint(x: self.view.frame.size.width / 2 , y: self.nomField.frame.origin.y + self.nomField.frame.size.height + 30)
+            
+            anneeField.frame.size.width = 80
+            anneeField.center = CGPoint(x: self.view.frame.size.width - 20 -  anneeField.frame.size.width / 2, y: self.nomField.frame.origin.y + self.nomField.frame.size.height + 30)
             
         }
     }

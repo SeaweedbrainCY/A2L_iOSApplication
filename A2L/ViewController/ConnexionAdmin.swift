@@ -54,6 +54,24 @@ class ConnexionAdmin: UIViewController, UITextFieldDelegate {
         
         mdpLost.titleLabel?.textAlignment = .center
         mdpLost.titleLabel?.numberOfLines = 3
+        
+        if  self.view.frame.size.width < 350{
+            prenomField.translatesAutoresizingMaskIntoConstraints = true
+            nomField.translatesAutoresizingMaskIntoConstraints = true
+            mdpField.translatesAutoresizingMaskIntoConstraints = true
+            
+            mdpField.textAlignment = .left
+            
+            prenomField.frame.size.width = 250
+            prenomField.center = CGPoint(x: 20 + prenomField.frame.size.width / 2, y: self.titreLabel.frame.origin.y + self.titreLabel.frame.size.height + 50)
+            
+            nomField.frame.size.width = 250
+            nomField.center = CGPoint(x: 20 + nomField.frame.size.width / 2, y: self.prenomField.frame.origin.y + self.prenomField.frame.size.height + 30)
+            
+            mdpField.frame.size.width = 250
+            mdpField.center = CGPoint(x: 20 + mdpField.frame.size.width / 2, y: self.nomField.frame.origin.y + self.nomField.frame.size.height + 30)
+            
+        }
        
     }
     

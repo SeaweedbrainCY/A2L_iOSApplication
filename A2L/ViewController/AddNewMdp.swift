@@ -46,6 +46,29 @@ class AddNewMdp: UIViewController, UITextFieldDelegate {
         codeField.delegate = self
         codeField.textAlignment = .center
         
+        if  self.view.frame.size.width < 350{
+            prenomField.translatesAutoresizingMaskIntoConstraints = true
+            nomField.translatesAutoresizingMaskIntoConstraints = true
+            codeField.translatesAutoresizingMaskIntoConstraints = true
+            helpButton.translatesAutoresizingMaskIntoConstraints = true
+            
+            titreLabel.frame.size.height = 110
+            
+            codeField.textAlignment = .left
+            
+            prenomField.frame.size.width = 250
+            prenomField.center = CGPoint(x: 20 + prenomField.frame.size.width / 2, y: self.titreLabel.frame.origin.y + self.titreLabel.frame.size.height )
+            
+            nomField.frame.size.width = 250
+            nomField.center = CGPoint(x: 20 + nomField.frame.size.width / 2, y: self.prenomField.frame.origin.y + self.prenomField.frame.size.height + 30)
+            
+            codeField.frame.size.width = 250
+            codeField.center = CGPoint(x: 20 + codeField.frame.size.width / 2, y: self.nomField.frame.origin.y + self.codeField.frame.size.height + 30)
+            
+            helpButton.frame.origin = CGPoint(x: 10 + codeField.frame.size.width + codeField.frame.origin.x, y: self.codeField.frame.origin.y)
+            
+        }
+        
     }
     
     private func changementViews() { // Premières view qui sont montrées

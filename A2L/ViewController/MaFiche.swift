@@ -100,9 +100,14 @@ class MaFiche: UIViewController, UITabBarControllerDelegate, UIImagePickerContro
         nomAdherent.translatesAutoresizingMaskIntoConstraints = false
         nomAdherent.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
         nomAdherent.topAnchor.constraint(equalToSystemSpacingBelow: self.scrollView.topAnchor, multiplier: 4).isActive = true
+        nomAdherent.widthAnchor.constraint(equalToConstant: self.view.frame.size.width - 20).isActive = true
+        nomAdherent.lineBreakMode = .byClipping
+        nomAdherent.numberOfLines = 2
+        nomAdherent.textAlignment = .center
         nomAdherent.textColor = currentTitleColor
         nomAdherent.font = UIFont(name: "Comfortaa-Bold", size: 30)
         nomAdherent.text = listeInfoAdherent["Nom"] ?? "Error"
+        
         
         
         self.backgroundView.addSubview(photoId)
@@ -376,7 +381,7 @@ class MaFiche: UIViewController, UITabBarControllerDelegate, UIImagePickerContro
             image.sourceType = UIImagePickerController.SourceType.photoLibrary
             self.present(image, animated: true)
             {
-                //une fois effectué (?)
+                
             }
         })
         alert.addAction(UIAlertAction(title: "Annuler", style: UIAlertAction.Style.cancel, handler: nil)) // Retour
@@ -390,16 +395,13 @@ class MaFiche: UIViewController, UITabBarControllerDelegate, UIImagePickerContro
             if info[UIImagePickerController.InfoKey.imageURL] != nil {
                 //self.imageExtension = URL(fileURLWithPath: "\(info[UIImagePickerController.InfoKey.imageURL]!)").pathExtension
                 //print("\(String(describing: info[UIImagePickerController.InfoKey.originalImage]))")
-                
-                let defintiveImage = rogneImage(image: image)
+                let defintiveImage = self.rogneImage(image: image)
                 
                 self.photoId.setImage(defintiveImage, for: .normal)
                 let imageData = self.photoId.currentImage!.jpegData(compressionQuality: 0.2)
                 let imageStr = imageData!.base64EncodedString(options:.endLineWithCarriageReturn)
-                let convertion = APIConnexion()
-                let pushData = PushDataServer()
-                let stringData = convertion.convertionToHexaCode("\(imageStr)")
-                pushData.uploadImage(imageDataString: stringData, id: infosAdherent["id"]!)
+                self.dismiss(animated: true, completion: nil)
+                self.askForImage(base64: imageStr)
             }
             
         } else {
@@ -409,6 +411,24 @@ class MaFiche: UIViewController, UITabBarControllerDelegate, UIImagePickerContro
         
         
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    private func askForImage(base64: String){
+       
+        let alert = UIAlertController(title: "Valider la photo d'identité", message: "ATTENTION : Trop de beauté peut faire crasher l'application .. ", preferredStyle: .alert)
+        let A1 = UIAlertAction(title: "Je vais réfléchir encore un peu", style: UIAlertAction.Style.destructive, handler: nil)
+        let A2 = UIAlertAction(title: "Je valide !", style: UIAlertAction.Style.default, handler: { (_) in
+            
+            let convertion = APIConnexion()
+            let pushData = PushDataServer()
+            let stringData = convertion.convertionToHexaCode("\(base64)")
+            pushData.uploadImage(imageDataString: stringData, id: infosAdherent["id"]!)
+            
+            
+        })
+        alert.addAction(A1)
+        alert.addAction(A2)
+        self.present(alert, animated: true, completion: nil)
     }
     
     func rogneImage(image: UIImage) -> UIImage { // rogne les images en carrés parfaits 300/300

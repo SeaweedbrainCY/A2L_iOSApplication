@@ -91,6 +91,7 @@ class ListeAdherent: UIViewController, UITableViewDataSource, UITableViewDelegat
             self.tabBarController?.tabBar.barStyle = .black
             self.navigationController?.navigationBar.barStyle = .black
             self.view.backgroundColor = .black
+            self.searchBar.barStyle = .black
         }
         
     }
@@ -100,7 +101,7 @@ class ListeAdherent: UIViewController, UITableViewDataSource, UITableViewDelegat
         if loadAdherent != "nil"{
             let infos = loadAdherent.split(separator: "%")
             let api = APIConnexion()
-            api.otherAdherentData(nom: api.convertionToHexaCode(String(infos[0])), dateNaissance: String(infos[1]))
+            api.otherAdherentData(nom: String(infos[0]), dateNaissance: String(infos[1]))
             //On lance un timer pour verifier toutes les secondes si on a une réponse
             timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(listeSelectedVerificationReponse), userInfo: nil, repeats: true)
             chargement.startAnimating()
@@ -173,7 +174,7 @@ class ListeAdherent: UIViewController, UITableViewDataSource, UITableViewDelegat
         for i in 0 ..< listeAdherentsNom.count {
             if i == indexPath.row { //index.path = numéro du nom sélectionné
                 let api = APIConnexion()
-                api.otherAdherentData(nom: api.convertionToHexaCode(listeAdherentsNom[i]), dateNaissance: listeDateNaissance[i])
+                api.otherAdherentData(nom: listeAdherentsNom[i], dateNaissance: listeDateNaissance[i])
                 //On lance un timer pour verifier toutes les secondes si on a une réponse
                 timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(listeSelectedVerificationReponse), userInfo: nil, repeats: true)
                 chargement.startAnimating()

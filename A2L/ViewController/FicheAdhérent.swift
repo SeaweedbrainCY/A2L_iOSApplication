@@ -78,6 +78,10 @@ class FicheAdherent: UIViewController {
         nomAdherent.translatesAutoresizingMaskIntoConstraints = false
         nomAdherent.centerXAnchor.constraint(equalToSystemSpacingAfter: self.scrollView.centerXAnchor, multiplier: 1).isActive = true
         nomAdherent.topAnchor.constraint(equalToSystemSpacingBelow: self.scrollView.topAnchor, multiplier: 4).isActive = true
+        nomAdherent.widthAnchor.constraint(equalToConstant: self.view.frame.size.width - 20).isActive = true
+        nomAdherent.lineBreakMode = .byClipping
+        nomAdherent.numberOfLines = 2
+        nomAdherent.textAlignment = .center
         nomAdherent.textColor = currentTitleColor
         nomAdherent.font = UIFont(name: "Comfortaa-Bold", size: 30)
         nomAdherent.text = listeInfoAdherent["Nom"] ?? "Error"

@@ -20,6 +20,8 @@ class generateQRcode {
     //ATTENTION : LE TEXTE EST CONVERTIE EN HEXA DECIMAL CAR NE GÈRE PAS LES CARACTÈRES SPÉCIAUX 
         func generateQRCode(from string: String) -> UIImage? {
         let data = string.data(using: String.Encoding.ascii)
+            print("string =\(string)")
+            print("data = \(String(describing: data))")
         
         if let filter = CIFilter(name: "CIQRCodeGenerator") {
             filter.setValue(data, forKey: "inputMessage")
