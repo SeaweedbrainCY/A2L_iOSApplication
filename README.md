@@ -1,5 +1,5 @@
 # A2L_Application 
-L'A2L ou Association du Lycée Lurçat se modernise en informatisant ses cartes adhérents. Une application sera déployée sur iOS, et Android afin de permettre aux adhérents d'avoir accès à leur carte et ainsi pouvoir bénéficer d'avantages. Ce code est l'application qui sera déployée sur iOS. Elle sera en permamence connectée à un serveur avec lequel elle dialoguera. Le serveur devra gérer les connexions, les privilèges, les informations. Voici le repository du serveur [https://github.com/DevNathan/A2L_BackEnd]. 
+L'A2L ou Association du Lycée Lurçat se modernise en informatisant ses cartes adhérents. Une application sera déployée sur iOS, et via un site internet afin de permettre aux adhérents d'avoir accès à leur carte et ainsi pouvoir bénéficer d'avantages. Ce code est l'application qui sera déployée sur iOS. Elle sera en permamence connectée à un serveur avec lequel elle dialoguera. Le serveur devra gérer les connexions, les privilèges, les informations. Voici le repository du serveur [https://github.com/DevNathan/A2L_BackEnd]. 
 3 types d'utilisateurs pourront utiliser l'application : 
 
 
@@ -14,8 +14,8 @@ L'A2L ou Association du Lycée Lurçat se modernise en informatisant ses cartes 
 
 4) Les développeurs : ils disposent de tous les privileges des super-admin et gardent le controlle de l’application. Ainsi ils ne peuvent pas êtres dégradé ni supprimé de la base de donnée. Ils disposeront d’un accès privé au serveur via l’application ainsi que les codes du serveurs.
 
-La sécurité de l'application et du serveur est détaillé dans ce docuement. La sécurité minimum sera fournis dès la première version distribuée et les mises à jours permettront d'apporter tous les protocles de sécurités nécessaires. (https://docs.google.com/document/d/16OY1z0zbXu0QAcL9X6n0x1Y-29bfma4KPi0Mht_SYCw/edit?usp=sharing)
-L’application se veut être autonome et doit donc être capable de réagir toute seule a tout type de menace.
+La sécurité de l'application et du serveur est détaillé dans ce docuement. La sécurité minimum sera fournis dès la première version distribuée et les mises à jours permettront d'apporter tous les protocles de sécurités nécessaires. (https://github.com/DevNathan/A2L_BackEnd/blob/master/README.md)
+L’application se veut être autonome et doit donc être capable de réagir toute seule à tout type de menace.
 
 Cette application n'a pas pour vocation de remplacer la carte A2L mais de faciliter son utilité. 
 Le code source est à la dispositon de tous. 
