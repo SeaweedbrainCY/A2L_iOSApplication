@@ -75,7 +75,7 @@ class Reglages: UIViewController, UITableViewDelegate, UITableViewDataSource, MF
         do {
             isDarkMode = try String(contentsOf: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(isDarkModeActivated), encoding: .utf8)
         } catch {
-            print("Fichier introuvable. ERREUR GRAVE")
+            print(["Fichier introuvable. ERREUR GRAVE"])
         }
         
         if isDarkMode == "true" {
